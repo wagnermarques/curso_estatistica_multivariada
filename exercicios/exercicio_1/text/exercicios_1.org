@@ -1,0 +1,447 @@
+#+TITLE: Exercícios 1 — Estatística Multivariada
+#+AUTHOR:
+#+DATE: @@latex:\today@@
+#+LANGUAGE: pt_BR
+#+PROPERTY: header-args:python :session ex1 :results output :exports both
+#+STARTUP: inlineimages overview latexpreview
+#+OPTIONS: toc:t num:t ^:nil
+
+
+Estes são os dois exercícios da nossa primeira lista
+
+alguma [[../exercicios/teoria/index.org]] anotações sobre a teoria relevante foi relevante para realização do exercício que além das
+aulas também foram consutadas no livro do hair 
+
+* Exercício 1 — Dendrogramas de Presença/Ausência
+
+Considere a Tabela 1 com valores de ausência-presença (0/1) de 8 espécies de
+plantas em 30 locais de amostragem. Construa dendrogramas usando os coeficientes:
+- Sorensen–Dice
+- Simple Matching (Correspondência Simples)
+  
+** Setup — Importações e Preparação dos Dados
+
+Os dados da Tabela 1 estão no arquivo =tabela_1_presenca_ausencia.csv=.
+
+#+name: define arq de dados
+#+begin_src python :session ex1 :results output :exports both
+  import numpy as np
+  import pandas as pd
+  import matplotlib
+  matplotlib.use('Agg')
+  import matplotlib.pyplot as plt
+  from pathlib import Path
+  from scipy.spatial.distance import pdist, squareform
+  from scipy.cluster.hierarchy import linkage, dendrogram, fcluster
+  import os
+
+  os.makedirs('figures', exist_ok=True)
+
+  data_path = Path('tabela_1_presenca_ausencia.csv')
+  
+  if data_path is None:
+      raise FileNotFoundError('Arquivo tabela_1_presenca_ausencia.csv nao encontrado.')
+  print(data_path)
+#+end_src
+
+#+RESULTS: define arq de dados
+: tabela_1_presenca_ausencia.csv
+
+
+#+name: preview_data
+#+begin_src python :session ex1 :results output :exports both
+try:
+    df = pd.read_csv(data_path)
+    print(df.head(10))
+except Exception as e:
+    print(f"Error loading CSV: {e}")
+#+end_src
+
+#+RESULTS: preview_data
+#+begin_example
+  species  loc_1  loc_2  loc_3  loc_4  loc_5  loc_6  loc_7  ...  loc_23  loc_24  loc_25  loc_26  loc_27  loc_28  loc_29  loc_30
+0   esp_1      0      0      1      1      0      1      1  ...       0       0       0       1       1       1       0       0
+1   esp_2      0      0      1      0      1      0      0  ...       0       0       0       1       0       1       0       0
+2   esp_3      0      0      1      0      1      0      0  ...       0       0       1       1       0       1       0       0
+3   esp_4      0      0      1      1      0      0      0  ...       0       0       0       1       0       1       0       1
+4   esp_5      0      0      1      0      1      0      0  ...       0       0       1       0       0       1       0       0
+5   esp_6      1      0      0      0      0      0      1  ...       1       0       0       0       0       0       1       1
+6   esp_7      0      0      1      1      1      0      1  ...       1       1       1       0       1       0       0       1
+7   esp_8      1      0      0      0      0      1      1  ...       1       0       1       1       0       1       0       0
+
+[8 rows x 31 columns]
+#+end_example
+
+
+#+name: asdf
+#+begin_src python :session ex1 :results output :exports both 
+  df = pd.read_csv(data_path, index_col='species').astype(int)
+  data    = df_tab1.to_numpy()
+  species = df_tab1.index.tolist()
+  locs    = df_tab1.columns.tolist()
+  print(df)
+#+end_src
+
+#+RESULTS: asdf
+
+
+** 1a. Dendrograma — Coeficiente Sorensen–Dice
+
+O coeficiente de similaridade Sorensen–Dice considera apenas co-presenças:
+
+$$S_{SD} = \frac{2a}{2a + b + c}$$
+
+onde $a$ = co-presenças, $b$ = presença só na sp. 1, $c$ = presença só na sp. 2.
+A distância correspondente é $d_{SD} = 1 - S_{SD}$.
+
+*** Matriz de Distâncias
+
+#+begin_src python :session ex1 :results output :exports both
+# scipy.spatial.distance.dice(u,v) = (b+c)/(2a+b+c) = 1 - S_SD  ✓
+dist_dice    = pdist(data, metric='dice')
+dist_dice_sq = squareform(dist_dice)
+
+df_dice = pd.DataFrame(np.round(dist_dice_sq, 4), index=species, columns=species)
+print("Matriz de Distâncias Sorensen–Dice  (d_SD = 1 − S_SD):")
+print(df_dice.to_string())
+#+end_src
+
+*** Dendrograma
+
+#+begin_src python :session ex1 :results file graphics :exports both :file figures/dendrograma_sorensen_dice.png
+Z_dice = linkage(dist_dice, method='ward')
+
+fig, ax = plt.subplots(figsize=(10, 6))
+dendrogram(
+    Z_dice,
+    labels=species,
+    ax=ax,
+    color_threshold=0.7 * max(Z_dice[:, 2]),
+    above_threshold_color='#95A5A6',
+    leaf_font_size=13,
+    leaf_rotation=30,
+)
+ax.set_title('Dendrograma — Coeficiente Sorensen–Dice\n(Método de Ligação: Ward)',
+             fontsize=14, fontweight='bold', pad=15)
+ax.set_xlabel('Espécies de Plantas', fontsize=12)
+ax.set_ylabel('Distância de Ward  (1 − S_SD)', fontsize=12)
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.grid(axis='y', linestyle='--', alpha=0.4)
+plt.tight_layout()
+plt.savefig('figures/dendrograma_sorensen_dice.png', dpi=150, bbox_inches='tight')
+plt.close()
+#+end_src
+
+** 1b. Dendrograma — Coeficiente Simple Matching
+
+O coeficiente Simple Matching considera co-presenças *e* co-ausências:
+
+$$S_{SM} = \frac{a + d}{a + b + c + d} = \frac{a + d}{n}$$
+
+onde $d$ = co-ausências e $n$ = total de locais.
+A distância é $d_{SM} = 1 - S_{SM}$.
+
+*** Matriz de Distâncias
+
+#+begin_src python :session ex1 :results output :exports both
+# scipy.spatial.distance.hamming(u,v) = (b+c)/n = 1 - S_SM  ✓
+dist_sm    = pdist(data, metric='hamming')
+dist_sm_sq = squareform(dist_sm)
+
+df_sm = pd.DataFrame(np.round(dist_sm_sq, 4), index=species, columns=species)
+print("Matriz de Distâncias Simple Matching  (d_SM = 1 − S_SM):")
+print(df_sm.to_string())
+#+end_src
+
+*** Dendrograma
+
+#+begin_src python :session ex1 :results file graphics :exports both :file figures/dendrograma_simple_matching.png
+Z_sm = linkage(dist_sm, method='ward')
+
+fig, ax = plt.subplots(figsize=(10, 6))
+dendrogram(
+    Z_sm,
+    labels=species,
+    ax=ax,
+    color_threshold=0.7 * max(Z_sm[:, 2]),
+    above_threshold_color='#95A5A6',
+    leaf_font_size=13,
+    leaf_rotation=30,
+)
+ax.set_title('Dendrograma — Coeficiente Simple Matching\n(Método de Ligação: Ward)',
+             fontsize=14, fontweight='bold', pad=15)
+ax.set_xlabel('Espécies de Plantas', fontsize=12)
+ax.set_ylabel('Distância de Ward  (1 − S_SM)', fontsize=12)
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.grid(axis='y', linestyle='--', alpha=0.4)
+plt.tight_layout()
+plt.savefig('figures/dendrograma_simple_matching.png', dpi=150, bbox_inches='tight')
+plt.close()
+#+end_src
+
+** Comparação e Interpretação
+
+#+begin_src python :session ex1 :results output :exports both
+print("=== Comparação dos Coeficientes ===\n")
+print("Sorensen–Dice  : ignora co-ausências → mais sensível a espécies raras.")
+print("Simple Matching: inclui co-ausências → peso igual a presenças e ausências.\n")
+
+n_clusters   = 3
+clusters_dice = fcluster(Z_dice, n_clusters, criterion='maxclust')
+clusters_sm   = fcluster(Z_sm,   n_clusters, criterion='maxclust')
+
+df_cmp = pd.DataFrame(
+    {'Sorensen–Dice': clusters_dice, 'Simple Matching': clusters_sm},
+    index=species)
+print(f"Grupos identificados com k = {n_clusters}:")
+print(df_cmp.to_string())
+#+end_src
+
+-----
+
+
+* Exercício 2 — Análise do Dataset IRIS_2023
+
+Considere o arquivo =IRIS_2023.xls= com dados morfométricos de flores de três
+espécies de íris: SETOSA, VIRGINIC e VERSICOL.
+
+** Setup — Dados
+
+#+begin_src python :session ex1 :results output :exports both
+import warnings
+warnings.filterwarnings('ignore')
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler, LabelEncoder
+from sklearn.metrics import silhouette_score, adjusted_rand_score
+from sklearn.decomposition import PCA
+from matplotlib.patches import Patch
+
+df_iris  = pd.read_excel('../IRIS_2023.xls', engine='xlrd')
+features = ['SEPALLEN', 'SEPALWID', 'PETALLEN', 'PETALWID']
+X        = df_iris[features].values
+y        = df_iris['specie'].values
+
+scaler   = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+print(f"Dimensões : {df_iris.shape}")
+print(f"Espécies  : {list(df_iris['specie'].unique())}")
+print(f"\nContagem por espécie:\n{df_iris['specie'].value_counts().to_string()}")
+print(f"\nMédias por espécie (variáveis originais):")
+print(df_iris.groupby('specie')[features].mean().round(2).to_string())
+#+end_src
+
+** 2a. Dendrograma Hierárquico
+
+#+begin_src python :session ex1 :results file graphics :exports both :file figures/dendrograma_iris.png
+dist_iris = pdist(X_scaled, metric='euclidean')
+Z_iris    = linkage(dist_iris, method='ward')
+
+color_map = {'SETOSA': '#E74C3C', 'VIRGINIC': '#2ECC71', 'VERSICOL': '#3498DB'}
+
+fig, ax = plt.subplots(figsize=(22, 7))
+dendrogram(
+    Z_iris,
+    ax=ax,
+    labels=y,
+    color_threshold=6.5,
+    above_threshold_color='#BDC3C7',
+    leaf_font_size=6.5,
+    leaf_rotation=90,
+)
+for lbl in ax.get_xmajorticklabels():
+    lbl.set_color(color_map.get(lbl.get_text(), 'black'))
+
+ax.set_title('Dendrograma Hierárquico — IRIS_2023\n'
+             '(Distância Euclidiana · Método Ward · Dados Padronizados)',
+             fontsize=14, fontweight='bold', pad=15)
+ax.set_xlabel('Observações (rótulos coloridos por espécie)', fontsize=11)
+ax.set_ylabel('Distância de Ward', fontsize=11)
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.grid(axis='y', linestyle='--', alpha=0.3)
+legend_handles = [Patch(facecolor=color_map[sp], label=sp) for sp in color_map]
+ax.legend(handles=legend_handles, fontsize=10, title='Espécies', loc='upper right')
+plt.tight_layout()
+plt.savefig('figures/dendrograma_iris.png', dpi=150, bbox_inches='tight')
+plt.close()
+#+end_src
+
+** 2b. K-Means
+
+*** Determinação do Número Ótimo de Clusters
+
+#+begin_src python :session ex1 :results file graphics :exports both :file figures/kmeans_elbow.png
+inertias    = []
+silhouettes = []
+k_range     = range(2, 10)
+
+for k in k_range:
+    km = KMeans(n_clusters=k, random_state=42, n_init=10)
+    km.fit(X_scaled)
+    inertias.append(km.inertia_)
+    silhouettes.append(silhouette_score(X_scaled, km.labels_))
+
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(13, 5))
+
+ax1.plot(list(k_range), inertias, 'o-', color='#2980B9', linewidth=2, markersize=8)
+ax1.axvline(x=3, color='#E74C3C', linestyle='--', alpha=0.8, label='k = 3 (real)')
+ax1.set_title('Método do Cotovelo', fontsize=13, fontweight='bold')
+ax1.set_xlabel('Número de Clusters (k)', fontsize=11)
+ax1.set_ylabel('Inércia (SSE within)', fontsize=11)
+ax1.legend(); ax1.grid(True, alpha=0.3)
+ax1.spines['top'].set_visible(False)
+ax1.spines['right'].set_visible(False)
+
+ax2.plot(list(k_range), silhouettes, 's-', color='#27AE60', linewidth=2, markersize=8)
+ax2.axvline(x=3, color='#E74C3C', linestyle='--', alpha=0.8, label='k = 3 (real)')
+ax2.set_title('Coeficiente de Silhueta', fontsize=13, fontweight='bold')
+ax2.set_xlabel('Número de Clusters (k)', fontsize=11)
+ax2.set_ylabel('Silhouette Score', fontsize=11)
+ax2.legend(); ax2.grid(True, alpha=0.3)
+ax2.spines['top'].set_visible(False)
+ax2.spines['right'].set_visible(False)
+
+plt.suptitle('Escolha do Número de Clusters — IRIS_2023', fontsize=14, fontweight='bold')
+plt.tight_layout()
+plt.savefig('figures/kmeans_elbow.png', dpi=150, bbox_inches='tight')
+plt.close()
+#+end_src
+
+*** K-Means com k = 3
+
+#+begin_src python :session ex1 :results output :exports both
+km3       = KMeans(n_clusters=3, random_state=42, n_init=10)
+labels_km = km3.fit_predict(X_scaled)
+
+df_iris['cluster'] = labels_km
+le  = LabelEncoder()
+ari = adjusted_rand_score(le.fit_transform(y), labels_km)
+sil = silhouette_score(X_scaled, labels_km)
+
+print("=== K-Means  k = 3 ===\n")
+print("Distribuição espécie × cluster:")
+print(pd.crosstab(df_iris['specie'], df_iris['cluster'],
+                  rownames=['Espécie'], colnames=['Cluster']).to_string())
+print(f"\nAdjusted Rand Index : {ari:.4f}  (1.0 = perfeito)")
+print(f"Silhouette Score    : {sil:.4f}  (intervalo: −1 a 1)")
+#+end_src
+
+#+begin_src python :session ex1 :results file graphics :exports both :file figures/kmeans_scatter.png
+pca   = PCA(n_components=2, random_state=42)
+X_pca = pca.fit_transform(X_scaled)
+ev    = pca.explained_variance_ratio_ * 100
+
+c_km  = ['#E74C3C', '#2ECC71', '#3498DB']
+c_sp  = {'SETOSA': '#E74C3C', 'VIRGINIC': '#2ECC71', 'VERSICOL': '#3498DB'}
+mk_sp = {'SETOSA': 'o', 'VIRGINIC': 's', 'VERSICOL': '^'}
+
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
+
+for c in range(3):
+    m = labels_km == c
+    ax1.scatter(X_pca[m, 0], X_pca[m, 1], c=c_km[c],
+                label=f'Cluster {c}', alpha=0.75, s=60, edgecolors='white', lw=0.5)
+ax1.set_title('K-Means Clusters', fontsize=12, fontweight='bold')
+ax1.set_xlabel(f'PC1 ({ev[0]:.1f}%)', fontsize=10)
+ax1.set_ylabel(f'PC2 ({ev[1]:.1f}%)', fontsize=10)
+ax1.legend(); ax1.grid(True, alpha=0.3)
+ax1.spines['top'].set_visible(False)
+ax1.spines['right'].set_visible(False)
+
+for sp in np.unique(y):
+    m = y == sp
+    ax2.scatter(X_pca[m, 0], X_pca[m, 1], c=c_sp[sp],
+                label=sp, marker=mk_sp[sp], alpha=0.75, s=60, edgecolors='white', lw=0.5)
+ax2.set_title('Espécies Reais', fontsize=12, fontweight='bold')
+ax2.set_xlabel(f'PC1 ({ev[0]:.1f}%)', fontsize=10)
+ax2.set_ylabel(f'PC2 ({ev[1]:.1f}%)', fontsize=10)
+ax2.legend(); ax2.grid(True, alpha=0.3)
+ax2.spines['top'].set_visible(False)
+ax2.spines['right'].set_visible(False)
+
+plt.suptitle('K-Means vs Espécies Reais — Projeção PCA — IRIS_2023',
+             fontsize=13, fontweight='bold')
+plt.tight_layout()
+plt.savefig('figures/kmeans_scatter.png', dpi=150, bbox_inches='tight')
+plt.close()
+#+end_src
+
+** 2c. MANOVA
+
+Testamos se os vetores de médias das variáveis morfométricas diferem entre as espécies:
+
+- $H_0$: $\boldsymbol{\mu}_{SETOSA} = \boldsymbol{\mu}_{VIRGINIC} = \boldsymbol{\mu}_{VERSICOL}$ (não há diferença)
+- $H_1$: pelo menos um par de espécies tem vetores de médias diferentes
+
+Nível de significância: $\alpha = 0{,}05$.
+
+#+begin_src python :session ex1 :results output :exports both
+from statsmodels.multivariate.manova import MANOVA
+
+formula = 'SEPALLEN + SEPALWID + PETALLEN + PETALWID ~ specie'
+manova  = MANOVA.from_formula(formula, data=df_iris)
+result  = manova.mv_test()
+print(result)
+#+end_src
+
+*** Interpretação
+
+#+begin_src python :session ex1 :results output :exports both
+stat_table = result.results['specie']['stat']
+wilks = float(stat_table.loc["Wilks' lambda", "Value"])
+f_val = float(stat_table.loc["Wilks' lambda", "F Value"])
+p_val = float(stat_table.loc["Wilks' lambda", "Pr > F"])
+
+print(f"Estatística de Wilks' Lambda : {wilks:.6f}")
+print(f"F-estatístico                : {f_val:.4f}")
+print(f"p-valor                      : {p_val:.2e}")
+print()
+if p_val < 0.05:
+    print("Decisão: REJEITA-SE H₀  (p < 0,05)")
+    print("→ Existe diferença estatisticamente significativa entre as espécies")
+    print("  nas variáveis morfométricas (SEPALLEN, SEPALWID, PETALLEN, PETALWID).")
+else:
+    print("Decisão: NÃO se rejeita H₀  (p ≥ 0,05)")
+    print("→ Não há evidência de diferença significativa entre as espécies.")
+#+end_src
+
+*** Boxplots por Espécie
+
+#+begin_src python :session ex1 :results file graphics :exports both :file figures/manova_boxplots.png
+labels_pt = {
+    'SEPALLEN': 'Comprimento da Sépala (cm)',
+    'SEPALWID': 'Largura da Sépala (cm)',
+    'PETALLEN': 'Comprimento da Pétala (cm)',
+    'PETALWID': 'Largura da Pétala (cm)',
+}
+palette  = {'SETOSA': '#E74C3C', 'VIRGINIC': '#2ECC71', 'VERSICOL': '#3498DB'}
+sp_order = ['SETOSA', 'VIRGINIC', 'VERSICOL']
+
+fig, axes = plt.subplots(2, 2, figsize=(13, 10))
+for ax, feat in zip(axes.flatten(), features):
+    groups = [df_iris.loc[df_iris['specie'] == sp, feat].values for sp in sp_order]
+    bp = ax.boxplot(groups, patch_artist=True, labels=sp_order,
+                    medianprops={'color': 'black', 'linewidth': 2})
+    for patch, sp in zip(bp['boxes'], sp_order):
+        patch.set_facecolor(palette[sp])
+        patch.set_alpha(0.75)
+    ax.set_title(labels_pt[feat], fontsize=11, fontweight='bold')
+    ax.set_ylabel('cm', fontsize=9)
+    ax.grid(axis='y', linestyle='--', alpha=0.35)
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+
+plt.suptitle('Distribuição das Variáveis por Espécie — IRIS_2023\n'
+             '(base para interpretação da MANOVA)',
+             fontsize=13, fontweight='bold')
+plt.tight_layout()
+plt.savefig('figures/manova_boxplots.png', dpi=150, bbox_inches='tight')
+plt.close()
+#+end_src
+
+# Local Variables:
+# org-babel-python-command: "../../.venv/bin/python3"
+# End:

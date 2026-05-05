@@ -1,0 +1,4 @@
+#+Title: Teoria: Estatística Multivariada
+
+* Tipos de variáveis
+  

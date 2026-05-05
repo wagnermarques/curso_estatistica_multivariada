@@ -1,0 +1,35 @@
+#+Title: Erros do Tipo 1 e 2
+
+
+|---+---------------------+----------------------------------------------------------+---------------------------------------------------------|
+|   | Decisão Estatística | H0: Realmente Verdadeira                                 | H0 Realmente Falsa                                      |
+|---+---------------------+----------------------------------------------------------+---------------------------------------------------------|
+|   | Rejeitar H0         | Erro Tipo I: Rejeitar H0 sendo ela verdadeira ($\alpha$) | Acerto: Poder Estatístico / Sensibilidade ($1-\beta$)   |
+|   | Aceitar H0          | Acerto: Nível de Confiança ($1-\alpha$)                  | Erro Tipo II: Não Rejeitar H0 Sendo ela falsa ($\beta$) |
+
+
+Síntese dos Erros (Notas de Estudo: Carecem de correção e confirmação)
+- Erro do Tipo I (Alfa - α): Probabilidade de rejeitar H0 sendo ela verdadeira
+
+  Queremos que seja uma probabilidade realmente baixa pra evitar de rejeitar a hipótese nula quando ela é verdadeira
+
+  No caso da hipótese nula ser "evidência de câncer".
+
+  Nosso teste pode errar rejeitando a H0 para o caso em que o paciente
+  está realmente com cancer. Esse erro "rejeitar H0 qdo ela é
+  verdadeira" é o erro do tipo I.
+
+  Se não queremos "perder a chance" de diagnosticar o cancer o mais o
+  cedo possível, desejamos muito, mas muito mesmo, minimizar a chance de não
+  aceitar (rejeitar H0) a hipótese de que o paciente estar com cancer
+  porque na realiade ele pode realmente estar com cancer.
+
+  O p valor é exatamente essa probabilidade. Por exemplo, p=.01
+  significa 99% de chance de estarmos rejeitando a hipotese do
+  paciente estar com cancer. 
+
+  
+- Erro do Tipo II (Beta - β): É a probabilidade de Não Rejeitar H0 qdo  ela é falsa
+
+  Não rejeitar H0 significa aceitar H0, ou seja, aceitar que o  paciente está com cancer quando na verdade ele não está.
+

@@ -1,0 +1,89 @@
+#+Title: Matriz e Medidas de Similaridade
+(Resumo criado pelo Notebooklm em <2026-05-05 ter>)
+
+* Métricas para Construção da Matriz de Similaridade
+
+As medidas dependendem do tipo de variável, que podem ser quantitivas
+ou qualitativas [1][fn:100].
+
+** 1. Medidas de Distância (Para variáveis Métricas/Quantitativas)
+- *Distância Euclidiana:* É a medida mais comumente utilizada, representando a distância geométrica em linha reta [1, 2][fn:5][fn:100].
+- *Distância de Mahalanobis:* Uma medida padronizada e generalizada que ajusta e compensa as correlações entre as variáveis [1][fn:100].
+- *Distância Euclidiana Quadrada (ou Absoluta):* É a soma das diferenças quadradas sem calcular a raiz quadrada (recomendada ao usar os métodos de agrupamento de Ward ou do Centróide).
+- *Distância City-block (de Manhattan):* Utiliza a soma das diferenças absolutas das variáveis em vez da hipotenusa.
+- *Distância de Chebychev:* Definida como a maior diferença ao longo de todas as variáveis multidimensionais.
+
+** 2. Coeficientes de Semelhança para Valores de Ausência-Presença (Dados Binários)
+Para dados binários (0 e 1), como é o caso do script de agrupamento do seu exemplo, a similaridade foca na concordância e na associação entre as respostas. A quantidade de coeficientes de semelhança é elevada, mas a literatura destaca os cinco seguintes [3, 4][fn:3][fn:4]:
+- *Sorensen-Dice* (exatamente a métrica =metric='dice'= utilizada no seu código) [4][fn:4].
+
+#+name: formula-sorensen-dice
+#+begin_src python :results file :exports results :file imgs/formula_sorensen_dice.png
+import sympy as sp
+import matplotlib.pyplot as plt
+import os
+
+os.makedirs('imgs', exist_ok=True)
+a, b, c = sp.symbols('a b c')
+S_sd = (2*a) / (2*a + b + c)
+
+# Gera a imagem usando matplotlib
+plt.figure(figsize=(4, 1))
+plt.text(0.5, 0.5, f"${{S_{{SD}}}} = {sp.latex(S_sd)}$", 
+         fontsize=20, ha='center', va='center')
+plt.axis('off')
+plt.savefig('imgs/formula_sorensen_dice.png', bbox_inches='tight', transparent=True, dpi=300)
+plt.close()
+print('imgs/formula_sorensen_dice.png')
+#+end_src
+
+#+RESULTS: formula-sorensen-dice
+[[file:imgs/formula_sorensen_dice.png]]
+
+
+- *Simple Matching* [4][fn:4].
+
+#+name: formula-simple-matching
+#+begin_src python :results file :exports results :file imgs/formula_simple_matching.png
+import sympy as sp
+import matplotlib.pyplot as plt
+import os
+
+os.makedirs('imgs', exist_ok=True)
+a, b, c, d = sp.symbols('a b c d')
+S_sm = (a + d) / (a + b + c + d)
+
+# Gera a imagem usando matplotlib
+plt.figure(figsize=(4, 1))
+plt.text(0.5, 0.5, f"${{S_{{SM}}}} = {sp.latex(S_sm)}$", 
+         fontsize=20, ha='center', va='center')
+plt.axis('off')
+plt.savefig('imgs/formula_simple_matching.png', bbox_inches='tight', transparent=True, dpi=300)
+plt.close()
+print('imgs/formula_simple_matching.png')
+#+end_src
+
+#+RESULTS: formula-simple-matching
+[[file:imgs/formula_simple_matching.png]]
+
+- *Jaccard* [4][fn:4].
+- *Ochiai* [4][fn:4].
+- *Anderberg* [4][fn:4].
+
+#+begin_quote
+Onde:
+- *a*: Ambos presentes (1,1)
+- *b*: Presente apenas no primeiro objeto (1,0)
+- *c*: Presente apenas no segundo objeto (0,1)
+- *d*: Ambos ausentes (0,0)
+#+end_quote
+
+** 3. Medidas Correlacionais
+A similaridade também pode ser avaliada invertendo-se a matriz para usar o coeficiente de correlação entre os objetos. Contudo, essa medida analisa os padrões dos valores e não a magnitude exata das diferenças.
+
+
+* Referências
+[fn:3] Ferraudo, A. S., Técnicas de Análise Multivariada, Capítulo 1 (A quantidade de coeficientes de semelhança é elevada).
+[fn:4] Ferraudo, A. S., Técnicas de Análise Multivariada, Tabela 2 (Cinco coeficientes de similaridade mais utilizados e suas fórmulas).
+[fn:5] Ferraudo, A. S., Técnicas de Análise Multivariada, Cálculo da matriz de semelhança (Distância euclidiana).
+[fn:100] Hair et al., Análise Multivariada de Dados (6ª edição), Capítulo 8 (Análise de Agrupamentos: Medida de similaridade).

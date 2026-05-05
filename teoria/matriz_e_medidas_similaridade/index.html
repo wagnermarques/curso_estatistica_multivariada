@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2026-05-05 ter 14:15 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Matriz e Medidas de Similaridade</title>
+<meta name="author" content="wgn" />
+<meta name="generator" content="Org Mode" />
+<style type="text/css">
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Matriz e Medidas de Similaridade</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org8c50ede">1. Métricas para Construção da Matriz de Similaridade</a>
+<ul>
+<li><a href="#org8a6eec5">1.1. 1. Medidas de Distância (Para variáveis Métricas/Quantitativas)</a></li>
+<li><a href="#org0fa59d1">1.2. 2. Coeficientes de Semelhança para Valores de Ausência-Presença (Dados Binários)</a></li>
+<li><a href="#orge98553c">1.3. 3. Medidas Correlacionais</a></li>
+</ul>
+</li>
+<li><a href="#org48cc21b">2. Referências</a></li>
+</ul>
+</div>
+</div>
+<p>
+(Resumo criado pelo Notebooklm em <span class="timestamp-wrapper"><span class="timestamp">&lt;2026-05-05 ter&gt;</span></span>)
+</p>
+<div id="outline-container-org8c50ede" class="outline-2">
+<h2 id="org8c50ede"><span class="section-number-2">1.</span> Métricas para Construção da Matriz de Similaridade</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+As medidas dependendem do tipo de variável, que podem ser quantitivas
+ou qualitativas [1]<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>.
+</p>
+</div>
+<div id="outline-container-org8a6eec5" class="outline-3">
+<h3 id="org8a6eec5"><span class="section-number-3">1.1.</span> 1. Medidas de Distância (Para variáveis Métricas/Quantitativas)</h3>
+<div class="outline-text-3" id="text-1-1">
+<ul class="org-ul">
+<li><b>Distância Euclidiana:</b> É a medida mais comumente utilizada, representando a distância geométrica em linha reta [1, 2]<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup><sup>, </sup><sup><a id="fnr.1.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>.</li>
+<li><b>Distância de Mahalanobis:</b> Uma medida padronizada e generalizada que ajusta e compensa as correlações entre as variáveis [1]<sup><a id="fnr.1.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>.</li>
+<li><b>Distância Euclidiana Quadrada (ou Absoluta):</b> É a soma das diferenças quadradas sem calcular a raiz quadrada (recomendada ao usar os métodos de agrupamento de Ward ou do Centróide).</li>
+<li><b>Distância City-block (de Manhattan):</b> Utiliza a soma das diferenças absolutas das variáveis em vez da hipotenusa.</li>
+<li><b>Distância de Chebychev:</b> Definida como a maior diferença ao longo de todas as variáveis multidimensionais.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org0fa59d1" class="outline-3">
+<h3 id="org0fa59d1"><span class="section-number-3">1.2.</span> 2. Coeficientes de Semelhança para Valores de Ausência-Presença (Dados Binários)</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+Para dados binários (0 e 1), como é o caso do script de agrupamento do seu exemplo, a similaridade foca na concordância e na associação entre as respostas. A quantidade de coeficientes de semelhança é elevada, mas a literatura destaca os cinco seguintes [3, 4]<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup><sup>, </sup><sup><a id="fnr.4" class="footref" href="#fn.4" role="doc-backlink">4</a></sup>:
+</p>
+<ul class="org-ul">
+<li><b>Sorensen-Dice</b> (exatamente a métrica <code>metric</code>'dice'= utilizada no seu código) [4]<sup><a id="fnr.4.4" class="footref" href="#fn.4" role="doc-backlink">4</a></sup>.</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python" id="org9bb27be"><span style="color: #51afef;">import</span> sympy <span style="color: #51afef;">as</span> sp
+<span style="color: #51afef;">import</span> matplotlib.pyplot <span style="color: #51afef;">as</span> plt
+<span style="color: #51afef;">import</span> os
+
+os.makedirs(<span style="color: #98be65;">'imgs'</span>, exist_ok<span style="color: #51afef;">=</span><span style="color: #a9a1e1;">True</span>)
+<span style="color: #dcaeea;">a</span>, <span style="color: #dcaeea;">b</span>, <span style="color: #dcaeea;">c</span> <span style="color: #51afef;">=</span> sp.symbols(<span style="color: #98be65;">'a b c'</span>)
+<span style="color: #dcaeea;">S_sd</span> <span style="color: #51afef;">=</span> (2<span style="color: #51afef;">*</span>a) <span style="color: #51afef;">/</span> (2<span style="color: #51afef;">*</span>a <span style="color: #51afef;">+</span> b <span style="color: #51afef;">+</span> c)
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">Gera a imagem usando matplotlib
+</span>plt.figure(figsize<span style="color: #51afef;">=</span>(4, 1))
+plt.text(0.5, 0.5, f<span style="color: #98be65;">"${{S_{{SD}}}} = </span>{sp.latex(S_sd)}<span style="color: #98be65;">$"</span>, 
+         fontsize<span style="color: #51afef;">=</span>20, ha<span style="color: #51afef;">=</span><span style="color: #98be65;">'center'</span>, va<span style="color: #51afef;">=</span><span style="color: #98be65;">'center'</span>)
+plt.axis(<span style="color: #98be65;">'off'</span>)
+plt.savefig(<span style="color: #98be65;">'imgs/formula_sorensen_dice.png'</span>, bbox_inches<span style="color: #51afef;">=</span><span style="color: #98be65;">'tight'</span>, transparent<span style="color: #51afef;">=</span><span style="color: #a9a1e1;">True</span>, dpi<span style="color: #51afef;">=</span>300)
+plt.close()
+<span style="color: #c678dd;">print</span>(<span style="color: #98be65;">'imgs/formula_sorensen_dice.png'</span>)
+</pre>
+</div>
+
+
+<div id="orged0e2e3" class="figure">
+<p><img src="imgs/formula_sorensen_dice.png" alt="formula_sorensen_dice.png" />
+</p>
+</div>
+
+
+<ul class="org-ul">
+<li><b>Simple Matching</b> [4]<sup><a id="fnr.4.4" class="footref" href="#fn.4" role="doc-backlink">4</a></sup>.</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python" id="org57b787c"><span style="color: #51afef;">import</span> sympy <span style="color: #51afef;">as</span> sp
+<span style="color: #51afef;">import</span> matplotlib.pyplot <span style="color: #51afef;">as</span> plt
+<span style="color: #51afef;">import</span> os
+
+os.makedirs(<span style="color: #98be65;">'imgs'</span>, exist_ok<span style="color: #51afef;">=</span><span style="color: #a9a1e1;">True</span>)
+<span style="color: #dcaeea;">a</span>, <span style="color: #dcaeea;">b</span>, <span style="color: #dcaeea;">c</span>, <span style="color: #dcaeea;">d</span> <span style="color: #51afef;">=</span> sp.symbols(<span style="color: #98be65;">'a b c d'</span>)
+<span style="color: #dcaeea;">S_sm</span> <span style="color: #51afef;">=</span> (a <span style="color: #51afef;">+</span> d) <span style="color: #51afef;">/</span> (a <span style="color: #51afef;">+</span> b <span style="color: #51afef;">+</span> c <span style="color: #51afef;">+</span> d)
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">Gera a imagem usando matplotlib
+</span>plt.figure(figsize<span style="color: #51afef;">=</span>(4, 1))
+plt.text(0.5, 0.5, f<span style="color: #98be65;">"${{S_{{SM}}}} = </span>{sp.latex(S_sm)}<span style="color: #98be65;">$"</span>, 
+         fontsize<span style="color: #51afef;">=</span>20, ha<span style="color: #51afef;">=</span><span style="color: #98be65;">'center'</span>, va<span style="color: #51afef;">=</span><span style="color: #98be65;">'center'</span>)
+plt.axis(<span style="color: #98be65;">'off'</span>)
+plt.savefig(<span style="color: #98be65;">'imgs/formula_simple_matching.png'</span>, bbox_inches<span style="color: #51afef;">=</span><span style="color: #98be65;">'tight'</span>, transparent<span style="color: #51afef;">=</span><span style="color: #a9a1e1;">True</span>, dpi<span style="color: #51afef;">=</span>300)
+plt.close()
+<span style="color: #c678dd;">print</span>(<span style="color: #98be65;">'imgs/formula_simple_matching.png'</span>)
+</pre>
+</div>
+
+
+<div id="org87ab3b8" class="figure">
+<p><img src="imgs/formula_simple_matching.png" alt="formula_simple_matching.png" />
+</p>
+</div>
+
+<ul class="org-ul">
+<li><b>Jaccard</b> [4]<sup><a id="fnr.4.4" class="footref" href="#fn.4" role="doc-backlink">4</a></sup>.</li>
+<li><b>Ochiai</b> [4]<sup><a id="fnr.4.4" class="footref" href="#fn.4" role="doc-backlink">4</a></sup>.</li>
+<li><b>Anderberg</b> [4]<sup><a id="fnr.4.4" class="footref" href="#fn.4" role="doc-backlink">4</a></sup>.</li>
+</ul>
+
+<blockquote>
+<p>
+Onde:
+</p>
+<ul class="org-ul">
+<li><b>a</b>: Ambos presentes (1,1)</li>
+<li><b>b</b>: Presente apenas no primeiro objeto (1,0)</li>
+<li><b>c</b>: Presente apenas no segundo objeto (0,1)</li>
+<li><b>d</b>: Ambos ausentes (0,0)</li>
+</ul>
+</blockquote>
+</div>
+</div>
+<div id="outline-container-orge98553c" class="outline-3">
+<h3 id="orge98553c"><span class="section-number-3">1.3.</span> 3. Medidas Correlacionais</h3>
+<div class="outline-text-3" id="text-1-3">
+<p>
+A similaridade também pode ser avaliada invertendo-se a matriz para usar o coeficiente de correlação entre os objetos. Contudo, essa medida analisa os padrões dos valores e não a magnitude exata das diferenças.
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org48cc21b" class="outline-2">
+<h2 id="org48cc21b"><span class="section-number-2">2.</span> Referências</h2>
+<div class="outline-text-2" id="text-2">
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+Hair et al., Análise Multivariada de Dados (6ª edição), Capítulo 8 (Análise de Agrupamentos: Medida de similaridade).
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+Ferraudo, A. S., Técnicas de Análise Multivariada, Cálculo da matriz de semelhança (Distância euclidiana).
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+Ferraudo, A. S., Técnicas de Análise Multivariada, Capítulo 1 (A quantidade de coeficientes de semelhança é elevada).
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4" role="doc-backlink">4</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+Ferraudo, A. S., Técnicas de Análise Multivariada, Tabela 2 (Cinco coeficientes de similaridade mais utilizados e suas fórmulas).
+</p></div></div>
+
+
+</div>
+</div></div>
+<div id="postamble" class="status">
+<p class="author">Author: wgn</p>
+<p class="date">Created: 2026-05-05 ter 14:15</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
