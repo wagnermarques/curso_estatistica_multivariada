@@ -7,11 +7,8 @@ Este documento apresenta a resolução passo a passo dos exercícios propostos, 
 
 Os scripts python estao na pasta =src/=.
 
-
-*  cria csv a partir do pdf
-
-
-
+* Configuração do Ambiente
+Configuramos o path para incluir nossos scripts em =src/=.
 
 * Exercício 1: Análise de Dados Binários
 Considere a Tabela 1 com valores de presença-ausência de 8 espécies.
@@ -19,27 +16,34 @@ Considere a Tabela 1 com valores de presença-ausência de 8 espécies.
 ** Objetivo: Gerar dendrogramas utilizando os coeficientes de Sorensen-Dice e Simple Matching.
 
 ** 1.1 Carga de Dados
-Utilizamos o script =read_csv.py= para carregar os dados.
+Utilizamos o script =ex1_1_read_data_from_csv.py= para carregar os dados.
 
 #+name: ex1-carga
 #+begin_src python :session multivariada :results output
-  #import read_csv
-  #df_bin = read_csv.read_data()
-  #print("Dados da Tabela 1 carregados:")
-  #print(df_bin.head())
-  
+import ex1_1_read_data_from_csv
+df_bin = ex1_1_read_data_from_csv.read_data()
+print("Dados da Tabela 1 carregados:")
+print(df_bin.head())
 #+end_src
 
 ** 1.2 Agrupamento Hierárquico
-Para gerar os dendrogramas, criamos o script =clustering_binario.py= que calcula as matrizes de distância e as plota utilizando o método de agrupamento /Average Linkage/ (UPGMA).
-
-- *Sorensen-Dice*: Mede a similaridade focando apenas nas presenças simultâneas (ignora duplas ausências). No scipy, a métrica =dice= calcula a disimilaridade correspondente.
-- *Simple Matching*: Mede a similaridade considerando tanto presenças quanto ausências simultâneas. No scipy, a métrica =matching= calcula a distância.
+Utilizamos o script =ex1_2_clustering_binario.py= para calcular as matrizes de distância e plotar os dendrogramas.
 
 #+name: ex1-clustering
 #+begin_src python :session multivariada :results output
-import clustering_binario
-clustering_binario.analyze_binary_data(df_bin)
+import ex1_2_clustering_binario
+from scipy.spatial.distance import squareform
+
+X = df_bin.iloc[:, 1:].values
+labels = df_bin.iloc[:, 0].values
+
+# Cálculo das distâncias
+dist_dice = ex1_2_clustering_binario.calcular_matriz_distancias(X, metric='dice')
+dist_sm = ex1_2_clustering_binario.calcular_matriz_distancias(X, metric='matching')
+
+# Geração dos gráficos
+ex1_2_clustering_binario.plot_dendrogram(dist_dice, labels, 'dice', 'Dendrograma - Sorensen-Dice', 'dendrograma_sorensen_dice.png')
+ex1_2_clustering_binario.plot_dendrogram(dist_sm, labels, 'matching', 'Dendrograma - Simple Matching', 'dendrograma_simple_matching.png')
 #+end_src
 
 ** 1.3 Resultados - Dendrogramas
@@ -51,3 +55,25 @@ clustering_binario.analyze_binary_data(df_bin)
 #+CAPTION: Dendrograma utilizando distância Simple Matching
 #+NAME: fig:dendrograma-matching
 [[file:figures/dendrograma_simple_matching.png]]
+
+* Exercício 2: Análise do Dataset IRIS
+
+O dataset IRIS sobre flores SETOSA, VIRGINIC e VERSICOLOR.
+
+** Objetivo: Realizar análise de agrupamento e validar as diferenças entre espécies via MANOVA.
+
+** 2.1 Carga e Exploração de Dados
+Utilizamos o script =ex2_1_load_iris.py= para carregar o arquivo Excel.
+
+#+name: ex2-carga
+#+begin_src python :session multivariada :results output
+import ex2_1_load_iris
+df_iris = ex2_1_load_iris.load_iris_data()
+print("Dataset IRIS carregado:")
+print(df_iris.describe())
+print(f"\nEspécies presentes: {df_iris['specie'].unique()}")
+#+end_src
+
+# Local Variables:
+# org-babel-python-command: "../../.venv/bin/python3"
+# End:
