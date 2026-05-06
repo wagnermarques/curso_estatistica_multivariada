@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.spatial.distance import pdist
-from scipy.cluster.hierarchy import linkage, dendrogram
+from scipy.cluster.hierarchy import linkage, dendrogram, fcluster
 import os
 
 def calcular_matriz_distancias(X, metric):
@@ -36,6 +36,20 @@ def plot_dendrogram(dist_matrix, labels, metric, title, filename):
     plt.savefig(output_path, dpi=300)
     plt.close()
     print(f"Dendrograma salvo em: {output_path}")
+
+def atribuir_grupos(dist_matrix, labels, t, criterion='distance', method='average'):
+    """
+    Corta o dendrograma e atribui grupos as amostras.
+    criterion pode ser 'distance' (corte na altura t) ou 'maxclust' (t grupos).
+    """
+    Z = linkage(dist_matrix, method=method)
+    cluster_ids = fcluster(Z, t=t, criterion=criterion)
+    
+    df_grupos = pd.DataFrame({
+        'Especie': labels,
+        'Grupo': cluster_ids
+    })
+    return df_grupos
 
 def analyze_binary_data(df):
     print("Iniciando analise de dados binÃ¡rios...")
