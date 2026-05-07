@@ -66,4 +66,43 @@ ex2_2_clustering_iris.plot_kmeans_clusters(
     filename='kmeans_scatter_iris.png'
 )
 
-print("\nExercicio 2 concluido com sucesso utilizando Pure K-means.")
+# 8. Analise Univariada (ANOVA) - Verificando a qualidade dos grupos
+import statsmodels.api as sm
+from statsmodels.formula.api import ols
+
+print("\n--- Analise de Variancia (ANOVA) por Variavel ---")
+print("H0: Nao ha diferenca entre as medias dos grupos")
+print("H1: Ha pelo menos uma diferenca entre as medias")
+
+for var in variaveis_list:
+    formula = f"{var} ~ C(Grupo)"
+    model = ols(formula, data=df).fit()
+    anova_table = sm.stats.anova_lm(model, typ=2)
+    
+    # Acessando os valores usando o nome da linha 'C(Grupo)'
+    p_valor = anova_table.at['C(Grupo)', 'PR(>F)']
+    f_stat = anova_table.at['C(Grupo)', 'F']
+    
+    print(f"\nVariavel: {var}")
+    print(f"F-statistic: {f_stat:.4f}")
+    print(f"p-valor: {p_valor:.4e}")
+    
+    if p_valor < 0.05:
+        print("Resultado: Significativo (Existem diferencas entre os grupos)")
+    else:
+        print("Resultado: Nao significativo (Nao ha diferencas claras)")
+
+# 9. Analise Multivariada de Variancia (MANOVA)
+from statsmodels.multivariate.manova import MANOVA
+
+print("\n--- Analise Multivariada de Variancia (MANOVA) ---")
+print("H0: Os vetores de medias dos grupos sao iguais")
+print("H1: Pelo menos um vetor de media e diferente")
+
+# Criando a formula para todas as variaveis dependentes
+formula_manova = " + ".join(variaveis_list) + " ~ C(Grupo)"
+manova = MANOVA.from_formula(formula_manova, data=df)
+
+# Exibindo os resultados (Wilks' lambda, Pillai's trace, etc)
+print(manova.mv_test())
+
