@@ -4,7 +4,7 @@
 
 * Introducao
 Este documento apresenta a resolucao da lista 1 de exercicios do nosso
-curso de introducao a analise estatística multivariada
+curso de introducao a analise estatÃ­stica multivariada
 
 Todos os scripts estao localizados na pasta =src/=.
 
@@ -13,8 +13,8 @@ pode ser acessados em
 https://github.com/wagnermarques/curso_estatistica_multivariada
 
 
-O código que produziu estes restulados abaixo se encontram neste mesmo
-repositório na pasta exercícios/exercicios_1/src
+O cÃ³digo que produziu estes restulados abaixo se encontram neste mesmo
+repositÃ³rio na pasta exercÃ­cios/exercicios_1/src
 
 
 obrigado
@@ -39,6 +39,7 @@ Os dendrogramas abaixo mostram como as especies se agrupam de acordo com cada me
 #+NAME: fig:dendrograma-matching
 [[file:figures/dendrograma_simple_matching.png]]
 
+#+latex: \clearpage
 * Exercicio 2: Agrupamento K-means no Dataset IRIS
 Neste exercicio, exploramos o algoritmo K-means para agrupar flores do dataset IRIS e validamos a qualidade dos grupos formados.
 
@@ -72,16 +73,16 @@ A analise inclui:
 
 * Conclusao
 
-Consegui praticar a análise de agrupamento
+Consegui praticar a anÃ¡lise de agrupamento
 
-O Livro do hair não fala do método ebowl de kmeans mas percebi que as
+O Livro do hair nÃ£o fala do mÃ©todo ebowl de kmeans mas percebi que as
 multiplos agrupamentos me pareceu resultar em grupos melhores que no
 kmeans simples onde eu escolhi 3 grupos e os grupos foram formados sem
 a inteligencia do ebowl.
-Já o dendograma é uma técnica mais interessante porque podemos
-escolher o ponto de corte. Consegui colocar isso no código, podemos
+JÃ¡ o dendograma Ã© uma tÃ©cnica mais interessante porque podemos
+escolher o ponto de corte. Consegui colocar isso no cÃ³digo, podemos
 cortar e obter os grupos.
-Agradeço muitíssimo a oportunidade e a compreenção.
+AgradeÃ§o muitÃ­ssimo a oportunidade e a compreenÃ§Ã£o.
 
 
 
@@ -277,7 +278,7 @@ H1: Pelo menos um vetor de media e diferente
 
 #+end_src
 
-* saída completa do kmeans com ebowol
+* saÃ­da completa do kmeans com ebowol
 
 #+name: 
 #+begin_src shell
