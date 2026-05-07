@@ -55,7 +55,7 @@ print(df_grupos['Grupo'].value_counts())
 
 # Comparar com as especies originais (Crosstab)
 print("\n--- Cruzamento: Especie Original vs Grupo K-means ---")
-print(pd.crosstab(df_grupos['Especie'], df_grupos['Grupo']))
+print(pd.crosstab(df['specie'], df['Grupo']))
 
 # 7. Visualizacao dos clusters
 print("\n--- Gerando Grafico de Dispersao dos Clusters ---")
