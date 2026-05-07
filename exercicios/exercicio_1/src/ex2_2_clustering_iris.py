@@ -1,47 +1,83 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.spatial.distance import pdist
-from scipy.cluster.hierarchy import linkage, dendrogram, fcluster
+from sklearn.cluster import KMeans
 import os
 
-def plot_dendrogram_iris(dist_matrix, labels, title, filename):
+def plot_elbow_method(data, max_k=10, filename='kmeans_elbow_iris.png'):
     """
-    Produces a customized dendrogram for the IRIS dataset using Ward's method.
+    Plots the elbow method to help find the optimal number of clusters.
     """
-    # Agrupamento hierÃ¡rquico (Ward is standard for numerical scaled data)
-    Z = linkage(dist_matrix, method='ward')
+    wcss = []
+    for i in range(1, max_k + 1):
+        kmeans = KMeans(n_clusters=i, init='k-means++', max_iter=300, n_init=10, random_state=42)
+        kmeans.fit(data)
+        wcss.append(kmeans.inertia_)
 
-    plt.figure(figsize=(15, 7))
-
-    # Custom color map for species if labels are provided
-    # (Simplified: using default dendrogram coloring)
-    dendrogram(Z, labels=labels, leaf_rotation=90, leaf_font_size=8)
-
-    plt.title(title, fontsize=14, fontweight='bold')
-    plt.xlabel('Observacoes / Especies', fontsize=12)
-    plt.ylabel('Distancia de Ward', fontsize=12)
-    plt.tight_layout()
-
-    # Salvar no diretÃ³rio de figuras (text/figures)
+    plt.figure(figsize=(10, 6))
+    plt.plot(range(1, max_k + 1), wcss, marker='o', linestyle='--', color='b')
+    plt.title('Metodo do Cotovelo (Elbow Method) - IRIS', fontsize=14, fontweight='bold')
+    plt.xlabel('Numero de Grupos (k)', fontsize=12)
+    plt.ylabel('WCSS (Soma dos Quadrados Intra-Cluster)', fontsize=12)
+    plt.grid(True)
+    
     output_path = os.path.join(os.path.dirname(__file__), '..', 'text', 'figures', filename)
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
-
     plt.savefig(output_path, dpi=300)
     plt.close()
-    print(f"Dendrograma IRIS salvo em: {output_path}")
+    print(f"Grafico do Cotovelo salvo em: {output_path}")
 
-def atribuir_grupos(dist_matrix, labels, t, criterion='distance', method='ward'):
+def executar_kmeans(data, labels, n_clusters=3):
     """
-    Corta o dendrograma e atribui grupos as amostras.
-    criterion pode ser 'distance' (corte na altura t) ou 'maxclust' (t grupos).
+    Executa o algoritmo K-means e retorna um DataFrame com as atribuicoes.
     """
-    Z = linkage(dist_matrix, method=method)
-    cluster_ids = fcluster(Z, t=t, criterion=criterion)
+    kmeans = KMeans(n_clusters=n_clusters, init='k-means++', max_iter=300, n_init=10, random_state=42)
+    cluster_ids = kmeans.fit_predict(data)
 
     df_grupos = pd.DataFrame({
         'Especie': labels,
-        'Grupo': cluster_ids
+        'Grupo': cluster_ids + 1  # Ajustando para comecar em 1
     })
-    return df_grupos
+    return df_grupos, kmeans
 
+def plot_kmeans_clusters(data, cluster_labels, centroids, filename='kmeans_scatter_iris.png'):
+    """
+    Visualiza os grupos do K-means usando as duas primeiras variaveis padronizadas.
+    """
+    plt.figure(figsize=(10, 7))
+    
+    colors = ['red', 'blue', 'green', 'purple', 'orange']
+    
+    for i in range(1, len(np.unique(cluster_labels)) + 1):
+        plt.scatter(
+            data[cluster_labels == i, 0], 
+            data[cluster_labels == i, 1], 
+            s=70, 
+            c=colors[i-1 % len(colors)], 
+            label=f'Grupo {i}',
+            alpha=0.6,
+            edgecolors='w'
+        )
+
+    # Plotting the centroids
+    plt.scatter(
+        centroids[:, 0], 
+        centroids[:, 1], 
+        s=250, 
+        c='yellow', 
+        label='Centroides', 
+        marker='*', 
+        edgecolors='black'
+    )
+    
+    plt.title('Clusters K-means (Projecao: Variavel 1 vs Variavel 2)', fontsize=14, fontweight='bold')
+    plt.xlabel('Variavel 1 (Padronizada)', fontsize=12)
+    plt.ylabel('Variavel 2 (Padronizada)', fontsize=12)
+    plt.legend()
+    plt.grid(True, linestyle=':', alpha=0.6)
+
+    output_path = os.path.join(os.path.dirname(__file__), '..', 'text', 'figures', filename)
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    plt.savefig(output_path, dpi=300)
+    plt.close()
+    print(f"Grafico de Clusters (Scatter) salvo em: {output_path}")
