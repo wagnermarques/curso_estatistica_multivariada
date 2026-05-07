@@ -1,79 +1,90 @@
-#+TITLE: Resolução do Exercício 1 - Estatística Multivariada
+#+TITLE: Resolucao do Exercicio 1 - Estatistica Multivariada
 #+AUTHOR: Wagner com ajuda do Gemini CLI
 #+OPTIONS: toc:2
 
-* Introdução
-Este documento apresenta a resolução passo a passo dos exercícios propostos, utilizando Python para análise de dados multivariados.
+* Introducao
+Este documento apresenta a resolucao da lista 1 de exercicios do nosso
+curso de introducao a analise estatística multivariada
 
-Os scripts python estao na pasta =src/=.
+Todos os scripts estao localizados na pasta =src/=.
 
-* Configuração do Ambiente
-Configuramos o path para incluir nossos scripts em =src/=.
+Para mais detalhes tudo que foi tealizado inclusive notas de estudos
+pode ser acessados em
+https://github.com/wagnermarques/curso_estatistica_multivariada
 
-* Exercício 1: Análise de Dados Binários
-Considere a Tabela 1 com valores de presença-ausência de 8 espécies.
 
-** Objetivo: Gerar dendrogramas utilizando os coeficientes de Sorensen-Dice e Simple Matching.
+O código que produziu estes restulados abaixo se encontram neste mesmo
+repositório na pasta exercícios/exercicios_1/src
 
-** 1.1 Carga de Dados
-Utilizamos o script =ex1_1_read_data_from_csv.py= para carregar os dados.
 
-#+name: ex1-carga
-#+begin_src python :session multivariada :results output
-import ex1_1_read_data_from_csv
-df_bin = ex1_1_read_data_from_csv.read_data()
-print("Dados da Tabela 1 carregados:")
-print(df_bin.head())
-#+end_src
+obrigado
 
-** 1.2 Agrupamento Hierárquico
-Utilizamos o script =ex1_2_clustering_binario.py= para calcular as matrizes de distância e plotar os dendrogramas.
+* Exercicio 1: Analise de Dados Binarios (Presenca-Ausencia)
+O objetivo deste exercicio e analisar a similaridade entre 8 especies com base em dados binarios utilizando diferentes coeficientes.
 
-#+name: ex1-clustering
-#+begin_src python :session multivariada :results output
-import ex1_2_clustering_binario
-from scipy.spatial.distance import squareform
+** Codigo de Carregamento e Processamento
+Os dados sao carregados de um arquivo CSV e processados para calcular as matrizes de distancia de Sorensen-Dice e Simple Matching.
 
-X = df_bin.iloc[:, 1:].values
-labels = df_bin.iloc[:, 0].values
+#+CAPTION: Script de Analise Binaria
+#+INCLUDE: "../src/main_ex1.py" src python
 
-# Cálculo das distâncias
-dist_dice = ex1_2_clustering_binario.calcular_matriz_distancias(X, metric='dice')
-dist_sm = ex1_2_clustering_binario.calcular_matriz_distancias(X, metric='matching')
+** Resultados: Dendrogramas
+Os dendrogramas abaixo mostram como as especies se agrupam de acordo com cada metrica de distancia.
 
-# Geração dos gráficos
-ex1_2_clustering_binario.plot_dendrogram(dist_dice, labels, 'dice', 'Dendrograma - Sorensen-Dice', 'dendrograma_sorensen_dice.png')
-ex1_2_clustering_binario.plot_dendrogram(dist_sm, labels, 'matching', 'Dendrograma - Simple Matching', 'dendrograma_simple_matching.png')
-#+end_src
-
-** 1.3 Resultados - Dendrogramas
-
-#+CAPTION: Dendrograma utilizando distância Sorensen-Dice
+#+CAPTION: Dendrograma utilizando distancia Sorensen-Dice
 #+NAME: fig:dendrograma-dice
 [[file:figures/dendrograma_sorensen_dice.png]]
 
-#+CAPTION: Dendrograma utilizando distância Simple Matching
+#+CAPTION: Dendrograma utilizando distancia Simple Matching
 #+NAME: fig:dendrograma-matching
 [[file:figures/dendrograma_simple_matching.png]]
 
-* Exercício 2: Análise do Dataset IRIS
+* Exercicio 2: Agrupamento K-means no Dataset IRIS
+Neste exercicio, exploramos o algoritmo K-means para agrupar flores do dataset IRIS e validamos a qualidade dos grupos formados.
 
-O dataset IRIS sobre flores SETOSA, VIRGINIC e VERSICOLOR.
+** Abordagem 1: Metodo do Cotovelo (Elbow Method)
+Esta abordagem foca em encontrar o numero otimo de grupos (k) analisando a variacao da soma dos quadrados intra-cluster (WCSS).
 
-** Objetivo: Realizar análise de agrupamento e validar as diferenças entre espécies via MANOVA.
+#+CAPTION: Script K-means com Metodo do Cotovelo
+#+INCLUDE: "../src/main_ex2_kmeans_elbow.py" src python
 
-** 2.1 Carga e Exploração de Dados
-Utilizamos o script =ex2_1_load_iris.py= para carregar o arquivo Excel.
+*** Graficos de Validacao do Numero de Grupos
+#+CAPTION: Analise do Metodo do Cotovelo
+[[file:figures/kmeans_elbow_iris.png]]
 
-#+name: ex2-carga
-#+begin_src python :session multivariada :results output
-import ex2_1_load_iris
-df_iris = ex2_1_load_iris.load_iris_data()
-print("Dataset IRIS carregado:")
-print(df_iris.describe())
-print(f"\nEspécies presentes: {df_iris['specie'].unique()}")
-#+end_src
+#+CAPTION: Dispersao dos Grupos (Cotovelo)
+[[file:figures/kmeans_scatter_iris.png]]
+
+** Abordagem 2: K-means Simples com Validacao Estatistica
+Nesta versao, definimos o numero de grupos diretamente e realizamos testes de ANOVA e MANOVA para verificar se os grupos sao estatisticamente distintos.
+
+#+CAPTION: Script K-means Simples e Validacao
+#+INCLUDE: "../src/main_ex2_kmeans_simple.py" src python
+
+*** Analise de Resultados
+A analise inclui:
+- *Crosstab*: Comparacao entre a especie real e o grupo atribuido.
+- *ANOVA*: Teste univariado para cada variavel (SEPALLEN, SEPALWID, etc).
+- *MANOVA*: Teste multivariado considerando todas as variaveis simultaneamente.
+
+#+CAPTION: Dispersao dos Grupos (Simples)
+[[file:figures/kmeans_scatter_iris_simple.png]]
+
+* Conclusao
+
+Consegui praticar a análise de agrupamento
+
+O Livro do hair não fala do método ebowl de kmeans mas percebi que as
+multiplos agrupamentos me pareceu resultar em grupos melhores que no
+kmeans simples onde eu escolhi 3 grupos e os grupos foram formados sem
+a inteligencia do ebowl.
+Já o dendograma é uma técnica mais interessante porque podemos
+escolher o ponto de corte. Consegui colocar isso no código, podemos
+cortar e obter os grupos.
+Agradeço muitíssimo a oportunidade e a compreenção.
+
+
 
 # Local Variables:
-# org-babel-python-command: "../../.venv/bin/python3"
+# org-babel-python-command: "venv/bin/python3"
 # End:
