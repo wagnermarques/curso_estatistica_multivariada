@@ -16,6 +16,7 @@ https://github.com/wagnermarques/curso_estatistica_multivariada
 O codigo que produziu estes restulados abaixo se encontram neste mesmo
 repositorio do github, na pasta exercicios/exercicios_1/src
 
+Consulte aqui como reproduzir a execucao do codigo que gerou o resultado 
 
 obrigado
 
@@ -23,7 +24,7 @@ obrigado
 O objetivo deste exercicio e analisar a similaridade entre 8 especies com base em dados binarios utilizando diferentes coeficientes.
 
 ** Codigo de Carregamento e Processamento
-Os dados sao carregados de um arquivo CSV e processados para calcular as matrizes de distancia de Sorensen-Dice e Simple Matching.
+Os dados sao carregados de um [[https://github.com/wagnermarques/curso_estatistica_multivariada/blob/main/exercicios/exercicio_1/src/tabela_1_presenca_ausencia.csv][arquivo CSV]] e processados para calcular as matrizes de distancia de Sorensen-Dice e Simple Matching.
 
 
 #+CAPTION: Script de Analise Binaria
@@ -391,4 +392,10 @@ H1: Pelo menos um vetor de media e diferente
 #+end_src
 
 
+* Como rodar o script no computador (usando linux)
+
+#+name: 
+#+begin_src shell
+
+#+end_src
 
