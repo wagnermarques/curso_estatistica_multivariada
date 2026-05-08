@@ -2,9 +2,13 @@
 
 Segue anotações de estudos da leitura do livro do hair
 
-é um conjunto de técnicas multivariadas de interdependência
-encontrar grupos de objetos ou indivíduos o mais similares possível dentro do
-grupo e mais diferentes possível entre os grupos.
+Conjunto de técnicas multivariadas de interdependência
+
+Objetiva encontrar grupos de objetos ou indivíduos o mais similares
+possível dentro do grupo e mais diferentes possível entre os grupos.
+
+Com isso os objetos classificados podem ser vistos como membros de um
+perfil geral (grupo) em vez de entidades únicas
 
 O pesquisador utiliza a técnica para descobrir os grupos, ou seja, ele
 ainda não sabe quais grupos existem. Na técnica de análise
@@ -14,46 +18,58 @@ A análise é um processo estruturado em 6 estágios
 
 1. Delinear Objetivos da Análise
 
-   - taxomonia e simplificação: Processo de classificar os indivíduos
-     com base em suas similaridades. Isso facilita identificar o
-     perfil dos indivíduos com base em seus grupos.
-   - fazer análises posteriores investigando as diferenças e semelhanças
-   de acordo com a literatura
- 
-Simplificação de dados:  análises posteriores, permitindo que os objetos sejam vistos como membros de um perfil geral em vez de entidades únicas
-.
-Identificação de relações: Revelação de relacionamentos ou características semelhantes que não seriam evidentes caso os dados fossem analisados individualmente
-. A seleção das variáveis é uma etapa crítica e deve ter forte suporte teórico e conceitual, pois a técnica agrupará os dados baseando-se estritamente nelas, sem distinguir o que é ou não relevante
-.
-2. Projeto de Pesquisa Nesta etapa, o pesquisador deve lidar com algumas questões fundamentais
-:
-Detecção de observações atípicas (outliers): A técnica é excessivamente sensível a observações atípicas, que podem distorcer a verdadeira estrutura dos dados e devem ser eliminadas, a menos que representem um segmento pequeno e válido da população
-.
-Medida de similaridade: Define-se como a correspondência entre os objetos será comparada. As medidas mais comuns são as de distância (como a Euclidiana ou a de Mahalanobis), em que distâncias menores representam maior similaridade
-.
-Padronização dos dados: Devido à sensibilidade do método a diferenças de magnitude nas escalas, as variáveis geralmente devem ser padronizadas (ex: convertidas em escores Z) para evitar que variáveis com maior dispersão tenham um peso desproporcional na formação dos grupos
-.
-3. Suposições da Análise de Agrupamentos Ao contrário de muitas técnicas multivariadas (como a regressão múltipla), a análise de agrupamentos não exige suposições estatísticas rigorosas de inferência (como normalidade, linearidade e homocedasticidade)
-. As exigências mais críticas referem-se ao delineamento da pesquisa
-:
-Representatividade da amostra: A amostra deve refletir adequadamente a população para que a estrutura obtida seja generalizável
-.
-Impacto da multicolinearidade: Variáveis altamente correlacionadas atuam como uma "ponderação implícita", alterando a medida de similaridade de forma oculta e distorcendo a análise
-.
-4. Determinação dos Agrupamentos e Ajuste Geral O pesquisador deve escolher o algoritmo (procedimento de partição) e determinar o número de agrupamentos
-:
-Procedimentos Hierárquicos (Aglomerativos ou Divisivos): Combinam ou dividem observações sequencialmente, construindo uma estrutura em formato de árvore chamada dendrograma
-. São excelentes para examinar uma vasta gama de soluções, mas exigem alto poder computacional e armazenagem em amostras grandes
-.
-Procedimentos Não-Hierárquicos (ex: K-médias): Designam objetos diretamente a um número especificado de pontos iniciais ("sementes"). São ideais para grandes conjuntos de dados e permitem a redesignação (otimização) de objetos para agrupamentos mais próximos
-.
-Hair frequentemente recomenda uma abordagem combinada: usar um método hierárquico primeiro para determinar o número ideal de grupos e gerar pontos semente, aplicando em seguida um método não-hierárquico para alocar e refinar os resultados
-. O número final de grupos normalmente é escolhido aplicando "regras de parada", que avaliam saltos expressivos na heterogeneidade quando os clusters são combinados
-.
-5. Interpretação dos Agrupamentos Nesta fase, examina-se o perfil das variáveis em cada cluster — geralmente olhando os valores médios (centróides) — a fim de atribuir um nome ou rótulo descritivo que defina precisamente a natureza e as características daquele grupo perante os demais
-.
-6. Validação e Perfil dos Agrupamentos Devido à natureza exploratória e muitas vezes subjetiva da análise de agrupamentos, a validação empírica é obrigatória
-. Ela garante a generalização e a estabilidade da solução (por exemplo, validando de forma cruzada em amostras separadas)
-. Por fim, traça-se o perfil dos agrupamentos valendo-se de dados extras que não foram incluídos no processo inicial de clusterização (como dados demográficos ou psicográficos), para atestar a validade preditiva e demonstrar que os grupos formados possuem significância prática real
-.
-Se você quiser, NotebookLM pode criar um relatório detalhado focado especificamente na análise de agrupamentos ou gerar flashcards interativos para facilitar sua revisão dessa teoria. Basta confirmar se deseja a criação desses artefatos!
+   - taxomonia e simplificação:
+     Escolha das variáveis de classificação
+     
+     Fazer a escolha fundamentada na literatura ou bem justificada
+     
+     Pode ser feita uma Análise de Componentes principais para
+     identificar variáveis estatísticamente relevantes e/ou
+     irrelevantes
+     
+   - Avaliar bem o comportamento das variávei escolhidas
+     Máximo cuidado com outlieres
+     
+     Fundamental padronizar na distribuição z pois o que interessa não
+     é a medida em sí mas principalmente as diferenças dessa medida
+     (variável) entre os objetos
+     
+     Não se exige distribuição normal para as variáveis selecionadas
+     para o agrupamento
+     
+     Padronizar a variável não significa que depois de padronizada ela     
+     vai seguir a distribuição normal
+     
+     Multicolinearidade entre as variáveis distorcem o resultado.
+     
+   - fazer análises posteriores investigando as diferenças e
+     semelhanças de acordo com a literatura
+     
+   - Decidir qual medidas de similiraidade e qual algoritmo
+     Percebi que é importante tomar essas duas decisoes em conjunto
+     Medidas populares: Euclidiana ou a de Mahalanobis
+     
+     Os algoritmos podem ser hierarquicos (wald) ou vc escolhe o
+     número de grupos antes de rodar a técnica (kmeans puro). Existe
+     um algoritmo que não é hierárquico que é Elbols (cotovelo) que
+     roda varios agrupamentos e escolhe o melhor.
+     
+     Tem como fazer uma técnica híbrida para conseguir um dendograma
+     quando tiver rodando um algoritmo não hierárquico.
+
+2.  Representatividade da amostra:
+    Necessário para inferências estatística. 
+
+3. Não existe o melhor agrupamento, isso vai depender da expertise do pesqusisador
+
+4. Hair frequentemente recomenda uma abordagem combinada: usar um método
+hierárquico primeiro para determinar o número ideal de grupos e gerar
+pontos semente,
+
+aplicando em seguida um método não-hierárquico para alocar e refinar os resultados
+
+6. Considerando que a técnica é exploratório o melhor agrupamento pode
+   depender do pesquisdor, validar os grupos é obrigatório.
+   A validadação pode ser comprovando com análise de variáncia que os
+   grupos realmente diferem entre sí ou técnicas similares.
+   
