@@ -7,14 +7,23 @@ As medidas dependendem do tipo de variável, que podem ser quantitivas
 ou qualitativas [1][fn:100].
 
 ** 1. Medidas de Distância (Para variáveis Métricas/Quantitativas)
-- *Distância Euclidiana:* É a medida mais comumente utilizada, representando a distância geométrica em linha reta [1, 2][fn:5][fn:100].
-- *Distância de Mahalanobis:* Uma medida padronizada e generalizada que ajusta e compensa as correlações entre as variáveis [1][fn:100].
-- *Distância Euclidiana Quadrada (ou Absoluta):* É a soma das diferenças quadradas sem calcular a raiz quadrada (recomendada ao usar os métodos de agrupamento de Ward ou do Centróide).
-- *Distância City-block (de Manhattan):* Utiliza a soma das diferenças absolutas das variáveis em vez da hipotenusa.
-- *Distância de Chebychev:* Definida como a maior diferença ao longo de todas as variáveis multidimensionais.
+- *Distância Euclidiana:*
+  É a medida mais comumente utilizada.Distância geométrica em linha reta [1, 2][fn:5][fn:100].
+- *Distância de Mahalanobis:*
+  Compensa as correlações entre as variáveis [1][fn:100].
+- *Distância Euclidiana Quadrada (ou Absoluta):*
+  Recomendada ao usar os métodos de agrupamento de Ward ou do Centróide.
+- *Distância City-block (de Manhattan):*
+  Utiliza a soma das diferenças absolutas das variáveis em vez da hipotenusa.
+- *Distância de Chebychev:*
+  Definida como a maior diferença ao longo de todas as variáveis multidimensionais.
 
 ** 2. Coeficientes de Semelhança para Valores de Ausência-Presença (Dados Binários)
-Para dados binários (0 e 1), como é o caso do script de agrupamento do seu exemplo, a similaridade foca na concordância e na associação entre as respostas. A quantidade de coeficientes de semelhança é elevada, mas a literatura destaca os cinco seguintes [3, 4][fn:3][fn:4]:
+Para dados binários (0 e 1), como é o caso do script de agrupamento ,
+a similaridade foca na concordância e na associação entre as
+respostas.
+
+A quantidade de coeficientes de semelhança é elevada, mas a literatura destaca os cinco seguintes [3, 4][fn:3][fn:4]:
 - *Sorensen-Dice* (exatamente a métrica =metric='dice'= utilizada no seu código) [4][fn:4].
 
 #+name: formula-sorensen-dice

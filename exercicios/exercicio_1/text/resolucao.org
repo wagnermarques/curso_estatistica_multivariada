@@ -13,8 +13,8 @@ pode ser acessados em
 https://github.com/wagnermarques/curso_estatistica_multivariada
 
 
-O cÃ³digo que produziu estes restulados abaixo se encontram neste mesmo
-repositÃ³rio na pasta exercÃ­cios/exercicios_1/src
+O codigo que produziu estes restulados abaixo se encontram neste mesmo
+repositorio do github, na pasta exercicios/exercicios_1/src
 
 
 obrigado
@@ -24,6 +24,7 @@ O objetivo deste exercicio e analisar a similaridade entre 8 especies com base e
 
 ** Codigo de Carregamento e Processamento
 Os dados sao carregados de um arquivo CSV e processados para calcular as matrizes de distancia de Sorensen-Dice e Simple Matching.
+
 
 #+CAPTION: Script de Analise Binaria
 #+INCLUDE: "../src/main_ex1.py" src python

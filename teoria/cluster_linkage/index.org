@@ -1,23 +1,51 @@
 #+Title: Cluster Linkage
-(Resumo construido com ajuda do notebooklm)
+#+STARTUP: latexpreview 
+preview(Resumo construido com ajuda do notebooklm)
 
 * Estratégia de Ligação: Método Average (UPGMA)
 
 Os métodos hierarquicos de agrupamento podem ter mais de uma
-*estratégia de agrupamento* (ou algoritmo de ligação) ou linkage. É o
+*estratégia de agrupamento* (ou algoritmo de ligação) ou
+linkage. Linkage é o
 algoritmo que decide quem será unido em um grupo ou não[fn:7].
 
-O mais comum é o =method='average'= é chamado nas fontes de *Ligação
-Média* ou *UPGMA* (do inglês /Unweighted Pair-Group Method using
+O mais comum é o =method='average'= que também é citado nas livros como *Ligação  Média* ou *UPGMA* (do inglês /Unweighted Pair-Group Method using
 arithmetic Averages/ - Método Não Ponderado de Agrupamento aos Pares).
 
 A teoria destaca os seguintes pontos sobre ele:
 
-- *Como a distância é calculada:* Neste método, a similaridade entre dois agrupamentos é definida como a média das distâncias entre todos os pares de valores (indivíduos) de um grupo com todos os indivíduos do outro grupo[fn:9][fn:788].
+- Como a distância é calculada:
+  Neste método/algoritmo (avarage/UPFMA), a similaridade entre dois
+  agrupamentos é definida como:
+  - média das distâncias entre todos os pares de valores (indivíduos)
+    de um grupo com todos os indivíduos do outro grupo[fn:9][fn:788].
+    
 - *Vantagem sobre outros métodos:* A ligação média atua como um "meio-termo" entre o método de Ligação Simples (que considera apenas a distância mínima entre os membros mais próximos)[fn:787] e o método de Ligação Completa (que considera a distância máxima entre os membros mais extremos)[fn:4][fn:787].
 - *Robustez:* Diferente desses outros métodos, o algoritmo de ligação média não depende de valores extremos (pares mais próximos ou mais afastados), pois baseia-se em todos os elementos dos agregados. Por esse motivo, é considerado menos suscetível a observações atípicas (/outliers/)[fn:788].
 
-Portanto, o uso de =linkage(dist_matrix, method='average')= no seu código aplica exatamente essa teoria: cria o dendrograma utilizando as distâncias médias entre os elementos dos grupos para garantir agrupamentos consistentes e proteger a análise de distorções causadas por ruídos nos dados.
+  
+Diferente dos single linkage e do complete linkage o avarage linkage
+leva em consideração a estrutura interna do grupo.
+
+#+begin_export latex
+\begin{equation}
+d(A, B) = \frac{1}{|A| \cdot |B|} \sum_{a \in A} \sum_{b \in B} d(a, b)
+\end{equation}
+#+end_export
+
+
+\[
+d(A, B) = \frac{1}{|A| \cdot |B|} \sum_{a \in A} \sum_{b \in B} d(a, b)
+\]
+
+
+* Estratégia Single Linkage
+A Estratégia Single Linkage difere da avarage linkage por olhar apenas
+para os vizinhos mais próximos
+
+
+* Complete Linkage
+Olha os mais distantes
 
 
 * Referências

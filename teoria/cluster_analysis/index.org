@@ -51,8 +51,9 @@ A análise é um processo estruturado em 6 estágios
      
      Os algoritmos podem ser hierarquicos (wald) ou vc escolhe o
      número de grupos antes de rodar a técnica (kmeans puro). Existe
-     um algoritmo que não é hierárquico que é Elbols (cotovelo) que
-     roda varios agrupamentos e escolhe o melhor.
+     um algoritmo que não é hierárquico que é Elbow (cotovelo) que
+     roda varios agrupamentos e escolhe o melhor. Também tem o
+     coeficiente da silhueta.
      
      Tem como fazer uma técnica híbrida para conseguir um dendograma
      quando tiver rodando um algoritmo não hierárquico.
