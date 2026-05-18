@@ -147,6 +147,60 @@ Multiplicamos a matriz centralizada pela matriz de escala. Isso equivale a divid
 Z = \begin{bmatrix} -1.195 & 0.677 & 1.352 \\ -0.598 & 1.258 & 0.104 \\ 1.195 & 0.677 & 0.104 \\ 0.000 & -0.484 & -1.144 \\ -0.598 & -1.064 & -1.144 \\ 1.195 & -1.064 & 0.728 \end{bmatrix}
 \end{equation}
 
+A matriz ta igualzinha a dos slides do prof
+
+o trecho de codigo do nosso arquivo main.py que produz os dados
+padronizados he este abaixo
+
+#+name: trecho que produz e mostra os dados padronizados
+#+begin_src python :session s1 :shebang "#!/usr/bin/env python3" :exports both :results graphics file output :file boxplot.svg
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Carregar dados
+df = pd.read_csv('exemplo_pca.csv')
+
+# === Passo 2.1: Media de cada coluna ===
+means = df.mean()
+print("=== Passo 2.1: Media de cada coluna ===")
+for col, val in means.items():
+    print(f"{col}: {val:.4f}")
+
+# Dados Padronizados (X_std)
+df_std = (df - df.mean()) / df.std()
+
+print("\nDados Padronizados (X_std):")
+print(df_std.head(5).to_string(index=True))
+
+# Gerar Boxplot
+plt.figure(figsize=(8, 5))
+df_std.boxplot()
+plt.title("Boxplot dos Dados Padronizados")
+plt.savefig('boxplot.svg')
+plt.show()
+#+end_src
+
+
+
+#+name: 
+#+begin_src shell
+  === Passo 2: Padronizacao (Z-score) ===
+
+=== Passo 2.1: Media de cada coluna ===
+unidade: 3.5000
+X1: 4.0000
+X2: 2.8333
+X3: 2.8333
+Dados Padronizados (X_std):
+    unidade        X1        X2        X3
+0 -1.336306 -1.195229  0.677349  1.352407
+1 -0.801784 -0.597614  1.257934  0.104031
+2 -0.267261  1.195229  0.677349  0.104031
+3  0.267261  0.000000 -0.483821 -1.144344
+4  0.801784 -0.597614 -1.064405 -1.144344
+
+#+end_src
+
 * Covariancia
 \begin{equation}
 R = \frac{1}{n-1} Z^T Z
