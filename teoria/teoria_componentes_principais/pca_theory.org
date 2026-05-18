@@ -1,0 +1,78 @@
+#+TITLE: Documentacao da Analise de Componentes Principais (PCA)
+#+AUTHOR: Gemini CLI
+
+* Introducao
+Este documento apresenta as formulacoes matriciais utilizadas no calculo do PCA.
+
+* Dados de Estudo
+
+#+BEGIN_SRC python
+import pandas as pd
+from data_io.data_loader import load_pca_data
+pd.set_option('display.max_columns', 10)
+csv_path = 'exemplo_pca.csv'
+data = load_pca_data(csv_path)
+print(data.head())
+#+END_SRC
+
+| unidade |  X1 |  X2 |  X3 |
+|---------+-----+-----+-----|
+|     1.0 | 2.0 | 4.0 | 5.0 |
+|     2.0 | 3.0 | 5.0 | 3.0 |
+|     3.0 | 6.0 | 4.0 | 3.0 |
+|     4.0 | 4.0 | 2.0 | 1.0 |
+|     5.0 | 3.0 | 1.0 | 1.0 |
+|     6.0 | 6.0 | 1.0 | 4.0 |
+
+* Notacoes Matriciais
+Matriz de dados reais:
+
+\begin{equation}
+X = \begin{bmatrix} 
+2.0 & 4.0 & 5.0 \\
+3.0 & 5.0 & 3.0 \\
+6.0 & 4.0 & 3.0 \\
+4.0 & 2.0 & 1.0 \\
+3.0 & 1.0 & 1.0 \\
+6.0 & 1.0 & 4.0
+\end{bmatrix}
+\end{equation}
+
+* Vetor de Medias
+
+** Operacao Matricial
+\begin{equation}
+\bar{x} = \frac{1}{n} X^T \mathbf{1}
+\end{equation}
+
+** Passo a Passo
+- Transposta:
+\begin{equation}
+X^T = \begin{bmatrix} 2 & 3 & 6 & 4 & 3 & 6 \\ 4 & 5 & 4 & 2 & 1 & 1 \\ 5 & 3 & 3 & 1 & 1 & 4 \end{bmatrix}
+\end{equation}
+
+- Soma das colunas (X^T * 1):
+\begin{equation}
+\begin{bmatrix} 24 \\ 17 \\ 17 \end{bmatrix}
+\end{equation}
+
+- Media Final:
+\begin{equation}
+\bar{x} = \begin{bmatrix} 4.0 \\ 2.833 \\ 2.833 \end{bmatrix}
+\end{equation}
+
+* Padronizacao
+Formula Matricial:
+\begin{equation}
+Z = (X - \mathbf{1}\bar{x}^T) D^{-1}
+\end{equation}
+
+* Covariancia
+\begin{equation}
+R = \frac{1}{n-1} Z^T Z
+\end{equation}
+
+* Equacao Caracteristica
+\begin{equation}
+det(R - \lambda I) = 0
+\end{equation}

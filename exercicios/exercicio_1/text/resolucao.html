@@ -1,0 +1,679 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2026-05-07 qui 15:44 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Resolucao do Exercicio 1 - Estatistica Multivariada</title>
+<meta name="author" content="Wagner com ajuda do Gemini CLI" />
+<meta name="generator" content="Org Mode" />
+<style type="text/css">
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Resolucao do Exercicio 1 - Estatistica Multivariada</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org8457655">1. Introducao</a></li>
+<li><a href="#org34cb938">2. Exercicio 1: Analise de Dados Binarios (Presenca-Ausencia)</a>
+<ul>
+<li><a href="#org7409d0a">2.1. Codigo de Carregamento e Processamento</a></li>
+<li><a href="#org83c4842">2.2. Resultados: Dendrogramas</a></li>
+</ul>
+</li>
+<li><a href="#orgd8bbb72">3. Exercicio 2: Agrupamento K-means no Dataset IRIS</a>
+<ul>
+<li><a href="#org06f3e0b">3.1. Abordagem 1: Metodo do Cotovelo (Elbow Method)</a></li>
+<li><a href="#org2ad82e6">3.2. Abordagem 2: K-means Simples com Validacao Estatistica</a></li>
+</ul>
+</li>
+<li><a href="#orge9cea5b">4. Conclusao</a></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org8457655" class="outline-2">
+<h2 id="org8457655"><span class="section-number-2">1.</span> Introducao</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Este documento apresenta a resolucao da lista 1 de exercicios do nosso
+curso de introducao a analise estatística multivariada
+</p>
+
+<p>
+Todos os scripts estao localizados na pasta <code>src/</code>.
+</p>
+
+<p>
+Para mais detalhes tudo que foi tealizado inclusive notas de estudos
+pode ser acessados em
+<a href="https://github.com/wagnermarques/curso_estatistica_multivariada">https://github.com/wagnermarques/curso_estatistica_multivariada</a>
+</p>
+
+
+<p>
+O código que produziu estes restulados abaixo se encontram neste mesmo
+repositório na pasta exercícios/exercicios<sub>1</sub>/src
+</p>
+
+
+<p>
+obrigado
+</p>
+</div>
+</div>
+<div id="outline-container-org34cb938" class="outline-2">
+<h2 id="org34cb938"><span class="section-number-2">2.</span> Exercicio 1: Analise de Dados Binarios (Presenca-Ausencia)</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+O objetivo deste exercicio e analisar a similaridade entre 8 especies com base em dados binarios utilizando diferentes coeficientes.
+</p>
+</div>
+<div id="outline-container-org7409d0a" class="outline-3">
+<h3 id="org7409d0a"><span class="section-number-3">2.1.</span> Codigo de Carregamento e Processamento</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+Os dados sao carregados de um arquivo CSV e processados para calcular as matrizes de distancia de Sorensen-Dice e Simple Matching.
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 1: </span>Script de Analise Binaria</label><pre class="src src-python"><span style="color: #51afef;">import</span> ex1_1_read_data_from_csv
+<span style="color: #51afef;">import</span> ex1_2_clustering_binario
+<span style="color: #51afef;">from</span> scipy.spatial.distance <span style="color: #51afef;">import</span> squareform
+<span style="color: #51afef;">import</span> pandas <span style="color: #51afef;">as</span> pd
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">1 read data from csv
+</span><span style="color: #dcaeea;">df</span> <span style="color: #51afef;">=</span> ex1_1_read_data_from_csv.read_data()
+
+<span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"--- Primeiras 10 linhas do dataframe ---"</span>)
+<span style="color: #c678dd;">print</span>(df.head(10))
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">3 calcula matriz de distancias usando coeficiente Sorensen-Dice e Simple Matching
+</span><span style="color: #dcaeea;">X</span> <span style="color: #51afef;">=</span> df.iloc[:, 1:].values
+<span style="color: #dcaeea;">species</span> <span style="color: #51afef;">=</span> df.iloc[:, 0].values
+
+
+<span style="color: #5B6268;">##################################################</span><span style="color: #5B6268;">
+</span><span style="color: #5B6268;"># </span><span style="color: #5B6268;">criando e observando as matrizes de distancias #
+</span><span style="color: #5B6268;">##################################################</span><span style="color: #5B6268;">
+</span><span style="color: #dcaeea;">dist_dice</span> <span style="color: #51afef;">=</span> ex1_2_clustering_binario.calcular_matriz_distancias(X, metric<span style="color: #51afef;">=</span><span style="color: #98be65;">'dice'</span>)
+<span style="color: #dcaeea;">dist_sm</span> <span style="color: #51afef;">=</span> ex1_2_clustering_binario.calcular_matriz_distancias(X, metric<span style="color: #51afef;">=</span><span style="color: #98be65;">'matching'</span>)
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">Converter para formato quadrado para visualizacao
+</span><span style="color: #5B6268;"># </span><span style="color: #5B6268;">isso porque sem essa conversao as mtz estao no formato otimizado o ndarry
+</span><span style="color: #dcaeea;">df_dist_dice</span> <span style="color: #51afef;">=</span> pd.DataFrame(squareform(dist_dice), index<span style="color: #51afef;">=</span>species, columns<span style="color: #51afef;">=</span>species)
+<span style="color: #dcaeea;">df_dist_sm</span> <span style="color: #51afef;">=</span> pd.DataFrame(squareform(dist_sm), index<span style="color: #51afef;">=</span>species, columns<span style="color: #51afef;">=</span>species)
+
+
+<span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"</span><span style="color: #a9a1e1;">\n</span><span style="color: #98be65;">--- Matriz de Distancia (Sorensen-Dice) ---"</span>)
+<span style="color: #c678dd;">print</span>(df_dist_dice.<span style="color: #c678dd;">round</span>(3))
+
+<span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"</span><span style="color: #a9a1e1;">\n</span><span style="color: #98be65;">--- Matriz de Distancia (Simple Matching) ---"</span>)
+<span style="color: #c678dd;">print</span>(df_dist_sm.<span style="color: #c678dd;">round</span>(3))
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">4 analyze the data using clustering_binario module (gera os dendrogramas)
+</span><span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"</span><span style="color: #a9a1e1;">\n</span><span style="color: #98be65;">--- Gerando Dendrogramas ---"</span>)
+ex1_2_clustering_binario.plot_dendrogram(dist_dice, species, <span style="color: #98be65;">'dice'</span>, <span style="color: #98be65;">'Dendrograma - Sorensen-Dice'</span>, <span style="color: #98be65;">'dendrograma_sorensen_dice.png'</span>)
+ex1_2_clustering_binario.plot_dendrogram(dist_sm, species, <span style="color: #98be65;">'matching'</span>, <span style="color: #98be65;">'Dendrograma - Simple Matching'</span>, <span style="color: #98be65;">'dendrograma_simple_matching.png'</span>)
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">5 Atribuindo grupos (exemplo de corte)
+</span><span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"</span><span style="color: #a9a1e1;">\n</span><span style="color: #98be65;">--- Atribuicao de Grupos (Exemplos) ---"</span>)
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">Exemplo 1: Cortar o dendrograma Sorensen-Dice para obter 3 grupos
+</span><span style="color: #dcaeea;">df_grupos_dice</span> <span style="color: #51afef;">=</span> ex1_2_clustering_binario.atribuir_grupos(dist_dice, species, t<span style="color: #51afef;">=</span>3, criterion<span style="color: #51afef;">=</span><span style="color: #98be65;">'maxclust'</span>)
+<span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"</span><span style="color: #a9a1e1;">\n</span><span style="color: #98be65;">Grupos (Sorensen-Dice, k=3):"</span>)
+<span style="color: #c678dd;">print</span>(df_grupos_dice)
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">Exemplo 2: Cortar o dendrograma Simple Matching na altura 0.4
+</span><span style="color: #dcaeea;">df_grupos_sm</span> <span style="color: #51afef;">=</span> ex1_2_clustering_binario.atribuir_grupos(dist_sm, species, t<span style="color: #51afef;">=</span>0.4, criterion<span style="color: #51afef;">=</span><span style="color: #98be65;">'distance'</span>)
+<span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"</span><span style="color: #a9a1e1;">\n</span><span style="color: #98be65;">Grupos (Simple Matching, h=0.4):"</span>)
+<span style="color: #c678dd;">print</span>(df_grupos_sm)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org83c4842" class="outline-3">
+<h3 id="org83c4842"><span class="section-number-3">2.2.</span> Resultados: Dendrogramas</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+Os dendrogramas abaixo mostram como as especies se agrupam de acordo com cada metrica de distancia.
+</p>
+
+
+<div id="org7e2fcce" class="figure">
+<p><img src="figures/dendrograma_sorensen_dice.png" alt="dendrograma_sorensen_dice.png" />
+</p>
+<p><span class="figure-number">Figure 1: </span>Dendrograma utilizando distancia Sorensen-Dice</p>
+</div>
+
+
+<div id="org50434cf" class="figure">
+<p><img src="figures/dendrograma_simple_matching.png" alt="dendrograma_simple_matching.png" />
+</p>
+<p><span class="figure-number">Figure 2: </span>Dendrograma utilizando distancia Simple Matching</p>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgd8bbb72" class="outline-2">
+<h2 id="orgd8bbb72"><span class="section-number-2">3.</span> Exercicio 2: Agrupamento K-means no Dataset IRIS</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+Neste exercicio, exploramos o algoritmo K-means para agrupar flores do dataset IRIS e validamos a qualidade dos grupos formados.
+</p>
+</div>
+<div id="outline-container-org06f3e0b" class="outline-3">
+<h3 id="org06f3e0b"><span class="section-number-3">3.1.</span> Abordagem 1: Metodo do Cotovelo (Elbow Method)</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+Esta abordagem foca em encontrar o numero otimo de grupos (k) analisando a variacao da soma dos quadrados intra-cluster (WCSS).
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 2: </span>Script K-means com Metodo do Cotovelo</label><pre class="src src-python"><span style="color: #51afef;">import</span> ex2_1_load_iris
+<span style="color: #51afef;">import</span> ex2_2_clustering_iris
+<span style="color: #51afef;">import</span> pandas <span style="color: #51afef;">as</span> pd
+<span style="color: #51afef;">import</span> numpy <span style="color: #51afef;">as</span> np
+<span style="color: #51afef;">from</span> sklearn.preprocessing <span style="color: #51afef;">import</span> StandardScaler
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">1. Leitura dos dados
+</span><span style="color: #dcaeea;">df</span> <span style="color: #51afef;">=</span> ex2_1_load_iris.load_iris_data()
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">2. Mostrar as primeiras 10 linhas
+</span><span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"--- Primeiras 10 linhas do dataset IRIS ---"</span>)
+<span style="color: #c678dd;">print</span>(df.head(10))
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">3. Padronizacao (Escalonamento)
+</span><span style="color: #5B6268;"># </span><span style="color: #5B6268;">Selecionamos as colunas numericas (SEPALLEN, SEPALWID, PETALLEN, PETALWID)
+</span><span style="color: #dcaeea;">variaveis_list</span> <span style="color: #51afef;">=</span> [<span style="color: #98be65;">'SEPALLEN'</span>, <span style="color: #98be65;">'SEPALWID'</span>, <span style="color: #98be65;">'PETALLEN'</span>, <span style="color: #98be65;">'PETALWID'</span>]
+<span style="color: #dcaeea;">mtz_vlrs</span> <span style="color: #51afef;">=</span> df[variaveis_list].values
+<span style="color: #dcaeea;">species</span> <span style="color: #51afef;">=</span> df[<span style="color: #98be65;">'specie'</span>].values
+
+<span style="color: #dcaeea;">scaler</span> <span style="color: #51afef;">=</span> StandardScaler()
+<span style="color: #dcaeea;">mtz_vlrs_padrozinados</span> <span style="color: #51afef;">=</span> scaler.fit_transform(mtz_vlrs)
+
+<span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"</span><span style="color: #a9a1e1;">\n</span><span style="color: #98be65;">Dados padronizados (primeiras 5 linhas):"</span>)
+<span style="color: #c678dd;">print</span>(mtz_vlrs_padrozinados[:5])
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">4. Metodo do Cotovelo (Elbow Method)
+</span><span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"</span><span style="color: #a9a1e1;">\n</span><span style="color: #98be65;">--- Analise do Numero Otimo de Grupos (Metodo do Cotovelo) ---"</span>)
+ex2_2_clustering_iris.plot_elbow_method(
+    mtz_vlrs_padrozinados, 
+    max_k<span style="color: #51afef;">=</span>10, 
+    filename<span style="color: #51afef;">=</span><span style="color: #98be65;">'kmeans_elbow_iris.png'</span>
+)
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">5. Executar K-means
+</span><span style="color: #5B6268;"># </span><span style="color: #5B6268;">Vamos utilizar k=3 pois sabemos que existem 3 especies no dataset IRIS
+</span><span style="color: #dcaeea;">k_ideal</span> <span style="color: #51afef;">=</span> 3
+<span style="color: #c678dd;">print</span>(f<span style="color: #98be65;">"</span><span style="color: #a9a1e1;">\n</span><span style="color: #98be65;">--- Executando K-means (k=</span>{k_ideal}<span style="color: #98be65;">) ---"</span>)
+<span style="color: #dcaeea;">df_grupos</span>, <span style="color: #dcaeea;">kmeans_model</span> <span style="color: #51afef;">=</span> ex2_2_clustering_iris.executar_kmeans(
+    mtz_vlrs_padrozinados, 
+    species, 
+    n_clusters<span style="color: #51afef;">=</span>k_ideal
+)
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">Adicionando a informacao do grupo ao DataFrame original
+</span><span style="color: #dcaeea;">df</span>[<span style="color: #98be65;">'Grupo'</span>] <span style="color: #51afef;">=</span> df_grupos[<span style="color: #98be65;">'Grupo'</span>]
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">6. Mostrar resultados
+</span><span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"</span><span style="color: #a9a1e1;">\n</span><span style="color: #98be65;">--- Dados Originais com Atribuicao de Grupos (K-means) ---"</span>)
+<span style="color: #c678dd;">print</span>(df.head(10))
+
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">Verificar a contagem em cada grupo
+</span><span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"</span><span style="color: #a9a1e1;">\n</span><span style="color: #98be65;">Contagem por grupo:"</span>)
+<span style="color: #c678dd;">print</span>(df_grupos[<span style="color: #98be65;">'Grupo'</span>].value_counts())
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">Comparar com as especies originais (Crosstab)
+</span><span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"</span><span style="color: #a9a1e1;">\n</span><span style="color: #98be65;">--- Cruzamento: Especie Original vs Grupo K-means ---"</span>)
+<span style="color: #c678dd;">print</span>(pd.crosstab(df[<span style="color: #98be65;">'specie'</span>], df[<span style="color: #98be65;">'Grupo'</span>]))
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">7. Visualizacao dos clusters
+</span><span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"</span><span style="color: #a9a1e1;">\n</span><span style="color: #98be65;">--- Gerando Grafico de Dispersao dos Clusters ---"</span>)
+ex2_2_clustering_iris.plot_kmeans_clusters(
+    mtz_vlrs_padrozinados, 
+    df_grupos[<span style="color: #98be65;">'Grupo'</span>].values, 
+    kmeans_model.cluster_centers_,
+    filename<span style="color: #51afef;">=</span><span style="color: #98be65;">'kmeans_scatter_iris.png'</span>
+)
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">8. Analise Univariada (ANOVA) - Verificando a qualidade dos grupos
+</span><span style="color: #51afef;">import</span> statsmodels.api <span style="color: #51afef;">as</span> sm
+<span style="color: #51afef;">from</span> statsmodels.formula.api <span style="color: #51afef;">import</span> ols
+
+<span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"</span><span style="color: #a9a1e1;">\n</span><span style="color: #98be65;">--- Analise de Variancia (ANOVA) por Variavel ---"</span>)
+<span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"H0: Nao ha diferenca entre as medias dos grupos"</span>)
+<span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"H1: Ha pelo menos uma diferenca entre as medias"</span>)
+
+<span style="color: #51afef;">for</span> var <span style="color: #51afef;">in</span> variaveis_list:
+    <span style="color: #dcaeea;">formula</span> <span style="color: #51afef;">=</span> f<span style="color: #98be65;">"</span>{var}<span style="color: #98be65;"> ~ C(Grupo)"</span>
+    <span style="color: #dcaeea;">model</span> <span style="color: #51afef;">=</span> ols(formula, data<span style="color: #51afef;">=</span>df).fit()
+    <span style="color: #dcaeea;">anova_table</span> <span style="color: #51afef;">=</span> sm.stats.anova_lm(model, typ<span style="color: #51afef;">=</span>2)
+    
+    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">Acessando os valores usando o nome da linha 'C(Grupo)'
+</span>    <span style="color: #dcaeea;">p_valor</span> <span style="color: #51afef;">=</span> anova_table.at[<span style="color: #98be65;">'C(Grupo)'</span>, <span style="color: #98be65;">'PR(&gt;F)'</span>]
+    <span style="color: #dcaeea;">f_stat</span> <span style="color: #51afef;">=</span> anova_table.at[<span style="color: #98be65;">'C(Grupo)'</span>, <span style="color: #98be65;">'F'</span>]
+    
+    <span style="color: #c678dd;">print</span>(f<span style="color: #98be65;">"</span><span style="color: #a9a1e1;">\n</span><span style="color: #98be65;">Variavel: </span>{var}<span style="color: #98be65;">"</span>)
+    <span style="color: #c678dd;">print</span>(f<span style="color: #98be65;">"F-statistic: </span>{f_stat:.4f}<span style="color: #98be65;">"</span>)
+    <span style="color: #c678dd;">print</span>(f<span style="color: #98be65;">"p-valor: </span>{p_valor:.4e}<span style="color: #98be65;">"</span>)
+    
+    <span style="color: #51afef;">if</span> p_valor <span style="color: #51afef;">&lt;</span> 0.05:
+        <span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"Resultado: Significativo (Existem diferencas entre os grupos)"</span>)
+    <span style="color: #51afef;">else</span>:
+        <span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"Resultado: Nao significativo (Nao ha diferencas claras)"</span>)
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">9. Analise Multivariada de Variancia (MANOVA)
+</span><span style="color: #51afef;">from</span> statsmodels.multivariate.manova <span style="color: #51afef;">import</span> MANOVA
+
+<span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"</span><span style="color: #a9a1e1;">\n</span><span style="color: #98be65;">--- Analise Multivariada de Variancia (MANOVA) ---"</span>)
+<span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"H0: Os vetores de medias dos grupos sao iguais"</span>)
+<span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"H1: Pelo menos um vetor de media e diferente"</span>)
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">Criando a formula para todas as variaveis dependentes
+</span><span style="color: #dcaeea;">formula_manova</span> <span style="color: #51afef;">=</span> <span style="color: #98be65;">" + "</span>.join(variaveis_list) <span style="color: #51afef;">+</span> <span style="color: #98be65;">" ~ C(Grupo)"</span>
+<span style="color: #dcaeea;">manova</span> <span style="color: #51afef;">=</span> MANOVA.from_formula(formula_manova, data<span style="color: #51afef;">=</span>df)
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">Exibindo os resultados (Wilks' lambda, Pillai's trace, etc)
+</span><span style="color: #c678dd;">print</span>(manova.mv_test())
+</pre>
+</div>
+</div>
+<div id="outline-container-org5f8d90c" class="outline-4">
+<h4 id="org5f8d90c"><span class="section-number-4">3.1.1.</span> Graficos de Validacao do Numero de Grupos</h4>
+<div class="outline-text-4" id="text-3-1-1">
+
+<div id="org1d04cb3" class="figure">
+<p><img src="figures/kmeans_elbow_iris.png" alt="kmeans_elbow_iris.png" />
+</p>
+<p><span class="figure-number">Figure 3: </span>Analise do Metodo do Cotovelo</p>
+</div>
+
+
+<div id="orgd7f4b81" class="figure">
+<p><img src="figures/kmeans_scatter_iris.png" alt="kmeans_scatter_iris.png" />
+</p>
+<p><span class="figure-number">Figure 4: </span>Dispersao dos Grupos (Cotovelo)</p>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org2ad82e6" class="outline-3">
+<h3 id="org2ad82e6"><span class="section-number-3">3.2.</span> Abordagem 2: K-means Simples com Validacao Estatistica</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+Nesta versao, definimos o numero de grupos diretamente e realizamos testes de ANOVA e MANOVA para verificar se os grupos sao estatisticamente distintos.
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 3: </span>Script K-means Simples e Validacao</label><pre class="src src-python"><span style="color: #5B6268;"># </span><span style="color: #5B6268;">%%
+</span><span style="color: #51afef;">import</span> ex2_1_load_iris
+<span style="color: #51afef;">import</span> ex2_2_clustering_iris
+<span style="color: #51afef;">import</span> pandas <span style="color: #51afef;">as</span> pd
+<span style="color: #51afef;">import</span> numpy <span style="color: #51afef;">as</span> np
+<span style="color: #51afef;">from</span> sklearn.preprocessing <span style="color: #51afef;">import</span> StandardScaler
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">1. Leitura dos dados
+</span><span style="color: #dcaeea;">df</span> <span style="color: #51afef;">=</span> ex2_1_load_iris.load_iris_data()
+
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">2. Mostrar as primeiras 10 linhas
+</span><span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"--- Primeiras 10 linhas do dataset IRIS ---"</span>)
+<span style="color: #c678dd;">print</span>(df.head(10))
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">3. Padronizacao (Escalonamento)
+</span><span style="color: #5B6268;"># </span><span style="color: #5B6268;">Selecionamos as colunas numericas (SEPALLEN, SEPALWID, PETALLEN, PETALWID)
+</span><span style="color: #dcaeea;">variaveis_list</span> <span style="color: #51afef;">=</span> [<span style="color: #98be65;">'SEPALLEN'</span>, <span style="color: #98be65;">'SEPALWID'</span>, <span style="color: #98be65;">'PETALLEN'</span>, <span style="color: #98be65;">'PETALWID'</span>]
+<span style="color: #dcaeea;">mtz_vlrs</span> <span style="color: #51afef;">=</span> df[variaveis_list].values
+<span style="color: #dcaeea;">species</span> <span style="color: #51afef;">=</span> df[<span style="color: #98be65;">'specie'</span>].values
+
+<span style="color: #dcaeea;">scaler</span> <span style="color: #51afef;">=</span> StandardScaler()
+<span style="color: #dcaeea;">mtz_vlrs_padrozinados</span> <span style="color: #51afef;">=</span> scaler.fit_transform(mtz_vlrs)
+
+<span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"</span><span style="color: #a9a1e1;">\n</span><span style="color: #98be65;">Dados padronizados (primeiras 5 linhas):"</span>)
+<span style="color: #c678dd;">print</span>(mtz_vlrs_padrozinados[:5])
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">4. Definicao do numero de grupos
+</span><span style="color: #5B6268;"># </span><span style="color: #5B6268;">Altere este valor para escolher quantos grupos deseja formar
+</span><span style="color: #dcaeea;">n_grupos</span> <span style="color: #51afef;">=</span> 3
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">5. Executar K-means
+</span><span style="color: #c678dd;">print</span>(f<span style="color: #98be65;">"</span><span style="color: #a9a1e1;">\n</span><span style="color: #98be65;">--- Executando K-means (k=</span>{n_grupos}<span style="color: #98be65;">) ---"</span>)
+<span style="color: #dcaeea;">df_grupos</span>, <span style="color: #dcaeea;">kmeans_model</span> <span style="color: #51afef;">=</span> ex2_2_clustering_iris.executar_kmeans(
+    mtz_vlrs_padrozinados, 
+    species, 
+    n_clusters<span style="color: #51afef;">=</span>n_grupos
+)
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">Adicionando a informacao do grupo ao DataFrame original
+</span><span style="color: #dcaeea;">df</span>[<span style="color: #98be65;">'Grupo'</span>] <span style="color: #51afef;">=</span> df_grupos[<span style="color: #98be65;">'Grupo'</span>]
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">6. Mostrar resultados
+</span><span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"</span><span style="color: #a9a1e1;">\n</span><span style="color: #98be65;">--- Dados Originais com Atribuicao de Grupos (K-means) ---"</span>)
+<span style="color: #c678dd;">print</span>(df.head(10))
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">Verificar a contagem em cada grupo
+</span><span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"</span><span style="color: #a9a1e1;">\n</span><span style="color: #98be65;">Contagem por grupo:"</span>)
+<span style="color: #c678dd;">print</span>(df_grupos[<span style="color: #98be65;">'Grupo'</span>].value_counts())
+<span style="color: #c678dd;">print</span>(df[<span style="color: #98be65;">'Grupo'</span>].value_counts())
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">exibir nome das variaveis e os grupos atribu&#237;dos em df
+</span><span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"</span><span style="color: #a9a1e1;">\n</span><span style="color: #98be65;">--- Variaveis e Grupos Atribuidos ---"</span>)
+
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">Comparar com as especies originais (Crosstab)
+</span><span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"</span><span style="color: #a9a1e1;">\n</span><span style="color: #98be65;">--- Cruzamento: Especie Original vs Grupo K-means ---"</span>)
+<span style="color: #c678dd;">print</span>(pd.crosstab(df[<span style="color: #98be65;">'specie'</span>], df[<span style="color: #98be65;">'Grupo'</span>]))
+
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">7. Visualizacao dos clusters
+</span><span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"</span><span style="color: #a9a1e1;">\n</span><span style="color: #98be65;">--- Gerando Grafico de Dispersao dos Clusters ---"</span>)
+ex2_2_clustering_iris.plot_kmeans_clusters(
+    mtz_vlrs_padrozinados, 
+    df_grupos[<span style="color: #98be65;">'Grupo'</span>].values, 
+    kmeans_model.cluster_centers_,
+    filename<span style="color: #51afef;">=</span><span style="color: #98be65;">'kmeans_scatter_iris_simple.png'</span>
+)
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">8. Analise Univariada (ANOVA) - Verificando a qualidade dos grupos
+</span><span style="color: #5B6268;">#  </span><span style="color: #5B6268;">1. Itera&#231;&#227;o por Vari&#225;vel: Para cada uma das 4 vari&#225;veis (SEPALLEN, SEPALWID, etc.), ele realiza um teste ANOVA.
+</span><span style="color: #5B6268;">#   </span><span style="color: #5B6268;">2. Teste de Hip&#243;tese:
+</span><span style="color: #5B6268;">#       </span><span style="color: #5B6268;">* H0 (Hip&#243;tese Nula): As m&#233;dias de todos os grupos s&#227;o iguais para aquela vari&#225;vel (o agrupamento n&#227;o foi eficaz para distinguir essa caracter&#237;stica).
+</span><span style="color: #5B6268;">#       </span><span style="color: #5B6268;">* H1 (Hip&#243;tese Alternativa): Pelo menos um grupo tem uma m&#233;dia significativamente diferente (o agrupamento conseguiu separar bem essa caracter&#237;stica).
+</span><span style="color: #5B6268;">#   </span><span style="color: #5B6268;">O script j&#225; interpreta o p-valor (usando o padr&#227;o de 5% ou 0.05) e te diz se o resultado foi significativo.
+</span><span style="color: #5B6268;">#</span><span style="color: #5B6268;">
+</span><span style="color: #5B6268;">#  </span><span style="color: #5B6268;">Se os grupos forem bons, esperamos que o p-valor seja muito pequeno (ex: algo como 1.23e-15) e a mensagem diga "Significativo" para a maioria das vari&#225;veis.
+</span><span style="color: #5B6268;">#</span><span style="color: #5B6268;">
+</span><span style="color: #5B6268;">#  </span><span style="color: #5B6268;">Pode rodar o script novamente para ver os resultados:
+</span><span style="color: #51afef;">import</span> statsmodels.api <span style="color: #51afef;">as</span> sm
+<span style="color: #51afef;">from</span> statsmodels.formula.api <span style="color: #51afef;">import</span> ols
+
+<span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"</span><span style="color: #a9a1e1;">\n</span><span style="color: #98be65;">--- Analise de Variancia (ANOVA) por Variavel ---"</span>)
+<span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"H0: Nao ha diferenca entre as medias dos grupos"</span>)
+<span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"H1: Ha pelo menos uma diferenca entre as medias"</span>)
+
+<span style="color: #51afef;">for</span> var <span style="color: #51afef;">in</span> variaveis_list:
+    <span style="color: #dcaeea;">formula</span> <span style="color: #51afef;">=</span> f<span style="color: #98be65;">"</span>{var}<span style="color: #98be65;"> ~ C(Grupo)"</span>
+    <span style="color: #dcaeea;">model</span> <span style="color: #51afef;">=</span> ols(formula, data<span style="color: #51afef;">=</span>df).fit()
+    <span style="color: #dcaeea;">anova_table</span> <span style="color: #51afef;">=</span> sm.stats.anova_lm(model, typ<span style="color: #51afef;">=</span>2)
+    
+    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">Acessando os valores usando o nome da linha 'C(Grupo)'
+</span>    <span style="color: #dcaeea;">p_valor</span> <span style="color: #51afef;">=</span> anova_table.at[<span style="color: #98be65;">'C(Grupo)'</span>, <span style="color: #98be65;">'PR(&gt;F)'</span>]
+    <span style="color: #dcaeea;">f_stat</span> <span style="color: #51afef;">=</span> anova_table.at[<span style="color: #98be65;">'C(Grupo)'</span>, <span style="color: #98be65;">'F'</span>]
+    
+    <span style="color: #c678dd;">print</span>(f<span style="color: #98be65;">"</span><span style="color: #a9a1e1;">\n</span><span style="color: #98be65;">Variavel: </span>{var}<span style="color: #98be65;">"</span>)
+    <span style="color: #c678dd;">print</span>(f<span style="color: #98be65;">"F-statistic: </span>{f_stat:.4f}<span style="color: #98be65;">"</span>)
+    <span style="color: #c678dd;">print</span>(f<span style="color: #98be65;">"p-valor: </span>{p_valor:.4e}<span style="color: #98be65;">"</span>)
+    
+    <span style="color: #51afef;">if</span> p_valor <span style="color: #51afef;">&lt;</span> 0.05:
+        <span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"Resultado: Significativo (Existem diferencas entre os grupos)"</span>)
+    <span style="color: #51afef;">else</span>:
+        <span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"Resultado: Nao significativo (Nao ha diferencas claras)"</span>)
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">9. Analise Multivariada de Variancia (MANOVA)
+</span><span style="color: #51afef;">from</span> statsmodels.multivariate.manova <span style="color: #51afef;">import</span> MANOVA
+
+<span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"</span><span style="color: #a9a1e1;">\n</span><span style="color: #98be65;">--- Analise Multivariada de Variancia (MANOVA) ---"</span>)
+<span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"H0: Os vetores de medias dos grupos sao iguais"</span>)
+<span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"H1: Pelo menos um vetor de media e diferente"</span>)
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">Criando a formula para todas as variaveis dependentes
+</span><span style="color: #5B6268;"># </span><span style="color: #5B6268;">Ex: "SEPALLEN + SEPALWID + PETALLEN + PETALWID ~ C(Grupo)"
+</span><span style="color: #dcaeea;">formula_manova</span> <span style="color: #51afef;">=</span> <span style="color: #98be65;">" + "</span>.join(variaveis_list) <span style="color: #51afef;">+</span> <span style="color: #98be65;">" ~ C(Grupo)"</span>
+<span style="color: #dcaeea;">manova</span> <span style="color: #51afef;">=</span> MANOVA.from_formula(formula_manova, data<span style="color: #51afef;">=</span>df)
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">Exibindo os resultados (Wilks' lambda, Pillai's trace, etc)
+</span><span style="color: #c678dd;">print</span>(manova.mv_test())
+
+<span style="color: #5B6268;">#</span><span style="color: #5B6268;">from notebooklm
+</span><span style="color: #5B6268;">#</span><span style="color: #5B6268;">referencias do livro Hair et al. (2024) para interpreta&#231;&#227;o dos resultados da MANOVA:
+</span><span style="color: #5B6268;">#</span><span style="color: #5B6268;">Aqui est&#225; como o livro orienta a interpreta&#231;&#227;o de cada uma dessas quatro medidas estat&#237;sticas:
+</span><span style="color: #5B6268;">#</span><span style="color: #5B6268;">Lambda de Wilks (Wilks' lambda): &#201; a estat&#237;stica mais comumente utilizada para testar a signific&#226;ncia geral entre os grupos. Ela considera todas as fun&#231;&#245;es discriminantes para examinar se os grupos s&#227;o de algum modo diferentes[fn:760].
+</span><span style="color: #5B6268;">#</span><span style="color: #5B6268;">Crit&#233;rio de Pillai (Pillai's trace) e Tra&#231;o de Hotelling (Hotelling-Lawley trace): S&#227;o medidas semelhantes ao Lambda de Wilks, pois tamb&#233;m consideram todas as ra&#237;zes caracter&#237;sticas (ou seja, avaliam todas as dimens&#245;es de diferen&#231;a simultaneamente)[fn:760].
+</span><span style="color: #5B6268;">#</span><span style="color: #5B6268;">Maior raiz caracter&#237;stica de Roy (Roy's greatest root): Diferentemente das outras tr&#234;s, esta estat&#237;stica mede as diferen&#231;as focando apenas na primeira fun&#231;&#227;o discriminante (a dimens&#227;o principal)[fn:517][fn:760].
+</span><span style="color: #5B6268;">##</span><span style="color: #5B6268;">Como o livro recomenda escolher entre elas? Apesar de, na grande maioria das vezes, todas levarem &#224; mesma conclus&#227;o, Hair et al. apontam diretrizes espec&#237;ficas para a escolha do melhor indicador, dependendo das caracter&#237;sticas dos seus dados[fn:761]:
+</span><span style="color: #5B6268;">#</span><span style="color: #5B6268;">Crit&#233;rio de Pillai: &#201; considerado o teste mais robusto. O autor recomenda que ele seja utilizado (junto ou no lugar do Lambda de Wilks) caso ocorram viola&#231;&#245;es nas suposi&#231;&#245;es b&#225;sicas: se o tamanho da amostra diminuir, se os grupos tiverem tamanhos muito diferentes (c&#233;lulas desiguais), ou se a suposi&#231;&#227;o de homogeneidade de covari&#226;ncias for violada[fn:761].
+</span><span style="color: #5B6268;">#</span><span style="color: #5B6268;">Lambda de Wilks ou Pillai: S&#227;o as medidas de prefer&#234;ncia quando as considera&#231;&#245;es b&#225;sicas de planejamento foram atendidas perfeitamente (amostra adequada, pressupostos atendidos e c&#233;lulas proporcionais)[fn:761].
+</span><span style="color: #5B6268;">#</span><span style="color: #5B6268;">Maior Raiz de Roy: &#201; o teste estat&#237;stico mais poderoso, mas apenas se o pesquisador estiver seguro de que todas as suposi&#231;&#245;es (como normalidade e homocedasticidade) foram estritamente cumpridas e que as vari&#225;veis dependentes est&#227;o fortemente inter-relacionadas em uma &#250;nica dimens&#227;o de efeito[fn:760][fn:761].
+</span><span style="color: #5B6268;">#</span><span style="color: #5B6268;">Interpretando o seu resultado espec&#237;fico: Observando a sua tabela na se&#231;&#227;o C(Grupo), a coluna Pr &gt; F (que &#233; o seu p-valor) apresenta 0.0000 para todos os quatro testes.
+</span><span style="color: #5B6268;">##</span><span style="color: #5B6268;">A interpreta&#231;&#227;o pr&#225;tica usando as diretrizes do Hair &#233; que, independentemente do crit&#233;rio utilizado &#8212; seja o mais poderoso (Roy) ou o mais robusto (Pillai) &#8212;, existe uma diferen&#231;a estatisticamente altamente significativa entre os seus grupos. O modelo demonstra que o fator Grupo afeta as vari&#225;veis analisadas de forma conjunta, com uma probabilidade de isso ser obra do acaso praticamente nula.
+</span><span style="color: #5B6268;">#</span><span style="color: #5B6268;">Refer&#234;ncias [fn:517] Hair et al., An&#225;lise Multivariada de Dados (Signific&#226;ncia geral - Estima&#231;&#227;o simult&#226;nea em An&#225;lise Discriminante). [fn:760] Hair et al., An&#225;lise Multivariada de Dados (Medidas estat&#237;sticas para avalia&#231;&#227;o de diferen&#231;as ao longo de dimens&#245;es - MANOVA). [fn:761] Hair et al., An&#225;lise Multivariada de Dados (Diretrizes e robustez dos testes Wilks, Pillai, Hotelling e Roy).</span>
+</pre>
+</div>
+</div>
+<div id="outline-container-orgc2e0694" class="outline-4">
+<h4 id="orgc2e0694"><span class="section-number-4">3.2.1.</span> Analise de Resultados</h4>
+<div class="outline-text-4" id="text-3-2-1">
+<p>
+A analise inclui:
+</p>
+<ul class="org-ul">
+<li><b>Crosstab</b>: Comparacao entre a especie real e o grupo atribuido.</li>
+<li><b>ANOVA</b>: Teste univariado para cada variavel (SEPALLEN, SEPALWID, etc).</li>
+<li><b>MANOVA</b>: Teste multivariado considerando todas as variaveis simultaneamente.</li>
+</ul>
+
+
+<div id="org142f30d" class="figure">
+<p><img src="figures/kmeans_scatter_iris_simple.png" alt="kmeans_scatter_iris_simple.png" />
+</p>
+<p><span class="figure-number">Figure 5: </span>Dispersao dos Grupos (Simples)</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orge9cea5b" class="outline-2">
+<h2 id="orge9cea5b"><span class="section-number-2">4.</span> Conclusao</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+Consegui praticar a análise de agrupamento
+</p>
+
+<p>
+O Livro do hair não fala do método ebowl de kmeans mas percebi que as
+multiplos agrupamentos me pareceu resultar em grupos melhores que no
+kmeans simples onde eu escolhi 3 grupos e os grupos foram formados sem
+a inteligencia do ebowl.
+Já o dendograma é uma técnica mais interessante porque podemos
+escolher o ponto de corte. Consegui colocar isso no código, podemos
+cortar e obter os grupos.
+Agradeço muitíssimo a oportunidade e a compreenção.
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Wagner com ajuda do Gemini CLI</p>
+<p class="date">Created: 2026-05-07 qui 15:44</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
