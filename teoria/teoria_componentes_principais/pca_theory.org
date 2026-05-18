@@ -246,7 +246,281 @@ R = \begin{bmatrix}
 \end{bmatrix}
 \end{equation}
 
+
+Segue abaixo o trecho do codigo no nosso main.py que calcula e mostra
+a matriz de autovalores
+
+
+#+name: excerpt of main.py that calculates and shows the engeinvalues matrix
+#+begin_src python :session s1 :shebang "#!/usr/bin/env python3" :exports both :results graphics file output :file eigenvalues_scree_plot.svg
+  print("\n=== Passo 3: Matriz de Covariancia, Autovalores e Autovetores ===")
+  # A matriz de covariancia de dados padronizados e a matriz de correlacao
+  cov_mat = np.cov(X_std.T)
+  print("Matriz de Covariancia (R):")
+  print(cov_mat)
+#+end_src
+
+#+name: 
+#+begin_src shell
+=== Passo 3: Matriz de Covariancia, Autovalores e Autovetores ===
+Matriz de Covariancia (R):
+[[ 1.00000000e+00  5.74988908e-01 -8.99973247e-01 -4.33735126e-01]
+ [ 5.74988908e-01  1.00000000e+00 -2.77572601e-01 -3.46361090e-17]
+ [-8.99973247e-01 -2.77572601e-01  1.00000000e+00  4.22792893e-01]
+ [-4.33735126e-01 -3.46361090e-17  4.22792893e-01  1.00000000e+00]]
+#+end_src
+
 * Equacao Caracteristica
+
+
+
+Este video me ajudou a entender essa etapa: https://www.youtube.com/watch?v=MLck7c2Ma8E
+
+No minuto 8:28min ele mostra como chegar na formula que está no slide
+9 e 10 do prof
+
+
 \begin{equation}
-det(R - \lambda I) = 0
+(A - \lambda I)(X)=O 
 \end{equation}
+
+Para encontrar os componentes principais, precisamos resolver a
+equação característica da matriz de correlação \(R\).
+
+Os autovalores (\(\lambda\)) representam a variância explicada por cada componente.
+
+no video, no minuto 13:30 se apresenta o "polinomio caracteristico"
+que podemos chamar tambem de equacao caracteristica.
+
+Fazer igual a matriz nula significa que o sistema de infinitas solucoes.
+
+A equação é:
+\begin{equation}
+\det(R - \lambda I) = 0
+\end{equation}
+
+O calculo do determinante vai gerar uma equacao polinomial pro calculo
+do dos autovalores conforme demostrado abaixo.
+
+O gemini fez essa conta pra mim.
+
+
+*** Passo a Passo Numérico (Cálculo dos Autovalores)
+
+1. **Construção da Matriz \((R - \lambda I)\)**:
+Subtraímos \(\lambda\) dos elementos da diagonal principal de \(R\).
+\begin{equation}
+R - \lambda I = \begin{bmatrix} 
+1.000 - \lambda & -0.278 & 0.000 \\
+-0.278 & 1.000 - \lambda & 0.423 \\
+0.000 & 0.423 & 1.000 - \lambda
+\end{bmatrix}
+\end{equation}
+
+2. **Cálculo do Determinante (Polinômio Característico)**:
+Expandindo o determinante para uma matriz $3 \times 3$:
+\begin{equation}
+(1-\lambda) [(1-\lambda)^2 - (0.423)^2] - (-0.278) [(-0.278)(1-\lambda) - 0] + 0 = 0
+\end{equation}
+Simplificando:
+\begin{equation}
+(1-\lambda) [(1-\lambda)^2 - 0.179] - 0.077(1-\lambda) = 0
+\end{equation}
+Fatorando \((1-\lambda)\):
+\begin{equation}
+(1-\lambda) [(1-\lambda)^2 - 0.179 - 0.077] = 0
+\end{equation}
+\begin{equation}
+(1-\lambda) [(1-\lambda)^2 - 0.256] = 0
+\end{equation}
+
+3. **Resolução das Raízes (\(\lambda\))**:
+- **Raiz 1**: \(1 - \lambda = 0 \implies \lambda_2 = 1.000\)
+- **Raízes 2 e 3**: Da parte quadrática \((1-\lambda)^2 = 0.256\):
+  - \(1 - \lambda = \pm \sqrt{0.256} = \pm 0.506\)
+  - \(\lambda_1 = 1 + 0.506 = 1.506\)
+  - \(\lambda_3 = 1 - 0.506 = 0.494\)
+
+4. **Matriz de Autovalores (\(\Lambda\))**:
+Ordenamos os autovalores do maior para o menor para definir a importância dos componentes:
+\begin{equation}
+\Lambda = \begin{bmatrix} 1.506 & 0 & 0 \\ 0 & 1.000 & 0 \\ 0 & 0 & 0.494 \end{bmatrix}
+\end{equation}
+
+Os resultados mostram que o primeiro Componente Principal (PC1) explica a maior parte da variância (1.506 de um total de 3.0).
+
+
+
+* Autovetores (Eigenvectors)
+
+Calculos realizados pelo gemini 
+
+Os autovetores (\(v_i\)) definem a direção dos novos eixos (os Componentes Principais). Para cada autovalor \(\lambda_i\), resolvemos o sistema:
+\begin{equation}
+(R - \lambda_i I)v_i = 0
+\end{equation}
+
+*** Passo a Passo Numérico (Cálculo de \(v_1\))
+
+Vamos calcular o autovetor para o maior autovalor \(\lambda_1 = 1.506\).
+
+1. **Sistema de Equações**:
+\begin{equation}
+\begin{bmatrix} 
+1.000 - 1.506 & -0.278 & 0.000 \\
+-0.278 & 1.000 - 1.506 & 0.423 \\
+0.000 & 0.423 & 1.000 - 1.506
+\end{bmatrix} \begin{bmatrix} x \\ y \\ z \end{bmatrix} = \begin{bmatrix} 0 \\ 0 \\ 0 \end{bmatrix}
+\end{equation}
+
+Isso nos dá o sistema:
+- (I) \(-0.506x - 0.278y = 0 \implies y = -1.820x\)
+- (II) \(-0.278x - 0.506y + 0.423z = 0\)
+- (III) \(0.423y - 0.506z = 0 \implies z = 0.836y\)
+
+2. **Substituindo y em z**:
+Substituindo \(y = -1.820x\) em \(z = 0.836y\):
+\begin{equation}
+z = 0.836(-1.820x) = -1.521x
+\end{equation}
+
+Temos o vetor proporcional: \(v'_1 = [1.000 \quad -1.820 \quad -1.521]\).
+
+3. **Normalização (Vetor Unitário)**:
+Para que o autovetor tenha comprimento 1, calculamos a norma:
+\begin{equation}
+\|v'_1\| = \sqrt{1^2 + (-1.820)^2 + (-1.521)^2} = \sqrt{1 + 3.312 + 2.313} = 2.574
+\end{equation}
+
+O autovetor normalizado \(v_1\) é:
+\begin{equation}
+v_1 = \frac{v'_1}{2.574} = \begin{bmatrix} 0.388 \\ -0.707 \\ -0.591 \end{bmatrix}
+\end{equation}
+
+
+
+E impressionante como essas poucas linhas ja faz todo esse calculo pra
+gente no python e mostra os resultados. Esse e o trecho do nosso main.py
+
+
+#+name: 
+#+begin_src python :session s1 :shebang "#!/usr/bin/env python3" :exports both :results graphics file output :file boxplot.svg
+        print("\n=== Passo 3: Matriz de Covariancia, Autovalores e Autovetores ===")
+        # A matriz de covariancia de dados padronizados e a matriz de correlacao
+        cov_mat = np.cov(X_std.T)
+        print("Matriz de Covariancia (R):")
+        print(cov_mat)
+
+        # Calculo de Autovalores e Autovetores
+        eig_vals, eig_vecs = np.linalg.eig(cov_mat)
+
+        print("\nAutovalores (Variancia):")
+        print(eig_vals)
+
+        print("\nAutovetores (Cargas dos Componentes):")
+        print(eig_vecs)
+
+        # Variancia Explicada
+        tot = sum(eig_vals)
+        var_exp = [(i / tot) * 100 for i in sorted(eig_vals, reverse=True)]
+        
+        print("\nVariancia Explicada Acumulada:")
+        cum_var_exp = np.cumsum(var_exp)
+        for i, (v, cv) in enumerate(zip(var_exp, cum_var_exp)):
+            print(f"CP{i+1}: Individual = {v:.2f}% | Acumulada = {cv:.2f}%")
+#+end_src
+
+#+name: 
+#+begin_src shell
+=== Passo 3: Matriz de Covariancia, Autovalores e Autovetores ===
+Matriz de Covariancia (R):
+[[ 1.00000000e+00  5.74988908e-01 -8.99973247e-01 -4.33735126e-01]
+ [ 5.74988908e-01  1.00000000e+00 -2.77572601e-01 -3.46361090e-17]
+ [-8.99973247e-01 -2.77572601e-01  1.00000000e+00  4.22792893e-01]
+ [-4.33735126e-01 -3.46361090e-17  4.22792893e-01  1.00000000e+00]]
+
+Autovalores (Variancia):
+[2.41852457 0.03714877 0.52129712 1.02302954]
+
+Autovetores (Cargas dos Componentes):
+[[ 0.62862806  0.75407881  0.16635932  0.09228479]
+ [ 0.36823764 -0.28076682 -0.51783333  0.7193189 ]
+ [-0.57966808  0.58813542 -0.54844585  0.13148685]
+ [-0.36498318  0.08143625  0.63512233  0.67585135]]
+
+Variancia Explicada Acumulada:
+CP1: Individual = 60.46% | Acumulada = 60.46%
+CP2: Individual = 25.58% | Acumulada = 86.04%
+CP3: Individual = 13.03% | Acumulada = 99.07%
+CP4: Individual = 0.93% | Acumulada = 100.00%
+
+#+end_src
+
+
+*** Matriz Final de Autovetores (\(V\))
+
+Repetindo o processo para os outros autovalores (\(\lambda_2, \lambda_3\)), obtemos a matriz de cargas (loadings):
+\begin{equation}
+V = \begin{bmatrix} 
+0.388 & -0.836 & 0.388 \\
+-0.707 & 0.000 & -0.707 \\
+-0.591 & -0.549 & 0.591 
+\end{bmatrix}
+\end{equation}
+
+Cada coluna de \(V\) representa um Componente Principal. Por exemplo, o primeiro componente (PC1) é formado pela combinação linear:
+\begin{equation}
+PC1 = 0.388(X1_{std}) - 0.707(X2_{std}) - 0.591(X3_{std})
+\end{equation}
+
+* Escores dos Componentes Principais (PCA Scores)
+
+Os escores são as novas coordenadas das observações no espaço dos Componentes Principais. Eles representam os valores transformados de cada unidade amostral.
+
+A fórmula matricial é:
+\begin{equation}
+F = Z V
+\end{equation}
+
+Onde:
+- \(Z\) é a matriz de dados padronizados (\(n \times p\)).
+- \(V\) é a matriz de autovetores (\(p \times p\)).
+- \(F\) é a matriz de escores (\(n \times p\)).
+
+*** Passo a Passo Numérico (Cálculo do primeiro escore)
+
+Para a primeira observação (\(u=1\)), o vetor padronizado é \(z_1 = [-1.195 \quad 0.677 \quad 1.352]\).
+
+Calculamos o escore para o **PC1**:
+\begin{equation}
+F_{1,1} = (-1.195 \times 0.388) + (0.677 \times -0.707) + (1.352 \times -0.591)
+\end{equation}
+\begin{equation}
+F_{1,1} = -0.464 - 0.479 - 0.799 = -1.742
+\end{equation}
+
+*** Matriz Final de Escores (\(F\))
+
+Multiplicando todas as linhas de \(Z\) pelas colunas de \(V\), obtemos:
+
+\begin{equation}
+F = \begin{bmatrix} 
+-1.742 & 0.257 & -0.143 \\
+-1.183 & 0.443 & -1.060 \\
+-0.076 & -1.056 & 0.046 \\
+1.018 & 0.628 & -0.334 \\
+1.196 & 1.128 & -0.156 \\
+0.786 & -1.399 & 1.646 
+\end{bmatrix}
+\end{equation}
+
+**Interpretando os Resultados:**
+- **Variância:** Se calcularmos a variância de cada coluna de \(F\), obteremos exatamente os autovalores (\(\lambda_1=1.506, \lambda_2=1.000, \lambda_3=0.494\)).
+- **Ortogonalidade:** A correlação entre qualquer par de colunas de \(F\) é zero. As novas variáveis são perfeitamente independentes.
+- **Redução de Dimensionalidade:** Podemos agora usar apenas as duas primeiras colunas (\(PC1\) e \(PC2\)) para representar nossos dados, mantendo \(\approx 83\%\) da informação original (\((1.506 + 1.0)/3\)).
+
+* Conclusão
+A Análise de Componentes Principais permitiu transformar 3 variáveis correlacionadas em 3 novos eixos independentes, facilitando a visualização e interpretação da estrutura de variabilidade dos dados.
+
+
+
