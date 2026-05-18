@@ -15,7 +15,7 @@ calculo dos componentes principais.
 
 * Dados de Estudo
 
-Pra rodar as analises é só clonar esse repositorio e rodar com o
+Pra rodar as analises Ã© sÃ³ clonar esse repositorio e rodar com o
 comando abaixo. Claro, adaptando os diretorios conforme o seu computador e
 sistema operacional e nao esquecendo de ativar o venv.
 
@@ -26,7 +26,7 @@ sistema operacional e nao esquecendo de ativar o venv.
 #+end_src
 
 O trecho que carrega e mostra os dados que vamos utilizar para as
-notas de estudo estão abaixo.
+notas de estudo estÃ£o abaixo.
 
 
 #+BEGIN_SRC python
@@ -51,7 +51,7 @@ print(data.head())
 
 * Notacoes Matriciais
 
-Acima temos os dados trazidos pela leitura do python, na notação
+Acima temos os dados trazidos pela leitura do python, na notaÃ§Ã£o
 matricial temos:
 
 
@@ -90,11 +90,21 @@ X^T = \begin{bmatrix} 2 & 3 & 6 & 4 & 3 & 6 \\ 4 & 5 & 4 & 2 & 1 & 1 \\ 5 & 3 & 
 \bar{x} = \begin{bmatrix} 4.0 \\ 2.833 \\ 2.833 \end{bmatrix}
 \end{equation}
 
-* Padronizacao
-Formula Matricial:
+* Padronizacao (Standardization)
+Para evitar que variaveis com escalas muito diferentes distorcam a analise, aplicamos a padronizacao (Z-score).
+
+** Formula Matricial Global
+A operacao para padronizar toda a matriz \(X\) simultaneamente e:
+
 \begin{equation}
 Z = (X - \mathbf{1}\bar{x}^T) D^{-1}
 \end{equation}
+
+Onde:
+- \(X\) e a matriz original.
+- \(\mathbf{1}\) e um vetor de uns.
+- \(\bar{x}^T\) e o vetor de medias transposto.
+- \(D^{-1}\) e a inversa da matriz diagonal de desvios padrao.
 
 * Covariancia
 \begin{equation}
