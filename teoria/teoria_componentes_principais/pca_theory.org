@@ -202,8 +202,48 @@ Dados Padronizados (X_std):
 #+end_src
 
 * Covariancia
+
+Como os dados foram padronizados (\(Z\)), a matriz de covariância de \(Z\) é, na verdade, a **Matriz de Correlação** (\(R\)) das variáveis originais.
+
+O Gemini, explica isso direitinho https://gemini.google.com/share/e072da343836
+
+Esse video tb mostra isso https://www.youtube.com/watch?v=6ard2U5URpU
+
+
+A fórmula matricial é:
 \begin{equation}
 R = \frac{1}{n-1} Z^T Z
+\end{equation}
+
+*** Passo a Passo Numérico (Cálculo de \(R\))
+
+1. **Matriz Padronizada Transposta (\(Z^T\))**:
+\begin{equation}
+Z^T = \begin{bmatrix} 
+-1.195 & -0.598 & 1.195 & 0.000 & -0.598 & 1.195 \\
+0.677 & 1.258 & 0.677 & -0.484 & -1.064 & -1.064 \\
+1.352 & 0.104 & 0.104 & -1.144 & -1.144 & 0.728
+\end{bmatrix}
+\end{equation}
+
+2. **Produto das Matrizes (\(Z^T Z\))**:
+Este produto resulta em uma matriz \(p \times p\) (onde \(p\) é o número de variáveis, no caso 3). Os elementos da diagonal principal são iguais a \(n-1\) (que é 5).
+\begin{equation}
+Z^T Z = \begin{bmatrix} 
+5.000 & -1.388 & 0.000 \\
+-1.388 & 5.000 & 2.114 \\
+0.000 & 2.114 & 5.000
+\end{bmatrix}
+\end{equation}
+
+3. **Matriz de Correlação ou covariancia Final (\(R = \frac{1}{5} Z^T Z\))**:
+Dividimos cada elemento pelo grau de liberdade (\(n-1 = 5\)).
+\begin{equation}
+R = \begin{bmatrix} 
+1.000 & -0.278 & 0.000 \\
+-0.278 & 1.000 & 0.423 \\
+0.000 & 0.423 & 1.000
+\end{bmatrix}
 \end{equation}
 
 * Equacao Caracteristica
