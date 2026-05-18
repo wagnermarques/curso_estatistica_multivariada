@@ -112,6 +112,41 @@ Onde:
 - \(\bar{x}^T\) e o vetor de medias transposto.
 - \(D^{-1}\) e a inversa da matriz diagonal de desvios padrao.
 
+*** Passo a Passo Numérico de como normalizar
+
+O passo a passo a baixo ajuda e compreender a formula matriciais acima
+
+- **Matriz Original \(X\)** (conforme os dados de estudo):
+\begin{equation}
+X = \begin{bmatrix} 2 & 4 & 5 \\ 3 & 5 & 3 \\ 6 & 4 & 3 \\ 4 & 2 & 1 \\ 3 & 1 & 1 \\ 6 & 1 & 4 \end{bmatrix}
+\end{equation}
+
+- (\(\mathbf{1}\bar{x}^T\)) he a matriz de Médias :
+Cada linha contém o vetor de médias \(\bar{x}^T = [4.000 \quad 2.833
+\quad 2.833]\).
+
+\begin{equation}
+\mathbf{1}\bar{x}^T = \begin{bmatrix} 4.000 & 2.833 & 2.833 \\ 4.000 & 2.833 & 2.833 \\ 4.000 & 2.833 & 2.833 \\ 4.000 & 2.833 & 2.833 \\ 4.000 & 2.833 & 2.833 \\ 4.000 & 2.833 & 2.833 \end{bmatrix}
+\end{equation}
+
+- **Matriz Centralizada (\(X_c = X - \mathbf{1}\bar{x}^T\))**:
+Subtraímos a média de cada valor correspondente.
+\begin{equation}
+X_c = \begin{bmatrix} -2.000 & 1.167 & 2.167 \\ -1.000 & 2.167 & 0.167 \\ 2.000 & 1.167 & 0.167 \\ 0.000 & -0.833 & -1.833 \\ -1.000 & -1.833 & -1.833 \\ 2.000 & -1.833 & 1.167 \end{bmatrix}
+\end{equation}
+
+- **Matriz Diagonal de Desvios Padrão Inversos (\(D^{-1}\))**:
+Calculamos o desvio padrão de cada coluna (\(s_1=1.673, s_2=1.722, s_3=1.602\)) e montamos a matriz diagonal com seus inversos (\(1/s_j\)).
+\begin{equation}
+D^{-1} = \begin{bmatrix} 0.598 & 0 & 0 \\ 0 & 0.581 & 0 \\ 0 & 0 & 0.624 \end{bmatrix}
+\end{equation}
+
+- **Matriz Padronizada (\(Z = X_c D^{-1}\))**:
+Multiplicamos a matriz centralizada pela matriz de escala. Isso equivale a dividir cada coluna pelo seu respectivo desvio padrão.
+\begin{equation}
+Z = \begin{bmatrix} -1.195 & 0.677 & 1.352 \\ -0.598 & 1.258 & 0.104 \\ 1.195 & 0.677 & 0.104 \\ 0.000 & -0.484 & -1.144 \\ -0.598 & -1.064 & -1.144 \\ 1.195 & -1.064 & 0.728 \end{bmatrix}
+\end{equation}
+
 * Covariancia
 \begin{equation}
 R = \frac{1}{n-1} Z^T Z
