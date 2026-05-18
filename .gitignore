@@ -4,6 +4,11 @@
 .venv
 **/__pycache__
 **/test_imgs
+**/*.log
+**/*.tex
+**/*.pdf
+**/*.docx
+**/latex
 exercicios/exercicio_1/src/__pycache__/ex1_2_clustering_binario.cpython-314.pyc
 exercicios/exercicio_1/src/__pycache__/ex1_2_clustering_binario.cpython-314.pyc
 **/tmp

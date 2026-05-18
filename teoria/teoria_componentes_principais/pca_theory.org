@@ -1,10 +1,33 @@
-#+TITLE: Documentacao da Analise de Componentes Principais (PCA)
-#+AUTHOR: Gemini CLI
+#+TITLE: Notas de Estudos: Analise de Componentes Principais (PCA)
+#+AUTHOR: Eu e o Gemini
 
 * Introducao
-Este documento apresenta as formulacoes matriciais utilizadas no calculo do PCA.
+
+Este documento sao notas de estudos sobre analise de componentes
+principais
+
+Criei um csv a partir dos dados de exemplo que o professor utilizou em
+seus slides pra manter a linha do que o prof explicou
+
+Pra realmente entender trouxe as operacoes matematicas pertinentes ao
+calculo dos componentes principais.
+
 
 * Dados de Estudo
+
+Pra rodar as analises é só clonar esse repositorio e rodar com o
+comando abaixo. Claro, adaptando os diretorios conforme o seu computador e
+sistema operacional e nao esquecendo de ativar o venv.
+
+
+#+name: (venv) wgn@fedora:~/WORKING/Projects-Srcs/Projects-Srcs-FzlSoft/curso_estatistica_multivariada/exercicios$ python3 exercicio_0_pca_dados_slide/src/main.py 
+#+begin_src shell
+(venv) wgn@fedora:~/WORKING/Projects-Srcs/Projects-Srcs-FzlSoft/curso_estatistica_multivariada/exercicios$ python3 exercicio_0_pca_dados_slide/src/main.py 
+#+end_src
+
+O trecho que carrega e mostra os dados que vamos utilizar para as
+notas de estudo estão abaixo.
+
 
 #+BEGIN_SRC python
 import pandas as pd
@@ -15,6 +38,7 @@ data = load_pca_data(csv_path)
 print(data.head())
 #+END_SRC
 
+
 | unidade |  X1 |  X2 |  X3 |
 |---------+-----+-----+-----|
 |     1.0 | 2.0 | 4.0 | 5.0 |
@@ -24,8 +48,12 @@ print(data.head())
 |     5.0 | 3.0 | 1.0 | 1.0 |
 |     6.0 | 6.0 | 1.0 | 4.0 |
 
+
 * Notacoes Matriciais
-Matriz de dados reais:
+
+Acima temos os dados trazidos pela leitura do python, na notação
+matricial temos:
+
 
 \begin{equation}
 X = \begin{bmatrix} 
@@ -37,6 +65,7 @@ X = \begin{bmatrix}
 6.0 & 1.0 & 4.0
 \end{bmatrix}
 \end{equation}
+
 
 * Vetor de Medias
 
