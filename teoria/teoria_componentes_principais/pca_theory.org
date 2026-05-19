@@ -642,17 +642,22 @@ Aqui estao os graficos gerados a partir da analise de componentes principais:
 ** 1. Scree Plot (Grafico de Cotovelo)
 O Scree Plot mostra a variancia explicada por cada componente principal. O Criterio de Kaiser sugere manter componentes com autovalores (λ) maiores que 1.
 
-#+WIDTH: 200x200
+#+ATTR_HTML: :width 600px
+#+ATTR_LATEX: :width 0.7\textwidth
 [[file:imgs/scree_plot.png]]
 
 ** 2. Grafico de Escores (CP1 x CP2)
 Este grafico mostra a posicao de cada unidade experimental no novo espaco bidimensional formado pelos dois primeiros componentes principais.
 
+#+ATTR_HTML: :width 600px
+#+ATTR_LATEX: :width 0.7\textwidth
 [[file:imgs/scores_plot.png]]
 
 ** 3. Biplot
 O Biplot combina os escores dos individuos com as cargas das variaveis originais, permitindo visualizar a relacao entre as variaveis e como elas influenciam a posicao dos individuos.
 
+#+ATTR_HTML: :width 700px
+#+ATTR_LATEX: :width 0.8\textwidth
 [[file:imgs/biplot.png]]
 
 

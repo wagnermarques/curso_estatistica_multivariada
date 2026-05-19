@@ -1,0 +1,1213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2026-05-19 ter 16:51 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Notas de Estudos: Analise de Componentes Principais (PCA)</title>
+<meta name="author" content="Eu e o Gemini" />
+<meta name="generator" content="Org Mode" />
+<style type="text/css">
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Notas de Estudos: Analise de Componentes Principais (PCA)</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org504e0a7">1. Introducao</a></li>
+<li><a href="#orgfb26194">2. Dados de Estudo</a></li>
+<li><a href="#org12ab1f5">3. Notacoes Matriciais</a></li>
+<li><a href="#orgd9c5c6e">4. Vetor de Medias</a>
+<ul>
+<li><a href="#orgfc0d66a">4.1. Operacao Matricial</a></li>
+<li><a href="#org03ccb4b">4.2. Passo a Passo</a></li>
+</ul>
+</li>
+<li><a href="#org25f26da">5. Padronizacao (Standardization)</a>
+<ul>
+<li><a href="#org090a422">5.1. Formula Matricial Global</a>
+<ul>
+<li><a href="#org172b846">5.1.1. Passo a Passo Numérico de como normalizar</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org715e6e9">6. Covariancia</a>
+<ul>
+<li>
+<ul>
+<li><a href="#orgb2cf210">6.0.1. Passo a Passo Numérico (Cálculo de \(R\))</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#orgc2417cd">7. Equacao Caracteristica</a>
+<ul>
+<li>
+<ul>
+<li><a href="#orgbb03adc">7.0.1. Passo a Passo Numérico (Cálculo dos Autovalores)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org8efcc34">8. Autovetores (Eigenvectors)</a>
+<ul>
+<li>
+<ul>
+<li><a href="#orgd47a07e">8.0.1. Passo a Passo Numérico (Cálculo de \(v_1\))</a></li>
+<li><a href="#org0d879be">8.0.2. Matriz Final de Autovetores (\(V\))</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org31b3a83">9. Equações dos Componentes Principais (Estilo Slide 25)</a></li>
+<li><a href="#org1be019a">10. Escores dos Componentes Principais (PCA Scores)</a>
+<ul>
+<li>
+<ul>
+<li><a href="#org0b00fac">10.0.1. Passo a Passo Numérico (Cálculo do primeiro escore)</a></li>
+<li><a href="#org6cc66c8">10.0.2. Matriz Final de Escores (\(F\))</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org6222ab1">11. Graficos</a>
+<ul>
+<li><a href="#org65edae7">11.1. 1. Scree Plot (Grafico de Cotovelo)</a></li>
+<li><a href="#org0a35111">11.2. 2. Grafico de Escores (CP1 x CP2)</a></li>
+<li><a href="#org03ab960">11.3. 3. Biplot</a></li>
+</ul>
+</li>
+<li><a href="#org6602794">12. Conclusão</a></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org504e0a7" class="outline-2">
+<h2 id="org504e0a7"><span class="section-number-2">1.</span> Introducao</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Este documento sao notas de estudos sobre analise de componentes
+principais
+</p>
+
+<p>
+Criei um csv a partir dos dados de exemplo que o professor utilizou em
+seus slides pra manter a linha do que o prof explicou
+</p>
+
+<p>
+Pra realmente entender trouxe as operacoes matematicas pertinentes ao
+calculo dos componentes principais.
+</p>
+</div>
+</div>
+<div id="outline-container-orgfb26194" class="outline-2">
+<h2 id="orgfb26194"><span class="section-number-2">2.</span> Dados de Estudo</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Pra rodar as analises basta clonar esse repositorio e rodar com o
+comando abaixo. Claro, adaptando os diretorios conforme o seu computador e
+sistema operacional e nao esquecendo de ativar o venv.
+</p>
+
+
+<div class="org-src-container">
+<pre class="src src-shell" id="orgca99832">(venv) wgn@fedora:~/WORKING/Projects-Srcs/Projects-Srcs-FzlSoft/curso_estatistica_multivariada/exercicios$ python3 exercicio_0_pca_dados_slide/src/main.py 
+</pre>
+</div>
+
+<p>
+O trecho que carrega e mostra os dados que vamos utilizar para as
+notas de estudo estÃ£o abaixo.
+</p>
+
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #51afef;">import</span> pandas <span style="color: #51afef;">as</span> pd
+<span style="color: #51afef;">from</span> data_io.data_loader <span style="color: #51afef;">import</span> load_pca_data
+pd.set_option(<span style="color: #98be65;">'display.max_columns'</span>, 10)
+<span style="color: #dcaeea;">csv_path</span> <span style="color: #51afef;">=</span> <span style="color: #98be65;">'exemplo_pca.csv'</span>
+<span style="color: #dcaeea;">data</span> <span style="color: #51afef;">=</span> load_pca_data(csv_path)
+<span style="color: #c678dd;">print</span>(data.head())
+</pre>
+</div>
+
+
+<div class="org-src-container">
+<pre class="src src-shell" id="org18f1da4">=== Passo 1: Carregamento de Dados ===
+Dados originais (primeiras linhas):
+[[2. 4. 5.]
+ [3. 5. 3.]
+ [6. 4. 3.]
+ [4. 2. 1.]
+ [3. 1. 1.]
+ [6. 1. 4.]]
+</pre>
+</div>
+
+<p>
+Nos slides do prof e em livros costuma-se falar em n casos e p medidas/dimensoes/variaveis.
+</p>
+
+<p>
+<a href="../../exercicios/exercicio_0_pca_dados_slide/src/exemplo_pca.csv">este é o arquivo csv</a>
+</p>
+</div>
+</div>
+<div id="outline-container-org12ab1f5" class="outline-2">
+<h2 id="org12ab1f5"><span class="section-number-2">3.</span> Notacoes Matriciais</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+Acima temos os dados trazidos pela leitura do python, e logo aqui
+abaixo a notacao matricial:
+</p>
+
+
+\begin{equation}
+X = \begin{bmatrix} 
+2.0 & 4.0 & 5.0 \\
+3.0 & 5.0 & 3.0 \\
+6.0 & 4.0 & 3.0 \\
+4.0 & 2.0 & 1.0 \\
+3.0 & 1.0 & 1.0 \\
+6.0 & 1.0 & 4.0
+\end{bmatrix}
+\end{equation}
+
+
+<p>
+Nos slides do prof e em livros costuma-se falar em n casos e p medidas/dimensoes/variaveis.
+</p>
+</div>
+</div>
+<div id="outline-container-orgd9c5c6e" class="outline-2">
+<h2 id="orgd9c5c6e"><span class="section-number-2">4.</span> Vetor de Medias</h2>
+<div class="outline-text-2" id="text-4">
+</div>
+<div id="outline-container-orgfc0d66a" class="outline-3">
+<h3 id="orgfc0d66a"><span class="section-number-3">4.1.</span> Operacao Matricial</h3>
+<div class="outline-text-3" id="text-4-1">
+\begin{equation}
+\bar{x} = \frac{1}{n} X^T \mathbf{1}
+\end{equation}
+</div>
+</div>
+<div id="outline-container-org03ccb4b" class="outline-3">
+<h3 id="org03ccb4b"><span class="section-number-3">4.2.</span> Passo a Passo</h3>
+<div class="outline-text-3" id="text-4-2">
+<ul class="org-ul">
+<li>Transposta:</li>
+</ul>
+\begin{equation}
+X^T = \begin{bmatrix} 2 & 3 & 6 & 4 & 3 & 6 \\ 4 & 5 & 4 & 2 & 1 & 1 \\ 5 & 3 & 3 & 1 & 1 & 4 \end{bmatrix}
+\end{equation}
+
+<ul class="org-ul">
+<li>Soma das colunas (X<sup>T</sup> * 1):</li>
+</ul>
+
+\begin{equation}
+\begin{bmatrix} 24 \\ 17 \\ 17 \end{bmatrix}
+\end{equation}
+
+<ul class="org-ul">
+<li>Media Final:</li>
+</ul>
+
+\begin{equation}
+\bar{x} = \begin{bmatrix} 4.0 \\ 2.833 \\ 2.833 \end{bmatrix}
+\end{equation}
+</div>
+</div>
+</div>
+<div id="outline-container-org25f26da" class="outline-2">
+<h2 id="org25f26da"><span class="section-number-2">5.</span> Padronizacao (Standardization)</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+Para evitar que variaveis com escalas muito diferentes distorcam a analise, aplicamos a padronizacao (Z-score).
+</p>
+</div>
+<div id="outline-container-org090a422" class="outline-3">
+<h3 id="org090a422"><span class="section-number-3">5.1.</span> Formula Matricial Global</h3>
+<div class="outline-text-3" id="text-5-1">
+<p>
+A operacao para padronizar toda a matriz \(X\) e:
+</p>
+
+\begin{equation}
+Z = (X - \mathbf{1}\bar{x}^T) D^{-1}
+\end{equation}
+
+<p>
+Onde:
+</p>
+<ul class="org-ul">
+<li>\(X\) e a matriz original.</li>
+<li>\(\mathbf{1}\) e um vetor de uns.</li>
+<li>\(\bar{x}^T\) e o vetor de medias transposto.</li>
+<li>\(D^{-1}\) e a inversa da matriz diagonal de desvios padrao.</li>
+</ul>
+</div>
+<div id="outline-container-org172b846" class="outline-4">
+<h4 id="org172b846"><span class="section-number-4">5.1.1.</span> Passo a Passo Numérico de como normalizar</h4>
+<div class="outline-text-4" id="text-5-1-1">
+<p>
+O passo a passo a baixo ajuda e compreender a formula matriciais acima
+</p>
+
+<ul class="org-ul">
+<li><b><b>Matriz Original \(X\)</b></b> (conforme os dados de estudo):</li>
+</ul>
+\begin{equation}
+X = \begin{bmatrix} 2 & 4 & 5 \\ 3 & 5 & 3 \\ 6 & 4 & 3 \\ 4 & 2 & 1 \\ 3 & 1 & 1 \\ 6 & 1 & 4 \end{bmatrix}
+\end{equation}
+
+<ul class="org-ul">
+<li>(\(\mathbf{1}\bar{x}^T\)) he a matriz de Médias :</li>
+</ul>
+<p>
+Cada linha contém o vetor de médias \(\bar{x}^T = [4.000 \quad 2.833
+\quad 2.833]\).
+</p>
+
+\begin{equation}
+\mathbf{1}\bar{x}^T = \begin{bmatrix} 4.000 & 2.833 & 2.833 \\ 4.000 & 2.833 & 2.833 \\ 4.000 & 2.833 & 2.833 \\ 4.000 & 2.833 & 2.833 \\ 4.000 & 2.833 & 2.833 \\ 4.000 & 2.833 & 2.833 \end{bmatrix}
+\end{equation}
+
+<ul class="org-ul">
+<li><b><b>Matriz Centralizada (\(X_c = X - \mathbf{1}\bar{x}^T\))</b></b>:</li>
+</ul>
+<p>
+Subtraímos a média de cada valor correspondente.
+</p>
+\begin{equation}
+X_c = \begin{bmatrix} -2.000 & 1.167 & 2.167 \\ -1.000 & 2.167 & 0.167 \\ 2.000 & 1.167 & 0.167 \\ 0.000 & -0.833 & -1.833 \\ -1.000 & -1.833 & -1.833 \\ 2.000 & -1.833 & 1.167 \end{bmatrix}
+\end{equation}
+
+<ul class="org-ul">
+<li><b><b>Matriz Diagonal de Desvios Padrão Inversos (\(D^{-1}\))</b></b>:</li>
+</ul>
+<p>
+Calculamos o desvio padrão de cada coluna (\(s_1=1.673, s_2=1.722, s_3=1.602\)) e montamos a matriz diagonal com seus inversos (\(1/s_j\)).
+</p>
+\begin{equation}
+D^{-1} = \begin{bmatrix} 0.598 & 0 & 0 \\ 0 & 0.581 & 0 \\ 0 & 0 & 0.624 \end{bmatrix}
+\end{equation}
+
+<ul class="org-ul">
+<li><b><b>Matriz Padronizada (\(Z = X_c D^{-1}\))</b></b>:</li>
+</ul>
+<p>
+Multiplicamos a matriz centralizada pela matriz de escala. Isso equivale a dividir cada coluna pelo seu respectivo desvio padrão.
+</p>
+\begin{equation}
+Z = \begin{bmatrix} -1.195 & 0.677 & 1.352 \\ -0.598 & 1.258 & 0.104 \\ 1.195 & 0.677 & 0.104 \\ 0.000 & -0.484 & -1.144 \\ -0.598 & -1.064 & -1.144 \\ 1.195 & -1.064 & 0.728 \end{bmatrix}
+\end{equation}
+
+
+<p>
+A matriz ta igualzinha a dos slides do prof
+</p>
+
+<p>
+o trecho de codigo do nosso arquivo main.py que produz os dados
+padronizados he este abaixo
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python" id="org1121a2b"><span style="color: #51afef;">import</span> pandas <span style="color: #51afef;">as</span> pd
+<span style="color: #51afef;">import</span> matplotlib.pyplot <span style="color: #51afef;">as</span> plt
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">Carregar dados
+</span><span style="color: #dcaeea;">df</span> <span style="color: #51afef;">=</span> pd.read_csv(<span style="color: #98be65;">'exemplo_pca.csv'</span>)
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">=== Passo 2.1: Media de cada coluna ===
+</span><span style="color: #dcaeea;">means</span> <span style="color: #51afef;">=</span> df.mean()
+<span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"=== Passo 2.1: Media de cada coluna ==="</span>)
+<span style="color: #51afef;">for</span> col, val <span style="color: #51afef;">in</span> means.items():
+    <span style="color: #c678dd;">print</span>(f<span style="color: #98be65;">"</span>{col}<span style="color: #98be65;">: </span>{val:.4f}<span style="color: #98be65;">"</span>)
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">Dados Padronizados (X_std)
+</span><span style="color: #dcaeea;">df_std</span> <span style="color: #51afef;">=</span> (df <span style="color: #51afef;">-</span> df.mean()) <span style="color: #51afef;">/</span> df.std()
+
+<span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"</span><span style="color: #a9a1e1;">\n</span><span style="color: #98be65;">Dados Padronizados (X_std):"</span>)
+<span style="color: #c678dd;">print</span>(df_std.head(5).to_string(index<span style="color: #51afef;">=</span><span style="color: #a9a1e1;">True</span>))
+</pre>
+</div>
+
+<p>
+O python tb está gerando a matriz de padronizada igual a dos slides do prof
+</p>
+
+
+<div class="org-src-container">
+<pre class="src src-shell" id="orgb32bb28">  === Passo 2.1: Media de cada coluna ===
+X1: 4.0000
+X2: 2.8333
+X3: 2.8333
+Dados Padronizados (X_std):
+[[-1.19522861  0.67734887  1.35240687]
+ [-0.5976143   1.25793362  0.1040313 ]
+ [ 1.19522861  0.67734887  0.1040313 ]
+ [ 0.         -0.48382062 -1.14434427]
+ [-0.5976143  -1.06440537 -1.14434427]
+ [ 1.19522861 -1.06440537  0.72821908]]
+
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org715e6e9" class="outline-2">
+<h2 id="org715e6e9"><span class="section-number-2">6.</span> Covariancia</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+Como os dados foram padronizados (\(Z\)), a matriz de covariância de \(Z\) é, na verdade, a <b><b>Matriz de Correlação</b></b> (\(R\)) das variáveis originais.
+</p>
+
+<p>
+O Gemini, explica isso direitinho <a href="https://gemini.google.com/share/e072da343836">https://gemini.google.com/share/e072da343836</a>
+</p>
+
+<p>
+Esse video tb mostra isso <a href="https://www.youtube.com/watch?v=6ard2U5URpU">https://www.youtube.com/watch?v=6ard2U5URpU</a>
+</p>
+
+
+<p>
+A fórmula matricial é:
+</p>
+
+
+\begin{equation}
+R = \frac{1}{n-1} Z^T Z
+\end{equation}
+</div>
+<div id="outline-container-orgb2cf210" class="outline-4">
+<h4 id="orgb2cf210"><span class="section-number-4">6.0.1.</span> Passo a Passo Numérico (Cálculo de \(R\))</h4>
+<div class="outline-text-4" id="text-6-0-1">
+<ol class="org-ol">
+<li><b><b>Matriz Padronizada Transposta (\(Z^T\))</b></b>:</li>
+</ol>
+
+
+\begin{equation}
+Z^T = \begin{bmatrix} 
+-1.195 & -0.598 & 1.195 & 0.000 & -0.598 & 1.195 \\
+0.677 & 1.258 & 0.677 & -0.484 & -1.064 & -1.064 \\
+1.352 & 0.104 & 0.104 & -1.144 & -1.144 & 0.728
+\end{bmatrix}
+\end{equation}
+
+
+
+<ol class="org-ol">
+<li><b><b>Produto das Matrizes (\(Z^T Z\))</b></b>:</li>
+</ol>
+
+<p>
+Este produto resulta em uma matriz \(p \times p\) (onde \(p\) é o
+número de variáveis, no caso 3). Os elementos da diagonal principal
+são iguais a \(n-1\) (que é 5).
+</p>
+
+
+\begin{equation}
+Z^T Z = \begin{bmatrix} 
+5.000 & -1.388 & 0.000 \\
+-1.388 & 5.000 & 2.114 \\
+0.000 & 2.114 & 5.000
+\end{bmatrix}
+\end{equation}
+
+<ol class="org-ol">
+<li><b><b>Matriz de Correlação ou covariancia Final (\(R = \frac{1}{5} Z^T Z\))</b></b>:</li>
+</ol>
+<p>
+Dividimos cada elemento pelo grau de liberdade (\(n-1 = 5\)).
+</p>
+\begin{equation}
+R = \begin{bmatrix} 
+1.000 & -0.278 & 0.000 \\
+-0.278 & 1.000 & 0.423 \\
+0.000 & 0.423 & 1.000
+\end{bmatrix}
+\end{equation}
+
+
+<p>
+Segue abaixo o trecho do codigo no nosso main.py que calcula e mostra
+a matriz de autovalores
+</p>
+
+
+<div class="org-src-container">
+<pre class="src src-python" id="org7658377"><span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"</span><span style="color: #a9a1e1;">\n</span><span style="color: #98be65;">=== Passo 3: Matriz de Covariancia, Autovalores e Autovetores ==="</span>)
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">A matriz de covariancia de dados padronizados e a matriz de correlacao
+</span><span style="color: #dcaeea;">cov_mat</span> <span style="color: #51afef;">=</span> np.cov(X_std.T)
+<span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"Matriz de Covariancia (R):"</span>)
+<span style="color: #c678dd;">print</span>(cov_mat)
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-shell" id="org152cb63">  
+=== Passo 3: Matriz de Covariancia, Autovalores e Autovetores ===
+Matriz de Covariancia (R):
+[[ 1.00000000e+00 -2.77572601e-01 -3.46361090e-17]
+ [-2.77572601e-01  1.00000000e+00  4.22792893e-01]
+ [-3.46361090e-17  4.22792893e-01  1.00000000e+00]]
+</pre>
+</div>
+
+<p>
+Dá a impressao de que a matriz de covariancia gerado pelo script esta
+diferente da matriz de covariancia nos slides do professor mas dando
+uma olhada <a href="https://gemini.google.com/share/0117c9293d76"> nessa explicacao aqui</a> da pra ver que esta corretissima
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-orgc2417cd" class="outline-2">
+<h2 id="orgc2417cd"><span class="section-number-2">7.</span> Equacao Caracteristica</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+Este video me ajudou a entender essa etapa: <a href="https://www.youtube.com/watch?v=MLck7c2Ma8E">https://www.youtube.com/watch?v=MLck7c2Ma8E</a>
+</p>
+
+<p>
+No minuto 8:28min ele mostra como chegar na formula que está no slide
+9 e 10 do prof
+</p>
+
+
+\begin{equation}
+(A - \lambda I)(X)=O 
+\end{equation}
+
+<p>
+Para encontrar os componentes principais, precisamos resolver a
+equação característica da matriz de correlação \(R\).
+</p>
+
+<p>
+Os autovalores (\(\lambda\)) representam a variância explicada por cada componente.
+</p>
+
+<p>
+no video, no minuto 13:30 se apresenta o "polinomio caracteristico"
+que podemos chamar tambem de equacao caracteristica.
+</p>
+
+<p>
+Fazer igual a matriz nula significa que o sistema de infinitas solucoes.
+</p>
+
+<p>
+A equação é:
+</p>
+\begin{equation}
+\det(R - \lambda I) = 0
+\end{equation}
+
+<p>
+O calculo do determinante vai gerar uma equacao polinomial pro calculo
+do dos autovalores conforme demostrado abaixo.
+</p>
+
+<p>
+O gemini fez essa conta pra mim, está logo abaixo no passo a passo numerico.
+</p>
+</div>
+<div id="outline-container-orgbb03adc" class="outline-4">
+<h4 id="orgbb03adc"><span class="section-number-4">7.0.1.</span> Passo a Passo Numérico (Cálculo dos Autovalores)</h4>
+<div class="outline-text-4" id="text-7-0-1">
+<ol class="org-ol">
+<li><b><b>Construção da Matriz \((R - \lambda I)\)</b></b>:</li>
+</ol>
+<p>
+Subtraímos \(\lambda\) dos elementos da diagonal principal de \(R\).
+</p>
+\begin{equation}
+R - \lambda I = \begin{bmatrix} 
+1.000 - \lambda & -0.278 & 0.000 \\
+-0.278 & 1.000 - \lambda & 0.423 \\
+0.000 & 0.423 & 1.000 - \lambda
+\end{bmatrix}
+\end{equation}
+
+
+<ol class="org-ol">
+<li><b><b>Cálculo do Determinante (Polinômio Característico)</b></b>:</li>
+</ol>
+
+<p>
+Expandindo o determinante para uma matriz \(3 \times 3\):
+</p>
+
+
+\begin{equation}
+(1-\lambda) [(1-\lambda)^2 - (0.423)^2] - (-0.278) [(-0.278)(1-\lambda) - 0] + 0 = 0
+\end{equation}
+<p>
+Simplificando:
+</p>
+\begin{equation}
+(1-\lambda) [(1-\lambda)^2 - 0.179] - 0.077(1-\lambda) = 0
+\end{equation}
+<p>
+Fatorando \((1-\lambda)\):
+</p>
+\begin{equation}
+(1-\lambda) [(1-\lambda)^2 - 0.179 - 0.077] = 0
+\end{equation}
+\begin{equation}
+(1-\lambda) [(1-\lambda)^2 - 0.256] = 0
+\end{equation}
+
+
+<ol class="org-ol">
+<li><b><b>Resolução das Raízes (\(\lambda\))</b></b>:</li>
+
+<li><b><b>Raiz 1</b></b>: \(1 - \lambda = 0 \implies \lambda_2 = 1.000\)</li>
+
+<li><b><b>Raízes 2 e 3</b></b>: Da parte quadrática \((1-\lambda)^2 = 0.256\):
+<ul class="org-ul">
+<li>\(1 - \lambda = \pm \sqrt{0.256} = \pm 0.506\)</li>
+<li>\(\lambda_1 = 1 + 0.506 = 1.506\)</li>
+<li>\(\lambda_3 = 1 - 0.506 = 0.494\)</li>
+</ul></li>
+</ol>
+
+
+<ol class="org-ol">
+<li><b><b>Matriz de Autovalores (\(\Lambda\))</b></b>:</li>
+</ol>
+
+<p>
+Ordenamos os autovalores do maior para o menor para definir a importância dos componentes:
+</p>
+\begin{equation}
+\Lambda = \begin{bmatrix} 1.506 & 0 & 0 \\ 0 & 1.000 & 0 \\ 0 & 0 & 0.494 \end{bmatrix}
+\end{equation}
+
+
+<p>
+Os resultados mostram que o primeiro Componente Principal (PC1) explica a maior parte da variância (1.506 de um total de 3.0).
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org8efcc34" class="outline-2">
+<h2 id="org8efcc34"><span class="section-number-2">8.</span> Autovetores (Eigenvectors)</h2>
+<div class="outline-text-2" id="text-8">
+<p>
+Calculos realizados pelo gemini 
+</p>
+
+<p>
+Os autovetores (\(v_i\)) definem a direção dos novos eixos (os
+Componentes Principais). Para cada autovalor \(\lambda_i\), resolvemos
+o sistema:
+</p>
+
+\begin{equation}
+(R - \lambda_i I)v_i = 0
+\end{equation}
+</div>
+<div id="outline-container-orgd47a07e" class="outline-4">
+<h4 id="orgd47a07e"><span class="section-number-4">8.0.1.</span> Passo a Passo Numérico (Cálculo de \(v_1\))</h4>
+<div class="outline-text-4" id="text-8-0-1">
+<p>
+Vamos calcular o autovetor para o maior autovalor \(\lambda_1 = 1.506\).
+</p>
+
+<ol class="org-ol">
+<li><b><b>Sistema de Equações</b></b>:</li>
+</ol>
+
+\begin{equation}
+\begin{bmatrix} 
+1.000 - 1.506 & -0.278 & 0.000 \\
+-0.278 & 1.000 - 1.506 & 0.423 \\
+0.000 & 0.423 & 1.000 - 1.506
+\end{bmatrix} \begin{bmatrix} x \\ y \\ z \end{bmatrix} = \begin{bmatrix} 0 \\ 0 \\ 0 \end{bmatrix}
+\end{equation}
+
+<p>
+Isso nos dá o sistema:
+</p>
+
+<ul class="org-ul">
+<li>(I) \(-0.506x - 0.278y = 0 \implies y = -1.820x\)</li>
+<li>(II) \(-0.278x - 0.506y + 0.423z = 0\)</li>
+<li>(III) \(0.423y - 0.506z = 0 \implies z = 0.836y\)</li>
+
+<li><b><b>Substituindo y em z</b></b>:</li>
+</ul>
+<p>
+Substituindo \(y = -1.820x\) em \(z = 0.836y\):
+</p>
+\begin{equation}
+z = 0.836(-1.820x) = -1.521x
+\end{equation}
+
+<p>
+Temos o vetor proporcional: \(v'_1 = [1.000 \quad -1.820 \quad -1.521]\).
+</p>
+
+<ol class="org-ol">
+<li><b><b>Normalização (Vetor Unitário)</b></b>:</li>
+</ol>
+
+<p>
+Para que o autovetor tenha comprimento 1, calculamos a norma:
+</p>
+
+\begin{equation}
+\|v'_1\| = \sqrt{1^2 + (-1.820)^2 + (-1.521)^2} = \sqrt{1 + 3.312 + 2.313} = 2.574
+\end{equation}
+
+<p>
+O autovetor normalizado \(v_1\) é:
+</p>
+
+\begin{equation}
+v_1 = \frac{v'_1}{2.574} = \begin{bmatrix} 0.388 \\ -0.707 \\ -0.591 \end{bmatrix}
+\end{equation}
+
+
+
+<p>
+E impressionante como essas poucas linhas ja faz todo esse calculo pra
+gente no python e mostra os resultados. Esse e o trecho do nosso main.py
+</p>
+
+
+<div class="org-src-container">
+<pre class="src src-python" id="orgfbd9d60"><span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"</span><span style="color: #a9a1e1;">\n</span><span style="color: #98be65;">=== Passo 3: Matriz de Covariancia, Autovalores e Autovetores ==="</span>)
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">A matriz de covariancia de dados padronizados e a matriz de correlacao
+</span><span style="color: #dcaeea;">cov_mat</span> <span style="color: #51afef;">=</span> np.cov(X_std.T)
+<span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"Matriz de Covariancia (R):"</span>)
+<span style="color: #c678dd;">print</span>(cov_mat)
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">Calculo de Autovalores e Autovetores
+</span><span style="color: #dcaeea;">eig_vals</span>, <span style="color: #dcaeea;">eig_vecs</span> <span style="color: #51afef;">=</span> np.linalg.eig(cov_mat)
+
+<span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"</span><span style="color: #a9a1e1;">\n</span><span style="color: #98be65;">Autovalores (Variancia):"</span>)
+<span style="color: #c678dd;">print</span>(eig_vals)
+
+<span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"</span><span style="color: #a9a1e1;">\n</span><span style="color: #98be65;">Autovetores (Cargas dos Componentes):"</span>)
+<span style="color: #c678dd;">print</span>(eig_vecs)
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">Variancia Explicada
+</span><span style="color: #dcaeea;">tot</span> <span style="color: #51afef;">=</span> <span style="color: #c678dd;">sum</span>(eig_vals)
+<span style="color: #dcaeea;">var_exp</span> <span style="color: #51afef;">=</span> [(i <span style="color: #51afef;">/</span> tot) <span style="color: #51afef;">*</span> 100 <span style="color: #51afef;">for</span> i <span style="color: #51afef;">in</span> <span style="color: #c678dd;">sorted</span>(eig_vals, reverse<span style="color: #51afef;">=</span><span style="color: #a9a1e1;">True</span>)]
+
+<span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"</span><span style="color: #a9a1e1;">\n</span><span style="color: #98be65;">Variancia Explicada Acumulada:"</span>)
+<span style="color: #dcaeea;">cum_var_exp</span> <span style="color: #51afef;">=</span> np.cumsum(var_exp)
+<span style="color: #51afef;">for</span> i, (v, cv) <span style="color: #51afef;">in</span> <span style="color: #c678dd;">enumerate</span>(<span style="color: #c678dd;">zip</span>(var_exp, cum_var_exp)):
+    <span style="color: #c678dd;">print</span>(f<span style="color: #98be65;">"CP</span>{i<span style="color: #51afef;">+</span>1}<span style="color: #98be65;">: Individual = </span>{v:.2f}<span style="color: #98be65;">% | Acumulada = </span>{cv:.2f}<span style="color: #98be65;">%"</span>)
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-shell" id="org55384f0"><span style="color: #c678dd;">Autovalores</span> (Variancia):
+[0.49423288 1.         1.50576712]
+
+<span style="color: #c678dd;">Autovetores</span> (Cargas dos Componentes):
+[[ 3.88070835e-01  8.35943810e-01 -3.88070835e-01]
+ [ 7.07106781e-01 -5.92621506e-16  7.07106781e-01]
+ [-5.91101537e-01  5.48815038e-01  5.91101537e-01]]
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org0d879be" class="outline-4">
+<h4 id="org0d879be"><span class="section-number-4">8.0.2.</span> Matriz Final de Autovetores (\(V\))</h4>
+<div class="outline-text-4" id="text-8-0-2">
+<p>
+Repetindo o processo para os outros autovalores (\(\lambda_2, \lambda_3\)), obtemos a matriz de cargas (loadings):
+</p>
+\begin{equation}
+V = \begin{bmatrix} 
+0.388 & -0.836 & 0.388 \\
+-0.707 & 0.000 & -0.707 \\
+-0.591 & -0.549 & 0.591 
+\end{bmatrix}
+\end{equation}
+
+<p>
+Cada coluna de \(V\) representa um Componente Principal. Por exemplo, o primeiro componente (PC1) é formado pela combinação linear:
+</p>
+\begin{equation}
+PC1 = 0.388(X1_{std}) - 0.707(X2_{std}) - 0.591(X3_{std})
+\end{equation}
+</div>
+</div>
+</div>
+<div id="outline-container-org31b3a83" class="outline-2">
+<h2 id="org31b3a83"><span class="section-number-2">9.</span> Equações dos Componentes Principais (Estilo Slide 25)</h2>
+<div class="outline-text-2" id="text-9">
+<p>
+<b>tem um erro de calculo cometido aqui pelo gemini que esta diferente
+do slide</b>
+</p>
+
+<p>
+<b>vou ver isso depois</b>
+Seguindo o padrão de apresentação dos resultados, os componentes principais (\(Y_i\)) são expressos como combinações lineares das variáveis originais padronizadas (\(Z_j\)):
+</p>
+
+\begin{equation}
+\begin{cases} 
+Y_1 = 0.388 Z_1 - 0.707 Z_2 - 0.591 Z_3 \\
+Y_2 = -0.836 Z_1 + 0.000 Z_2 - 0.549 Z_3 \\
+Y_3 = 0.388 Z_1 - 0.707 Z_2 + 0.591 Z_3 
+\end{cases}
+\end{equation}
+
+<p>
+Onde:
+</p>
+<ul class="org-ul">
+<li>\(Y_i\) são os escores dos Componentes Principais.</li>
+<li>\(Z_j\) são as variáveis originais padronizadas.</li>
+<li>Os coeficientes são os elementos dos autovetores (pesos).</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org1be019a" class="outline-2">
+<h2 id="org1be019a"><span class="section-number-2">10.</span> Escores dos Componentes Principais (PCA Scores)</h2>
+<div class="outline-text-2" id="text-10">
+<p>
+Os escores são as novas coordenadas das observações no espaço dos Componentes Principais. Eles representam os valores transformados de cada unidade amostral.
+</p>
+
+<p>
+A fórmula matricial é:
+</p>
+\begin{equation}
+F = Z V
+\end{equation}
+
+<p>
+Onde:
+</p>
+<ul class="org-ul">
+<li>\(Z\) é a matriz de dados padronizados (\(n \times p\)).</li>
+<li>\(V\) é a matriz de autovetores (\(p \times p\)).</li>
+<li>\(F\) é a matriz de escores (\(n \times p\)).</li>
+</ul>
+</div>
+<div id="outline-container-org0b00fac" class="outline-4">
+<h4 id="org0b00fac"><span class="section-number-4">10.0.1.</span> Passo a Passo Numérico (Cálculo do primeiro escore)</h4>
+<div class="outline-text-4" id="text-10-0-1">
+<p>
+Para a primeira observação (\(u=1\)), o vetor padronizado é \(z_1 = [-1.195 \quad 0.677 \quad 1.352]\).
+</p>
+
+<p>
+Calculamos o escore para o <b><b>PC1</b></b>:
+</p>
+\begin{equation}
+F_{1,1} = (-1.195 \times 0.388) + (0.677 \times -0.707) + (1.352 \times -0.591)
+\end{equation}
+\begin{equation}
+F_{1,1} = -0.464 - 0.479 - 0.799 = -1.742
+\end{equation}
+</div>
+</div>
+<div id="outline-container-org6cc66c8" class="outline-4">
+<h4 id="org6cc66c8"><span class="section-number-4">10.0.2.</span> Matriz Final de Escores (\(F\))</h4>
+<div class="outline-text-4" id="text-10-0-2">
+<p>
+Multiplicando todas as linhas de \(Z\) pelas colunas de \(V\), obtemos:
+</p>
+
+\begin{equation}
+F = \begin{bmatrix} 
+-1.742 & 0.257 & -0.143 \\
+-1.183 & 0.443 & -1.060 \\
+-0.076 & -1.056 & 0.046 \\
+1.018 & 0.628 & -0.334 \\
+1.196 & 1.128 & -0.156 \\
+0.786 & -1.399 & 1.646 
+\end{bmatrix}
+\end{equation}
+
+<p>
+<b><b>Interpretando os Resultados:</b></b>
+</p>
+<ul class="org-ul">
+<li><b><b>Variância:</b></b> Se calcularmos a variância de cada coluna de \(F\), obteremos exatamente os autovalores (\(\lambda_1=1.506, \lambda_2=1.000, \lambda_3=0.494\)).</li>
+<li><b><b>Ortogonalidade:</b></b> A correlação entre qualquer par de colunas de \(F\) é zero. As novas variáveis são perfeitamente independentes.</li>
+<li><b><b>Redução de Dimensionalidade:</b></b> Podemos agora usar apenas as duas primeiras colunas (\(PC1\) e \(PC2\)) para representar nossos dados, mantendo \(\approx 83\%\) da informação original (\((1.506 + 1.0)/3\)).</li>
+</ul>
+
+
+<p>
+Segue o trecho do codigo que gere os scores dos individuos
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python" id="org70ff9a1"><span style="color: #5B6268;"># </span><span style="color: #5B6268;">Calculo de Autovalores e Autovetores
+</span><span style="color: #dcaeea;">eig_vals</span>, <span style="color: #dcaeea;">eig_vecs</span> <span style="color: #51afef;">=</span> np.linalg.eig(cov_mat)
+
+
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">Ordenar de forma decrescente pelos autovalores (Variancia)
+</span><span style="color: #dcaeea;">idx</span> <span style="color: #51afef;">=</span> eig_vals.argsort()[::<span style="color: #51afef;">-</span>1]
+<span style="color: #dcaeea;">eig_vals</span> <span style="color: #51afef;">=</span> eig_vals[idx]
+<span style="color: #dcaeea;">eig_vecs</span> <span style="color: #51afef;">=</span> eig_vecs[:, idx]
+
+
+
+
+<span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"</span><span style="color: #a9a1e1;">\n</span><span style="color: #98be65;">Autovalores (Variancia):"</span>)
+<span style="color: #c678dd;">print</span>(eig_vals)
+
+<span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"</span><span style="color: #a9a1e1;">\n</span><span style="color: #98be65;">Autovetores (Cargas dos Componentes):"</span>)
+<span style="color: #c678dd;">print</span>(eig_vecs)
+
+
+
+<span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"</span><span style="color: #a9a1e1;">\n</span><span style="color: #98be65;">=== Passo 4: Valores Originais com os Escores dos Individuos ==="</span>)
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">O calculo dos escores e o produto matricial dos dados padronizados pelos autovetores
+</span><span style="color: #dcaeea;">scores</span> <span style="color: #51afef;">=</span> np.dot(X_std, eig_vecs)
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">Criando o DataFrame dos escores organizados (com index iniciando em 1)
+</span><span style="color: #dcaeea;">component_names</span> <span style="color: #51afef;">=</span> [f<span style="color: #98be65;">'S_CP</span>{i<span style="color: #51afef;">+</span>1}<span style="color: #98be65;">'</span> <span style="color: #51afef;">for</span> i <span style="color: #51afef;">in</span> <span style="color: #c678dd;">range</span>(<span style="color: #c678dd;">len</span>(eig_vals))]
+<span style="color: #dcaeea;">df_scores</span> <span style="color: #51afef;">=</span> pd.DataFrame(scores, columns<span style="color: #51afef;">=</span>component_names, index<span style="color: #51afef;">=</span>data.index <span style="color: #51afef;">+</span> 1)
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">Ajustando o index dos dados originais para iniciar em 1 para alinhar a juncao
+</span><span style="color: #dcaeea;">df_original</span> <span style="color: #51afef;">=</span> data.copy()
+df_original.<span style="color: #dcaeea;">index</span> <span style="color: #51afef;">=</span> data.index <span style="color: #51afef;">+</span> 1
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">Concatenando os dados originais com os escores lado a lado (eixo 1)
+</span><span style="color: #dcaeea;">df_final</span> <span style="color: #51afef;">=</span> pd.concat([df_original, df_scores], axis<span style="color: #51afef;">=</span>1)
+df_final.index.<span style="color: #dcaeea;">name</span> <span style="color: #51afef;">=</span> <span style="color: #98be65;">'unidade'</span>
+
+<span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"Tabela Completa (Dados Originais + Escores):"</span>)
+<span style="color: #c678dd;">print</span>(df_final)
+
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-shell" id="orga3aa999">=== Passo 4: Valores Originais com os Escores dos Individuos ===
+Tabela Completa (Dados Originais + Escores):
+          X1   X2   X3     S_CP1     S_CP2     S_CP3
+unidade                                             
+1        2.0  4.0  5.0  1.742201 -0.256923 -0.784285
+2        3.0  5.0  3.0  1.182903 -0.442478  0.596084
+3        6.0  4.0  3.0  0.076618  1.056238  0.881298
+4        4.0  2.0  1.0 -1.018537 -0.628033  0.334311
+5        3.0  1.0  1.0 -1.197155 -1.127605 -0.308141
+6        6.0  1.0  4.0 -0.786030  1.398802 -0.719266
+</pre>
+</div>
+
+
+<p>
+Variancia explicada igual do slide 23 do prof
+</p>
+
+
+<div class="org-src-container">
+<pre class="src src-shell" id="org827ed33">  Variancia Explicada Acumulada:
+CP1: Individual = 50.19% | Acumulada = 50.19%
+CP2: Individual = 33.33% | Acumulada = 83.53%
+CP3: Individual = 16.47% | Acumulada = 100.00%
+
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org6222ab1" class="outline-2">
+<h2 id="org6222ab1"><span class="section-number-2">11.</span> Graficos</h2>
+<div class="outline-text-2" id="text-11">
+<p>
+Aqui estao os graficos gerados a partir da analise de componentes principais:
+</p>
+</div>
+<div id="outline-container-org65edae7" class="outline-3">
+<h3 id="org65edae7"><span class="section-number-3">11.1.</span> 1. Scree Plot (Grafico de Cotovelo)</h3>
+<div class="outline-text-3" id="text-11-1">
+<p>
+O Scree Plot mostra a variancia explicada por cada componente principal. O Criterio de Kaiser sugere manter componentes com autovalores (λ) maiores que 1.
+</p>
+
+
+<div id="org184d338" class="figure">
+<p><img src="imgs/scree_plot.png" alt="scree_plot.png" width="600px" />
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org0a35111" class="outline-3">
+<h3 id="org0a35111"><span class="section-number-3">11.2.</span> 2. Grafico de Escores (CP1 x CP2)</h3>
+<div class="outline-text-3" id="text-11-2">
+<p>
+Este grafico mostra a posicao de cada unidade experimental no novo espaco bidimensional formado pelos dois primeiros componentes principais.
+</p>
+
+
+<div id="org8fa6e19" class="figure">
+<p><img src="imgs/scores_plot.png" alt="scores_plot.png" width="600px" />
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org03ab960" class="outline-3">
+<h3 id="org03ab960"><span class="section-number-3">11.3.</span> 3. Biplot</h3>
+<div class="outline-text-3" id="text-11-3">
+<p>
+O Biplot combina os escores dos individuos com as cargas das variaveis originais, permitindo visualizar a relacao entre as variaveis e como elas influenciam a posicao dos individuos.
+</p>
+
+
+<div id="org2cfd431" class="figure">
+<p><img src="imgs/biplot.png" alt="biplot.png" width="700px" />
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org6602794" class="outline-2">
+<h2 id="org6602794"><span class="section-number-2">12.</span> Conclusão</h2>
+<div class="outline-text-2" id="text-12">
+<p>
+A Análise de Componentes Principais permitiu transformar 3 variáveis correlacionadas em 3 novos eixos independentes, facilitando a visualização e interpretação da estrutura de variabilidade dos dados.
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Eu e o Gemini</p>
+<p class="date">Created: 2026-05-19 ter 16:51</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
