@@ -2,6 +2,7 @@ import os
 import sys
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 
 # Adicionando o caminho das libs para reuso
 LIB_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../libs'))
@@ -107,6 +108,10 @@ def main():
 
 
         print("\n=== Passo 5: Geracao dos Graficos ===")
+        # Definir caminho para salvar as imagens na teoria
+        output_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../teoria/teoria_componentes_principais/imgs'))
+        os.makedirs(output_dir, exist_ok=True)
+
         # -------------------------------------------------------------
         # GRAFICO 1: Scree Plot (Grafico de Autovalores)
         # -------------------------------------------------------------
@@ -129,6 +134,10 @@ def main():
         plt.ylim(0, max(eig_vals) + 0.4)
         plt.grid(True, linestyle=':', alpha=0.6)
         plt.legend()
+        
+        scree_path = os.path.join(output_dir, 'scree_plot.png')
+        plt.savefig(scree_path, dpi=300, bbox_inches='tight')
+        print(f"Salvo: {scree_path}")
         plt.show()
 
         # -------------------------------------------------------------
@@ -150,6 +159,10 @@ def main():
         plt.ylabel('Componente Principal 2')
         plt.grid(True, linestyle=':', alpha=0.6)
         plt.axis('equal') # Mantem a escala dos eixos proporcional
+        
+        scores_path = os.path.join(output_dir, 'scores_plot.png')
+        plt.savefig(scores_path, dpi=300, bbox_inches='tight')
+        print(f"Salvo: {scores_path}")
         plt.show()
 
         # -------------------------------------------------------------
@@ -183,6 +196,10 @@ def main():
         plt.ylabel(f'Factor 2: {var_exp[1]:.2f}%')
         plt.grid(True, linestyle=':', alpha=0.6)
         plt.axis('equal')
+        
+        biplot_path = os.path.join(output_dir, 'biplot.png')
+        plt.savefig(biplot_path, dpi=300, bbox_inches='tight')
+        print(f"Salvo: {biplot_path}")
         plt.show()
 
 
