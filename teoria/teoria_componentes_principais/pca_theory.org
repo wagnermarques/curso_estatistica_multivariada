@@ -39,16 +39,22 @@ print(data.head())
 #+END_SRC
 
 
-| unidade |  X1 |  X2 |  X3 |
-|---------+-----+-----+-----|
-|     1.0 | 2.0 | 4.0 | 5.0 |
-|     2.0 | 3.0 | 5.0 | 3.0 |
-|     3.0 | 6.0 | 4.0 | 3.0 |
-|     4.0 | 4.0 | 2.0 | 1.0 |
-|     5.0 | 3.0 | 1.0 | 1.0 |
-|     6.0 | 6.0 | 1.0 | 4.0 |
+#+name: 
+#+begin_src shell
+=== Passo 1: Carregamento de Dados ===
+Dados originais (primeiras linhas):
+[[2. 4. 5.]
+ [3. 5. 3.]
+ [6. 4. 3.]
+ [4. 2. 1.]
+ [3. 1. 1.]
+ [6. 1. 4.]]
+#+end_src
 
 Nos slides do prof e em livros costuma-se falar em n casos e p medidas/dimensoes/variaveis.
+
+[[../../exercicios/exercicio_0_pca_dados_slide/src/exemplo_pca.csv][este é o arquivo csv]]
+
 
 * Notacoes Matriciais
 
@@ -86,11 +92,13 @@ X^T = \begin{bmatrix} 2 & 3 & 6 & 4 & 3 & 6 \\ 4 & 5 & 4 & 2 & 1 & 1 \\ 5 & 3 & 
 \end{equation}
 
 - Soma das colunas (X^T * 1):
+  
 \begin{equation}
 \begin{bmatrix} 24 \\ 17 \\ 17 \end{bmatrix}
 \end{equation}
 
 - Media Final:
+  
 \begin{equation}
 \bar{x} = \begin{bmatrix} 4.0 \\ 2.833 \\ 2.833 \end{bmatrix}
 \end{equation}
@@ -147,6 +155,7 @@ Multiplicamos a matriz centralizada pela matriz de escala. Isso equivale a divid
 Z = \begin{bmatrix} -1.195 & 0.677 & 1.352 \\ -0.598 & 1.258 & 0.104 \\ 1.195 & 0.677 & 0.104 \\ 0.000 & -0.484 & -1.144 \\ -0.598 & -1.064 & -1.144 \\ 1.195 & -1.064 & 0.728 \end{bmatrix}
 \end{equation}
 
+
 A matriz ta igualzinha a dos slides do prof
 
 o trecho de codigo do nosso arquivo main.py que produz os dados
@@ -171,35 +180,27 @@ df_std = (df - df.mean()) / df.std()
 
 print("\nDados Padronizados (X_std):")
 print(df_std.head(5).to_string(index=True))
-
-# Gerar Boxplot
-plt.figure(figsize=(8, 5))
-df_std.boxplot()
-plt.title("Boxplot dos Dados Padronizados")
-plt.savefig('boxplot.svg')
-plt.show()
 #+end_src
 
+O python tb está gerando a matriz de padronizada igual a dos slides do prof
 
 
 #+name: 
 #+begin_src shell
-  === Passo 2: Padronizacao (Z-score) ===
-
-=== Passo 2.1: Media de cada coluna ===
-unidade: 3.5000
+  === Passo 2.1: Media de cada coluna ===
 X1: 4.0000
 X2: 2.8333
 X3: 2.8333
 Dados Padronizados (X_std):
-    unidade        X1        X2        X3
-0 -1.336306 -1.195229  0.677349  1.352407
-1 -0.801784 -0.597614  1.257934  0.104031
-2 -0.267261  1.195229  0.677349  0.104031
-3  0.267261  0.000000 -0.483821 -1.144344
-4  0.801784 -0.597614 -1.064405 -1.144344
+[[-1.19522861  0.67734887  1.35240687]
+ [-0.5976143   1.25793362  0.1040313 ]
+ [ 1.19522861  0.67734887  0.1040313 ]
+ [ 0.         -0.48382062 -1.14434427]
+ [-0.5976143  -1.06440537 -1.14434427]
+ [ 1.19522861 -1.06440537  0.72821908]]
 
 #+end_src
+
 
 * Covariancia
 
@@ -211,13 +212,19 @@ Esse video tb mostra isso https://www.youtube.com/watch?v=6ard2U5URpU
 
 
 A fórmula matricial é:
+
+
 \begin{equation}
 R = \frac{1}{n-1} Z^T Z
 \end{equation}
 
+
 *** Passo a Passo Numérico (Cálculo de \(R\))
 
+
 1. **Matriz Padronizada Transposta (\(Z^T\))**:
+
+   
 \begin{equation}
 Z^T = \begin{bmatrix} 
 -1.195 & -0.598 & 1.195 & 0.000 & -0.598 & 1.195 \\
@@ -226,8 +233,15 @@ Z^T = \begin{bmatrix}
 \end{bmatrix}
 \end{equation}
 
+
+
 2. **Produto das Matrizes (\(Z^T Z\))**:
-Este produto resulta em uma matriz \(p \times p\) (onde \(p\) é o número de variáveis, no caso 3). Os elementos da diagonal principal são iguais a \(n-1\) (que é 5).
+
+Este produto resulta em uma matriz \(p \times p\) (onde \(p\) é o
+número de variáveis, no caso 3). Os elementos da diagonal principal
+são iguais a \(n-1\) (que é 5).
+
+
 \begin{equation}
 Z^T Z = \begin{bmatrix} 
 5.000 & -1.388 & 0.000 \\
@@ -262,13 +276,18 @@ a matriz de autovalores
 
 #+name: 
 #+begin_src shell
+  
 === Passo 3: Matriz de Covariancia, Autovalores e Autovetores ===
 Matriz de Covariancia (R):
-[[ 1.00000000e+00  5.74988908e-01 -8.99973247e-01 -4.33735126e-01]
- [ 5.74988908e-01  1.00000000e+00 -2.77572601e-01 -3.46361090e-17]
- [-8.99973247e-01 -2.77572601e-01  1.00000000e+00  4.22792893e-01]
- [-4.33735126e-01 -3.46361090e-17  4.22792893e-01  1.00000000e+00]]
+[[ 1.00000000e+00 -2.77572601e-01 -3.46361090e-17]
+ [-2.77572601e-01  1.00000000e+00  4.22792893e-01]
+ [-3.46361090e-17  4.22792893e-01  1.00000000e+00]]
 #+end_src
+
+Dá a impressao de que a matriz de covariancia gerado pelo script esta
+diferente da matriz de covariancia nos slides do professor mas dando
+uma olhada [[https://gemini.google.com/share/0117c9293d76][ nessa explicacao aqui]] da pra ver que esta corretissima
+
 
 * Equacao Caracteristica
 
@@ -302,7 +321,7 @@ A equação é:
 O calculo do determinante vai gerar uma equacao polinomial pro calculo
 do dos autovalores conforme demostrado abaixo.
 
-O gemini fez essa conta pra mim.
+O gemini fez essa conta pra mim, está logo abaixo no passo a passo numerico.
 
 
 *** Passo a Passo Numérico (Cálculo dos Autovalores)
@@ -317,8 +336,12 @@ R - \lambda I = \begin{bmatrix}
 \end{bmatrix}
 \end{equation}
 
+
 2. **Cálculo do Determinante (Polinômio Característico)**:
+
 Expandindo o determinante para uma matriz $3 \times 3$:
+
+
 \begin{equation}
 (1-\lambda) [(1-\lambda)^2 - (0.423)^2] - (-0.278) [(-0.278)(1-\lambda) - 0] + 0 = 0
 \end{equation}
@@ -334,28 +357,36 @@ Fatorando \((1-\lambda)\):
 (1-\lambda) [(1-\lambda)^2 - 0.256] = 0
 \end{equation}
 
+
 3. **Resolução das Raízes (\(\lambda\))**:
+   
 - **Raiz 1**: \(1 - \lambda = 0 \implies \lambda_2 = 1.000\)
+  
 - **Raízes 2 e 3**: Da parte quadrática \((1-\lambda)^2 = 0.256\):
   - \(1 - \lambda = \pm \sqrt{0.256} = \pm 0.506\)
   - \(\lambda_1 = 1 + 0.506 = 1.506\)
   - \(\lambda_3 = 1 - 0.506 = 0.494\)
 
+    
 4. **Matriz de Autovalores (\(\Lambda\))**:
+   
 Ordenamos os autovalores do maior para o menor para definir a importância dos componentes:
 \begin{equation}
 \Lambda = \begin{bmatrix} 1.506 & 0 & 0 \\ 0 & 1.000 & 0 \\ 0 & 0 & 0.494 \end{bmatrix}
 \end{equation}
 
-Os resultados mostram que o primeiro Componente Principal (PC1) explica a maior parte da variância (1.506 de um total de 3.0).
 
+Os resultados mostram que o primeiro Componente Principal (PC1) explica a maior parte da variância (1.506 de um total de 3.0).
 
 
 * Autovetores (Eigenvectors)
 
 Calculos realizados pelo gemini 
 
-Os autovetores (\(v_i\)) definem a direção dos novos eixos (os Componentes Principais). Para cada autovalor \(\lambda_i\), resolvemos o sistema:
+Os autovetores (\(v_i\)) definem a direção dos novos eixos (os
+Componentes Principais). Para cada autovalor \(\lambda_i\), resolvemos
+o sistema:
+
 \begin{equation}
 (R - \lambda_i I)v_i = 0
 \end{equation}
@@ -365,6 +396,7 @@ Os autovetores (\(v_i\)) definem a direção dos novos eixos (os Componentes Pri
 Vamos calcular o autovetor para o maior autovalor \(\lambda_1 = 1.506\).
 
 1. **Sistema de Equações**:
+   
 \begin{equation}
 \begin{bmatrix} 
 1.000 - 1.506 & -0.278 & 0.000 \\
@@ -374,6 +406,7 @@ Vamos calcular o autovetor para o maior autovalor \(\lambda_1 = 1.506\).
 \end{equation}
 
 Isso nos dá o sistema:
+
 - (I) \(-0.506x - 0.278y = 0 \implies y = -1.820x\)
 - (II) \(-0.278x - 0.506y + 0.423z = 0\)
 - (III) \(0.423y - 0.506z = 0 \implies z = 0.836y\)
@@ -387,12 +420,15 @@ z = 0.836(-1.820x) = -1.521x
 Temos o vetor proporcional: \(v'_1 = [1.000 \quad -1.820 \quad -1.521]\).
 
 3. **Normalização (Vetor Unitário)**:
+   
 Para que o autovetor tenha comprimento 1, calculamos a norma:
+
 \begin{equation}
 \|v'_1\| = \sqrt{1^2 + (-1.820)^2 + (-1.521)^2} = \sqrt{1 + 3.312 + 2.313} = 2.574
 \end{equation}
 
 O autovetor normalizado \(v_1\) é:
+
 \begin{equation}
 v_1 = \frac{v'_1}{2.574} = \begin{bmatrix} 0.388 \\ -0.707 \\ -0.591 \end{bmatrix}
 \end{equation}
@@ -432,28 +468,13 @@ gente no python e mostra os resultados. Esse e o trecho do nosso main.py
 
 #+name: 
 #+begin_src shell
-=== Passo 3: Matriz de Covariancia, Autovalores e Autovetores ===
-Matriz de Covariancia (R):
-[[ 1.00000000e+00  5.74988908e-01 -8.99973247e-01 -4.33735126e-01]
- [ 5.74988908e-01  1.00000000e+00 -2.77572601e-01 -3.46361090e-17]
- [-8.99973247e-01 -2.77572601e-01  1.00000000e+00  4.22792893e-01]
- [-4.33735126e-01 -3.46361090e-17  4.22792893e-01  1.00000000e+00]]
-
 Autovalores (Variancia):
-[2.41852457 0.03714877 0.52129712 1.02302954]
+[0.49423288 1.         1.50576712]
 
 Autovetores (Cargas dos Componentes):
-[[ 0.62862806  0.75407881  0.16635932  0.09228479]
- [ 0.36823764 -0.28076682 -0.51783333  0.7193189 ]
- [-0.57966808  0.58813542 -0.54844585  0.13148685]
- [-0.36498318  0.08143625  0.63512233  0.67585135]]
-
-Variancia Explicada Acumulada:
-CP1: Individual = 60.46% | Acumulada = 60.46%
-CP2: Individual = 25.58% | Acumulada = 86.04%
-CP3: Individual = 13.03% | Acumulada = 99.07%
-CP4: Individual = 0.93% | Acumulada = 100.00%
-
+[[ 3.88070835e-01  8.35943810e-01 -3.88070835e-01]
+ [ 7.07106781e-01 -5.92621506e-16  7.07106781e-01]
+ [-5.91101537e-01  5.48815038e-01  5.91101537e-01]]
 #+end_src
 
 
@@ -472,6 +493,27 @@ Cada coluna de \(V\) representa um Componente Principal. Por exemplo, o primeiro
 \begin{equation}
 PC1 = 0.388(X1_{std}) - 0.707(X2_{std}) - 0.591(X3_{std})
 \end{equation}
+
+* Equações dos Componentes Principais (Estilo Slide 25)
+
+*tem um erro de calculo cometido aqui pelo gemini que esta diferente
+do slide*
+
+*vou ver isso depois*
+Seguindo o padrão de apresentação dos resultados, os componentes principais (\(Y_i\)) são expressos como combinações lineares das variáveis originais padronizadas (\(Z_j\)):
+
+\begin{equation}
+\begin{cases} 
+Y_1 = 0.388 Z_1 - 0.707 Z_2 - 0.591 Z_3 \\
+Y_2 = -0.836 Z_1 + 0.000 Z_2 - 0.549 Z_3 \\
+Y_3 = 0.388 Z_1 - 0.707 Z_2 + 0.591 Z_3 
+\end{cases}
+\end{equation}
+
+Onde:
+- \(Y_i\) são os escores dos Componentes Principais.
+- \(Z_j\) são as variáveis originais padronizadas.
+- Os coeficientes são os elementos dos autovetores (pesos).
 
 * Escores dos Componentes Principais (PCA Scores)
 
@@ -518,6 +560,174 @@ F = \begin{bmatrix}
 - **Variância:** Se calcularmos a variância de cada coluna de \(F\), obteremos exatamente os autovalores (\(\lambda_1=1.506, \lambda_2=1.000, \lambda_3=0.494\)).
 - **Ortogonalidade:** A correlação entre qualquer par de colunas de \(F\) é zero. As novas variáveis são perfeitamente independentes.
 - **Redução de Dimensionalidade:** Podemos agora usar apenas as duas primeiras colunas (\(PC1\) e \(PC2\)) para representar nossos dados, mantendo \(\approx 83\%\) da informação original (\((1.506 + 1.0)/3\)).
+
+
+Segue o trecho do codigo que gere os scores dos individuos
+
+#+name: 
+#+begin_src python :session s1 :shebang "#!/usr/bin/env python3" :exports both :results graphics file output :file boxplot.svg
+        # Calculo de Autovalores e Autovetores
+        eig_vals, eig_vecs = np.linalg.eig(cov_mat)
+
+
+
+        # Ordenar de forma decrescente pelos autovalores (Variancia)
+        idx = eig_vals.argsort()[::-1]
+        eig_vals = eig_vals[idx]
+        eig_vecs = eig_vecs[:, idx]
+
+
+
+
+        print("\nAutovalores (Variancia):")
+        print(eig_vals)
+
+        print("\nAutovetores (Cargas dos Componentes):")
+        print(eig_vecs)
+
+
+
+        print("\n=== Passo 4: Valores Originais com os Escores dos Individuos ===")
+        # O calculo dos escores e o produto matricial dos dados padronizados pelos autovetores
+        scores = np.dot(X_std, eig_vecs)
+        
+        # Criando o DataFrame dos escores organizados (com index iniciando em 1)
+        component_names = [f'S_CP{i+1}' for i in range(len(eig_vals))]
+        df_scores = pd.DataFrame(scores, columns=component_names, index=data.index + 1)
+        
+        # Ajustando o index dos dados originais para iniciar em 1 para alinhar a juncao
+        df_original = data.copy()
+        df_original.index = data.index + 1
+        
+        # Concatenando os dados originais com os escores lado a lado (eixo 1)
+        df_final = pd.concat([df_original, df_scores], axis=1)
+        df_final.index.name = 'unidade'
+        
+        print("Tabela Completa (Dados Originais + Escores):")
+        print(df_final)
+
+#+end_src
+
+#+name: 
+#+begin_src shell
+=== Passo 4: Valores Originais com os Escores dos Individuos ===
+Tabela Completa (Dados Originais + Escores):
+          X1   X2   X3     S_CP1     S_CP2     S_CP3
+unidade                                             
+1        2.0  4.0  5.0  1.742201 -0.256923 -0.784285
+2        3.0  5.0  3.0  1.182903 -0.442478  0.596084
+3        6.0  4.0  3.0  0.076618  1.056238  0.881298
+4        4.0  2.0  1.0 -1.018537 -0.628033  0.334311
+5        3.0  1.0  1.0 -1.197155 -1.127605 -0.308141
+6        6.0  1.0  4.0 -0.786030  1.398802 -0.719266
+#+end_src
+
+
+Variancia explicada igual do slide 23 do prof
+
+
+#+name: 
+#+begin_src shell
+  Variancia Explicada Acumulada:
+CP1: Individual = 50.19% | Acumulada = 50.19%
+CP2: Individual = 33.33% | Acumulada = 83.53%
+CP3: Individual = 16.47% | Acumulada = 100.00%
+
+#+end_src
+
+* Graficos
+
+
+trecho de codigo que gera os graficos
+
+
+#+name: 
+#+begin_src python :session s1 :shebang "#!/usr/bin/env python3" :exports both :results graphics file output :file boxplot.svg
+        print("\n=== Passo 5: Geracao dos Graficos ===")
+        # -------------------------------------------------------------
+        # GRAFICO 1: Scree Plot (Grafico de Autovalores)
+        # -------------------------------------------------------------
+        plt.figure(figsize=(8, 5))
+        # Variancia explicada em percentual
+        tot = sum(eig_vals)
+        var_exp = [(i / tot) * 100 for i in eig_vals]
+        
+        plt.plot(range(1, len(eig_vals) + 1), eig_vals, marker='o', linestyle='-', color='blue')
+        plt.axhline(y=1.0, color='red', linestyle='--', label='Criterio de Kaiser (λ = 1)')
+        
+        # Adicionando os rotulos das porcentagens sobre os pontos
+        for i, val in enumerate(var_exp):
+            plt.text(i + 1, eig_vals[i] + 0.05, f"{val:.2f}%", ha='center', va='bottom', fontweight='bold')
+            
+        plt.title('Grafico Scree Plot')
+        plt.xlabel('Numero do Autovalor (Componente)')
+        plt.ylabel('Autovalor (Eigenvalue)')
+        plt.xticks(range(1, len(eig_vals) + 1))
+        plt.ylim(0, max(eig_vals) + 0.4)
+        plt.grid(True, linestyle=':', alpha=0.6)
+        plt.legend()
+        plt.show()
+
+        # -------------------------------------------------------------
+        # GRAFICO 2: Grafico de Escores (CP1 x CP2)
+        # -------------------------------------------------------------
+        plt.figure(figsize=(8, 6))
+        plt.axhline(0, color='gray', linestyle='--', alpha=0.5)
+        plt.axvline(0, color='gray', linestyle='--', alpha=0.5)
+        
+        # Plotando os pontos dos individuos (unidades)
+        plt.scatter(df_scores['S_CP1'], df_scores['S_CP2'], color='blue', edgecolors='black', s=100, zorder=3)
+        
+        # Rotulando cada ponto com o numero da unidade correspondente
+        for idx, row in df_scores.iterrows():
+            plt.text(row['S_CP1'] + 0.05, row['S_CP2'] + 0.05, str(idx), fontsize=12, fontweight='bold', ha='left', va='bottom')
+            
+        plt.title(f'Grafico CP1 x CP2\n(CP1: {var_exp[0]:.2f}% | CP2: {var_exp[1]:.2f}%)')
+        plt.xlabel('Componente Principal 1')
+        plt.ylabel('Componente Principal 2')
+        plt.grid(True, linestyle=':', alpha=0.6)
+        plt.axis('equal') # Mantem a escala dos eixos proporcional
+        plt.show()
+
+        # -------------------------------------------------------------
+        # GRAFICO 3: BIPLOT (Escores + Cargas das Variaveis Originais)
+        # -------------------------------------------------------------
+        plt.figure(figsize=(9, 7))
+        plt.axhline(0, color='gray', linestyle='--', alpha=0.5)
+        plt.axvline(0, color='gray', linestyle='--', alpha=0.5)
+        
+        # 1. Plota os escores dos individuos (mesma lógica do gráfico 2)
+        plt.scatter(df_scores['S_CP1'], df_scores['S_CP2'], color='blue', edgecolors='black', alpha=0.7, s=80, label='Individuos', zorder=3)
+        for idx, row in df_scores.iterrows():
+            plt.text(row['S_CP1'] + 0.05, row['S_CP2'] + 0.05, str(idx), fontsize=10, ha='left', va='bottom')
+            
+        # 2. Plota os vetores das cargas das variaveis originais (multiplicados por um fator de escala para visualizacao)
+        # No biplot do slide, as direcoes dependem da correlacao/carga da variavel na CP1 e CP2
+        escala_vetor = 2.0  # Fator para esticar os vetores e facilitar a leitura no mesmo grafico
+        for i, col_name in enumerate(data.columns):
+            # Coordenadas da variavel tiradas das cargas (autovetores) da CP1 e CP2
+            # Nota: multiplicamos por np.sqrt(eig_vals) se quisermos correlacoes como no slide
+            carga_cp1 = eig_vecs[i, 0] * np.sqrt(eig_vals[0])
+            carga_cp2 = eig_vecs[i, 1] * np.sqrt(eig_vals[1])
+            
+            plt.arrow(0, 0, carga_cp1 * escala_vetor, carga_cp2 * escala_vetor, 
+                      color='red', alpha=0.8, head_width=0.08, head_length=0.1, lw=1.5, length_includes_head=True)
+            plt.text(carga_cp1 * escala_vetor * 1.15, carga_cp2 * escala_vetor * 1.15, col_name, 
+                     color='black', fontsize=12, fontweight='bold', ha='center', va='center')
+            
+        plt.title('Grafico BIPLOT')
+        plt.xlabel(f'Factor 1: {var_exp[0]:.2f}%')
+        plt.ylabel(f'Factor 2: {var_exp[1]:.2f}%')
+        plt.grid(True, linestyle=':', alpha=0.6)
+        plt.axis('equal')
+        plt.show()
+
+
+#+end_src
+
+
+
+
 
 * Conclusão
 A Análise de Componentes Principais permitiu transformar 3 variáveis correlacionadas em 3 novos eixos independentes, facilitando a visualização e interpretação da estrutura de variabilidade dos dados.
