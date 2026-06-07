@@ -168,16 +168,95 @@ frente quando encontrar-mos os fatores.
 * Passo 3: Decomposição em Autovalores e Autovetores
 
 Para extrair os fatores, resolvemos a equação característica:
+
 \[ \det(R - \lambda I) = 0 \]
 
-Onde $\lambda$ são os autovalores. Para cada $\lambda_i$, encontramos o autovetor $v_i$ tal que:
+Onde $\lambda$ são os autovalores. Para cada $\lambda_i$, encontramos
+o autovetor $v_i$ tal que:
+
 \[ R v_i = \lambda_i v_i \]
+
+** Script para Extração de Autovalores e Autovetores
+Este script lê os dados padronizados, calcula a matriz de correlação e
+extrai os autovalores e autovetores.
+
+
+#+begin_src python :results output :exports both :tangle extract_eigen.py
+import pandas as pd
+import numpy as np
+import os
+
+# Localização do script e arquivos
+script_dir = os.path.dirname(os.path.abspath(__file__)) if '__file__' in locals() else os.getcwd()
+input_file = os.path.join(script_dir, 'dados_padronizados.csv')
+
+if not os.path.exists(input_file):
+    print(f"Erro: Arquivo {input_file} não encontrado. Execute o script de padronização primeiro.")
+else:
+    # Carregar dados padronizados
+    df_std = pd.read_csv(input_file)
+    
+    # Calcular matriz de correlação (R)
+    R = df_std.corr()
+    
+    # Extrair autovalores e autovetores
+    eigenvalues, eigenvectors = np.linalg.eig(R)
+    
+    # Ordenar de forma decrescente
+    idx = eigenvalues.argsort()[::-1]
+    eigenvalues = eigenvalues[idx]
+    eigenvectors = eigenvectors[:, idx]
+    
+    print("=== Resultados da Decomposição Espectral ===")
+    print("\nAutovalores (Variância Explicada por cada componente):")
+    for i, val in enumerate(eigenvalues):
+        variancia_perc = (val / len(eigenvalues)) * 100
+        print(f"Componente {i+1}: {val:.4f} ({variancia_perc:.2f}%)")
+        
+    print("\nMatriz de Autovetores (V) - Primeiros 2 componentes:")
+    df_v = pd.DataFrame(eigenvectors[:, :2], index=df_std.columns, columns=['V1', 'V2'])
+    print(df_v)
+#+end_src
+
+a linha que extrai os autovalores e autovetores é np.linalg.eig(R)
+
+pra entender melhor como o numpy trabalhar com algebra linear, esta he
+a documentacao: https://numpy.org/doc/stable/reference/routines.linalg.html
+
 
 tem uma explicacao que achei muito interessante nesse video:
 https://www.youtube.com/watch?v=MLck7c2Ma8E&t=1388s
 
 
 ** Autovalores Obtidos:
+
+#+name: 
+#+begin_src shell
+  (venv) wgn@fedora:/run/media/wgn/ext4/Projects-Srcs/Projects-Srcs-FzlSoft/curso_estatistica_multivariada$ python3 teoria/analise_fatorial_exploratoria/extract_eigen.py 
+  === Resultados da Decomposição Espectral ===
+  
+  Autovalores (Variância Explicada por cada componente):
+  Componente 1: 2.7974 (39.96%)
+  Componente 2: 1.7257 (24.65%)
+  Componente 3: 0.8920 (12.74%)
+  Componente 4: 0.5799 (8.28%)
+  Componente 5: 0.4519 (6.46%)
+  Componente 6: 0.3807 (5.44%)
+  Componente 7: 0.1724 (2.46%)
+
+  Matriz de Autovetores (V) - Primeiros 2 componentes:
+                V1        V2
+  Ca     -0.363171 -0.156996
+  Mg     -0.476468 -0.200491
+  H + Al  0.482937 -0.133232
+  Al3+    0.539410 -0.156802
+  S       0.267106  0.549150
+  Fe      0.192170 -0.499852
+  Mn     -0.092840  0.584294
+  (venv) wgn@fedora:/run/media/wgn/ext4/Projects-Srcs/Projects-Srcs-FzlSoft/curso_estatistica_multivariada$ 
+#+end_src
+
+
 | Componente | Autovalor ($\lambda$) | % Variância | % Acumulada |
 |------------+----------------------+-------------+-------------|
 | 1          | 2.797                | 39.96%      | 39.96%      |
@@ -189,6 +268,8 @@ https://www.youtube.com/watch?v=MLck7c2Ma8E&t=1388s
 | 7          | 0.172                | 2.46%       | 100.00%     |
 
 Pelo critério de Kaiser ($\lambda > 1$), reteríamos 2 fatores.
+
+
 
 * Passo 4: Matriz de Cargas Fatoriais (A)
 As cargas fatoriais representam a correlação entre as variáveis originais e os fatores. Elas são calculadas como:

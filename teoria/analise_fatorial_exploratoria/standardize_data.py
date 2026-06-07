@@ -2,7 +2,7 @@ import pandas as pd
 import os
 
 # Determina o diretório onde o script está localizado
-script_dir = os.path.dirname(os.path.abspath(__file__))
+script_dir = os.path.dirname(os.path.abspath(__file__)) if '__file__' in locals() else os.getcwd()
 
 # Caminhos dos arquivos baseados na localização do script
 input_file = os.path.join(script_dir, '../../quimica_do_solo.xlsx')
