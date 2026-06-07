@@ -16,6 +16,8 @@ encontrou usando o statistica.
 
 A análise segue os passos matemáticos clássicos utilizando álgebra matricial e a biblioteca SymPy para representação simbólica.
 
+Seguindo a orientacao do professor, sempre que oportuno vou fazer
+analises para melhorar a compreensao do que esta sendo apresentado.
 
 * Passo 1: Carregamento e Preparação dos Dados
 
@@ -102,31 +104,78 @@ Primeiras linhas dos dados padronizados:
 
 
 * Passo 2: Matriz de Correlação (R)
+
+A matriz de correção he mesmo que a matriz de covariancia aplicada aos
+dados padronizados.
+
+A padronizacao he importante porque a matriz de covariancia tem seus
+resultados fortemente impactado pelas escalas, mas a padronizacao
+resolve isso.
+
+o que temos abaixo he a matriz de covariancia aplicada aos dados
+padronizados mas pelo fato de ser identica a matriz de correlacao
+chamamos de matriz de correlacao mesmo.
+
+So pra ilustrar que apesar de resultados identicos no nosso caso desta
+analise, matriz de covariancia nao he a mesma coisa que matriz de
+correlacao, conforme essa imagem gerado pelo claude.
+
+[[./imgs/passo_a_passo_mtz_cov_e_mtz_corr.png]]
+
+
 A AFE baseia-se na matriz de correlação entre as variáveis padronizadas.
 
 Seja $Z$ a matriz de dados padronizados ($n \times p$), a matriz de correlação $R$ é dada por:
 \[ R = \frac{1}{n-1} Z^T Z \]
 
-Numericamente, a matriz de correlação para nossos dados é:
+
+No exercicio de componentes principais tem os passos detalhados sobre
+como obter  a matriz de correlacao.
+
+
+De posse da matriz de correlacao, ja temos algumas leituras interessantes diante da correlacao entre as variaveis.
+
 
 #+begin_table
-|        | Ca    | Mg    | H+Al  | Al3+  | S     | Fe    | Mn    |
-|--------+-------+-------+-------+-------+-------+-------+-------|
-| *Ca*   | 1.000 | 0.437 | -0.302| -0.375| -0.337| 0.028 | 0.126 |
-| *Mg*   | 0.437 | 1.000 | -0.490| -0.653| -0.403| -0.044| -0.077|
-| *H+Al* | -0.302| -0.490| 1.000 | 0.734 | 0.211 | 0.297 | -0.162|
-| *Al3+* | -0.375| -0.653| 0.734 | 1.000 | 0.255 | 0.397 | -0.252|
-| *S*    | -0.337| -0.403| 0.211 | 0.255 | 1.000 | -0.184| 0.413 |
-| *Fe*   | 0.028 | -0.044| 0.297 | 0.397 | -0.184| 1.000 | -0.281|
-| *Mn*   | 0.126 | -0.077| -0.162| -0.252| 0.413 | -0.281| 1.000 |
+|        |      Ca |       Mg |    H+Al |    Al3+ |      S |     Fe |     Mn |
+|--------+---------+----------+---------+---------+--------+--------+--------|
+| *Ca*   |   1.000 |    0.437 |  -0.302 |  -0.375 | -0.337 |  0.028 |  0.126 |
+| *Mg*   |   0.437 |    1.000 |  -0.490 |  -0.653 | -0.403 | -0.044 | -0.077 |
+| *H+Al* |  -0.302 |   -0.490 |   1.000 | _0.734_ |  0.211 |  0.297 | -0.162 |
+| *Al3+* |  -0.375 |   -0.653 | *0.734* |   1.000 |  0.255 |  0.397 | -0.252 |
+| *S*    |  -0.337 |   -0.403 |   0.211 |   0.255 |  1.000 | -0.184 |  0.413 |
+| *Fe*   | *0.028* | *-0.044* |   0.297 |   0.397 | -0.184 |  1.000 | -0.281 |
+| *Mn*   |   0.126 | *-0.077* |  -0.162 |  -0.252 |  0.413 | -0.281 |  1.000 |
 #+end_table
 
+A tabela mostra que Al3 tem correlacao forte com H+Al.Claro que aí
+precisa de literatura e conhecimento da área pra seber quais as
+implicacoes disso.
+
+O Fe tem correlação zero com Ca, Mg e muito baixa com H_Al 0.297, com
+Al3+ 0.397 e mais baixa ainda com S -0.184.
+
+Isso quer dizer que a variancia do Fe nao esta relacionada a variancia
+da maioria dos outros elementos quimicos.
+
+O Mn já se relaciona fracamente com S 0.413.
+
+
+Esse primeiro olhar já nos da uma pista do que podemos ter lá na
+frente quando encontrar-mos os fatores.
+
+
 * Passo 3: Decomposição em Autovalores e Autovetores
+
 Para extrair os fatores, resolvemos a equação característica:
 \[ \det(R - \lambda I) = 0 \]
 
 Onde $\lambda$ são os autovalores. Para cada $\lambda_i$, encontramos o autovetor $v_i$ tal que:
 \[ R v_i = \lambda_i v_i \]
+
+tem uma explicacao que achei muito interessante nesse video:
+https://www.youtube.com/watch?v=MLck7c2Ma8E&t=1388s
+
 
 ** Autovalores Obtidos:
 | Componente | Autovalor ($\lambda$) | % Variância | % Acumulada |
