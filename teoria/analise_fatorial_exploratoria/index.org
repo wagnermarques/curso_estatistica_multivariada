@@ -1,9 +1,10 @@
-#+Title: Análise Fatorial Exploratória (AFE) - Química do Solo
-#+Author: Gemini CLI
+#+Title: Análise Fatorial Exploratória (EFA - Exploratory Factorial Analysis)
+#+Author: Eu e o Gemini
 #+Date: 2026-06-07
 #+Language: pt-br
 
 * Introdução
+
 Este documento sao anotacoes de estudo sobre Análise Fatorial Exploratória (AFE)
 
 Detalhada dos dados de química do solo contidos no arquivo =quimica_do_solo.xlsx=.
@@ -51,11 +52,16 @@ O código abaixo realiza a leitura dos dados originais, aplica a padronização 
 import pandas as pd
 import os
 
-# Caminhos dos arquivos
-# Ao executar via Org-mode, o caminho relativo é em relação ao diretório do arquivo .org
-# Se executado externamente, certifique-se de que o arquivo .xlsx esteja no local correto
-input_file = '../../quimica_do_solo.xlsx'
-output_file = 'dados_padronizados.csv'
+# Determina o diretório onde o script está localizado
+script_dir = os.path.dirname(os.path.abspath(__file__)) if '__file__' in locals() else os.getcwd()
+
+# Caminhos dos arquivos baseados na localização do script
+input_file = os.path.join(script_dir, '../../quimica_do_solo.xlsx')
+output_file = os.path.join(script_dir, 'dados_padronizados.csv')
+
+# Normaliza os caminhos para evitar problemas com ../
+input_file = os.path.normpath(input_file)
+output_file = os.path.normpath(output_file)
 
 if not os.path.exists(input_file):
     print(f"Erro: Arquivo {input_file} não encontrado.")
@@ -76,6 +82,23 @@ else:
 #+end_src
 
 #+RESULTS:
+
+
+#+name: dados padronizados head
+#+begin_src shell
+(venv) wgn@fedora:/run/media/wgn/ext4/Projects-Srcs/Projects-Srcs-FzlSoft/curso_estatistica_multivariada$ python3 teoria/analise_fatorial_exploratoria/standardize_data.py 
+Dados padronizados salvos em: /run/media/wgn/ext4/Projects-Srcs/Projects-Srcs-FzlSoft/curso_estatistica_multivariada/teoria/analise_fatorial_exploratoria/dados_padronizados.csv
+
+Primeiras linhas dos dados padronizados:
+         Ca        Mg    H + Al      Al3+         S        Fe        Mn
+0  2.421023  2.568326 -1.000292 -1.427352 -1.508906  2.819830  0.344644
+1 -0.642253 -0.661305  1.634109  0.862064  1.195651  0.312838  1.524034
+2 -0.514616 -0.661305  0.668162  1.116444  1.154673  0.891375  1.406095
+3  2.038113  2.106950 -1.000292 -1.427352 -1.508906  1.277066  1.347125
+4 -0.259343 -0.661305 -0.122158 -0.155454  0.458045  0.312838  0.757430
+(venv) wgn@fedora:/run/media/wgn/ext4/Projects-Srcs/Projects-Srcs-FzlSoft/curso_estatistica_multivariada$ 
+#+end_src
+
 
 
 * Passo 2: Matriz de Correlação (R)

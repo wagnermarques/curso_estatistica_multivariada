@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="pt-br" xml:lang="pt-br">
 <head>
-<!-- 2026-06-07 dom 17:56 -->
+<!-- 2026-06-07 dom 18:14 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Análise Fatorial Exploratória (AFE) - Química do Solo</title>
@@ -201,31 +201,31 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org6860d1c">1. Introdução</a></li>
-<li><a href="#org2686505">2. Passo 1: Carregamento e Preparação dos Dados</a>
+<li><a href="#orge10167f">1. Introdução</a></li>
+<li><a href="#orgcc55e93">2. Passo 1: Carregamento e Preparação dos Dados</a>
 <ul>
-<li><a href="#orgdd37de8">2.1. Padronização das variaveis</a></li>
-<li><a href="#org91e2945">2.2. Script para Padronização dos Dados</a></li>
+<li><a href="#org9df1c03">2.1. Padronização das variaveis</a></li>
+<li><a href="#orgeb5dd1b">2.2. Script para Padronização dos Dados</a></li>
 </ul>
 </li>
-<li><a href="#orgbd70440">3. Passo 2: Matriz de Correlação (R)</a></li>
-<li><a href="#org9718d5d">4. Passo 3: Decomposição em Autovalores e Autovetores</a>
+<li><a href="#orge6c1d34">3. Passo 2: Matriz de Correlação (R)</a></li>
+<li><a href="#orgc67538a">4. Passo 3: Decomposição em Autovalores e Autovetores</a>
 <ul>
-<li><a href="#orgea9a016">4.1. Autovalores Obtidos:</a></li>
+<li><a href="#orgd281fc6">4.1. Autovalores Obtidos:</a></li>
 </ul>
 </li>
-<li><a href="#org27648d0">5. Passo 4: Matriz de Cargas Fatoriais (A)</a>
+<li><a href="#orgefd6080">5. Passo 4: Matriz de Cargas Fatoriais (A)</a>
 <ul>
-<li><a href="#org128737f">5.1. Matriz de Cargas Fatoriais (Sem Rotação):</a></li>
+<li><a href="#org6ae5786">5.1. Matriz de Cargas Fatoriais (Sem Rotação):</a></li>
 </ul>
 </li>
-<li><a href="#orgf9a64e8">6. Passo 5: Interpretação dos Fatores</a></li>
-<li><a href="#org3db67a0">7. Conclusão</a></li>
+<li><a href="#org949c49c">6. Passo 5: Interpretação dos Fatores</a></li>
+<li><a href="#org7d04e15">7. Conclusão</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org6860d1c" class="outline-2">
-<h2 id="org6860d1c"><span class="section-number-2">1.</span> Introdução</h2>
+<div id="outline-container-orge10167f" class="outline-2">
+<h2 id="orge10167f"><span class="section-number-2">1.</span> Introdução</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Este documento sao anotacoes de estudo sobre Análise Fatorial Exploratória (AFE)
@@ -247,8 +247,8 @@ A análise segue os passos matemáticos clássicos utilizando álgebra matricial
 </p>
 </div>
 </div>
-<div id="outline-container-org2686505" class="outline-2">
-<h2 id="org2686505"><span class="section-number-2">2.</span> Passo 1: Carregamento e Preparação dos Dados</h2>
+<div id="outline-container-orgcc55e93" class="outline-2">
+<h2 id="orgcc55e93"><span class="section-number-2">2.</span> Passo 1: Carregamento e Preparação dos Dados</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 Os dados consistem em 90 amostras de solo com 7 variáveis quantitativas.
@@ -267,8 +267,8 @@ As variáveis analisadas são:
 <li><b>Mn</b>: Manganês</li>
 </ul>
 </div>
-<div id="outline-container-orgdd37de8" class="outline-3">
-<h3 id="orgdd37de8"><span class="section-number-3">2.1.</span> Padronização das variaveis</h3>
+<div id="outline-container-org9df1c03" class="outline-3">
+<h3 id="org9df1c03"><span class="section-number-3">2.1.</span> Padronização das variaveis</h3>
 <div class="outline-text-3" id="text-2-1">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #51afef;">from</span> sympy <span style="color: #51afef;">import</span> symbols, Matrix, latex
@@ -285,41 +285,66 @@ A fórmula matemática é:
 </p>
 </div>
 </div>
-<div id="outline-container-org91e2945" class="outline-3">
-<h3 id="org91e2945"><span class="section-number-3">2.2.</span> Script para Padronização dos Dados</h3>
+<div id="outline-container-orgeb5dd1b" class="outline-3">
+<h3 id="orgeb5dd1b"><span class="section-number-3">2.2.</span> Script para Padronização dos Dados</h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
-O código abaixo realiza a leitura dos dados originais, aplica a padronização Z-score e exporta o resultado para um arquivo CSV.
+O código abaixo realiza a leitura dos dados originais, aplica a padronização Z-score e exporta o resultado para um arquivo CSV. Este script pode ser extraído para um arquivo Python independente.
 </p>
 
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #51afef;">import</span> pandas <span style="color: #51afef;">as</span> pd
 <span style="color: #51afef;">import</span> os
 
-<span style="color: #5B6268;"># </span><span style="color: #5B6268;">Caminhos dos arquivos
-</span><span style="color: #dcaeea;">input_file</span> <span style="color: #51afef;">=</span> <span style="color: #98be65;">'../../quimica_do_solo.xlsx'</span>
-<span style="color: #dcaeea;">output_file</span> <span style="color: #51afef;">=</span> <span style="color: #98be65;">'dados_padronizados.csv'</span>
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">Determina o diret&#243;rio onde o script est&#225; localizado
+</span><span style="color: #dcaeea;">script_dir</span> <span style="color: #51afef;">=</span> os.path.dirname(os.path.abspath(__file__)) <span style="color: #51afef;">if</span> <span style="color: #98be65;">'__file__'</span> <span style="color: #51afef;">in</span> <span style="color: #c678dd;">locals</span>() <span style="color: #51afef;">else</span> os.getcwd()
 
-<span style="color: #5B6268;"># </span><span style="color: #5B6268;">Carregamento dos dados
-</span><span style="color: #dcaeea;">cols</span> <span style="color: #51afef;">=</span> [<span style="color: #98be65;">'Ca'</span>, <span style="color: #98be65;">'Mg'</span>, <span style="color: #98be65;">'H + Al'</span>, <span style="color: #98be65;">'Al3+'</span>, <span style="color: #98be65;">'S'</span>, <span style="color: #98be65;">'Fe'</span>, <span style="color: #98be65;">'Mn'</span>]
-<span style="color: #dcaeea;">df</span> <span style="color: #51afef;">=</span> pd.read_excel(input_file)
-<span style="color: #dcaeea;">X</span> <span style="color: #51afef;">=</span> df[cols]
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">Caminhos dos arquivos baseados na localiza&#231;&#227;o do script
+</span><span style="color: #dcaeea;">input_file</span> <span style="color: #51afef;">=</span> os.path.join(script_dir, <span style="color: #98be65;">'../../quimica_do_solo.xlsx'</span>)
+<span style="color: #dcaeea;">output_file</span> <span style="color: #51afef;">=</span> os.path.join(script_dir, <span style="color: #98be65;">'dados_padronizados.csv'</span>)
 
-<span style="color: #5B6268;"># </span><span style="color: #5B6268;">C&#225;lculo da padroniza&#231;&#227;o (Z-score)
-</span><span style="color: #dcaeea;">df_std</span> <span style="color: #51afef;">=</span> (X <span style="color: #51afef;">-</span> X.mean()) <span style="color: #51afef;">/</span> X.std()
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">Normaliza os caminhos para evitar problemas com ../
+</span><span style="color: #dcaeea;">input_file</span> <span style="color: #51afef;">=</span> os.path.normpath(input_file)
+<span style="color: #dcaeea;">output_file</span> <span style="color: #51afef;">=</span> os.path.normpath(output_file)
 
-<span style="color: #5B6268;"># </span><span style="color: #5B6268;">Salvar em CSV
-</span>df_std.to_csv(output_file, index<span style="color: #51afef;">=</span><span style="color: #a9a1e1;">False</span>)
-<span style="color: #c678dd;">print</span>(f<span style="color: #98be65;">"Dados padronizados salvos em: </span>{output_file}<span style="color: #98be65;">"</span>)
-<span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"</span><span style="color: #a9a1e1;">\n</span><span style="color: #98be65;">Primeiras linhas dos dados padronizados:"</span>)
-<span style="color: #c678dd;">print</span>(df_std.head())
+<span style="color: #51afef;">if</span> <span style="color: #51afef;">not</span> os.path.exists(input_file):
+    <span style="color: #c678dd;">print</span>(f<span style="color: #98be65;">"Erro: Arquivo </span>{input_file}<span style="color: #98be65;"> n&#227;o encontrado."</span>)
+<span style="color: #51afef;">else</span>:
+    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">Carregamento dos dados
+</span>    <span style="color: #dcaeea;">cols</span> <span style="color: #51afef;">=</span> [<span style="color: #98be65;">'Ca'</span>, <span style="color: #98be65;">'Mg'</span>, <span style="color: #98be65;">'H + Al'</span>, <span style="color: #98be65;">'Al3+'</span>, <span style="color: #98be65;">'S'</span>, <span style="color: #98be65;">'Fe'</span>, <span style="color: #98be65;">'Mn'</span>]
+    <span style="color: #dcaeea;">df</span> <span style="color: #51afef;">=</span> pd.read_excel(input_file)
+    <span style="color: #dcaeea;">X</span> <span style="color: #51afef;">=</span> df[cols]
+
+    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">C&#225;lculo da padroniza&#231;&#227;o (Z-score)
+</span>    <span style="color: #dcaeea;">df_std</span> <span style="color: #51afef;">=</span> (X <span style="color: #51afef;">-</span> X.mean()) <span style="color: #51afef;">/</span> X.std()
+
+    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">Salvar em CSV
+</span>    df_std.to_csv(output_file, index<span style="color: #51afef;">=</span><span style="color: #a9a1e1;">False</span>)
+    <span style="color: #c678dd;">print</span>(f<span style="color: #98be65;">"Dados padronizados salvos em: </span>{output_file}<span style="color: #98be65;">"</span>)
+    <span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"</span><span style="color: #a9a1e1;">\n</span><span style="color: #98be65;">Primeiras linhas dos dados padronizados:"</span>)
+    <span style="color: #c678dd;">print</span>(df_std.head())
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-shell" id="org5ec83eb">(venv) wgn@fedora:/run/media/wgn/ext4/Projects-Srcs/Projects-Srcs-FzlSoft/curso_estatistica_multivariada$ python3 teoria/analise_fatorial_exploratoria/standardize_data.py 
+Dados padronizados salvos em: /run/media/wgn/ext4/Projects-Srcs/Projects-Srcs-FzlSoft/curso_estatistica_multivariada/teoria/analise_fatorial_exploratoria/dados_padronizados.csv
+
+Primeiras linhas dos dados padronizados:
+         Ca        Mg    H + Al      Al3+         S        Fe        Mn
+0  2.421023  2.568326 -1.000292 -1.427352 -1.508906  2.819830  0.344644
+1 -0.642253 -0.661305  1.634109  0.862064  1.195651  0.312838  1.524034
+2 -0.514616 -0.661305  0.668162  1.116444  1.154673  0.891375  1.406095
+3  2.038113  2.106950 -1.000292 -1.427352 -1.508906  1.277066  1.347125
+4 -0.259343 -0.661305 -0.122158 -0.155454  0.458045  0.312838  0.757430
+(venv) wgn@fedora:/run/media/wgn/ext4/Projects-Srcs/Projects-Srcs-FzlSoft/curso_estatistica_multivariada$ 
 </pre>
 </div>
 </div>
 </div>
 </div>
-<div id="outline-container-orgbd70440" class="outline-2">
-<h2 id="orgbd70440"><span class="section-number-2">3.</span> Passo 2: Matriz de Correlação (R)</h2>
+<div id="outline-container-orge6c1d34" class="outline-2">
+<h2 id="orge6c1d34"><span class="section-number-2">3.</span> Passo 2: Matriz de Correlação (R)</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 A AFE baseia-se na matriz de correlação entre as variáveis padronizadas.
@@ -334,7 +359,7 @@ Seja <img src="./tmp/latex/index_1df32491ca6a22e979f1737e1b87c4a8e06f7a02.svg" a
 Numericamente, a matriz de correlação para nossos dados é:
 </p>
 
-<div class="table" id="org0cb7003">
+<div class="table" id="orgf050660">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -450,8 +475,8 @@ Numericamente, a matriz de correlação para nossos dados é:
 </div>
 </div>
 </div>
-<div id="outline-container-org9718d5d" class="outline-2">
-<h2 id="org9718d5d"><span class="section-number-2">4.</span> Passo 3: Decomposição em Autovalores e Autovetores</h2>
+<div id="outline-container-orgc67538a" class="outline-2">
+<h2 id="orgc67538a"><span class="section-number-2">4.</span> Passo 3: Decomposição em Autovalores e Autovetores</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 Para extrair os fatores, resolvemos a equação característica:
@@ -463,8 +488,8 @@ Onde <img src="./tmp/latex/index_11dd773360a5998641e92685c84d17858047fc62.svg" a
 <img src="./tmp/latex/index_23939a303feec73eb4a1c9cede0bdbeeaca03692.svg" alt="\[ R v_i = \lambda_i v_i \]" class="org-svg" />
 </p>
 </div>
-<div id="outline-container-orgea9a016" class="outline-3">
-<h3 id="orgea9a016"><span class="section-number-3">4.1.</span> Autovalores Obtidos:</h3>
+<div id="outline-container-orgd281fc6" class="outline-3">
+<h3 id="orgd281fc6"><span class="section-number-3">4.1.</span> Autovalores Obtidos:</h3>
 <div class="outline-text-3" id="text-4-1">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -544,8 +569,8 @@ Pelo critério de Kaiser (<img src="./tmp/latex/index_475885cbfd8cbaf3601caa864b
 </div>
 </div>
 </div>
-<div id="outline-container-org27648d0" class="outline-2">
-<h2 id="org27648d0"><span class="section-number-2">5.</span> Passo 4: Matriz de Cargas Fatoriais (A)</h2>
+<div id="outline-container-orgefd6080" class="outline-2">
+<h2 id="orgefd6080"><span class="section-number-2">5.</span> Passo 4: Matriz de Cargas Fatoriais (A)</h2>
 <div class="outline-text-2" id="text-5">
 <p>
 As cargas fatoriais representam a correlação entre as variáveis originais e os fatores. Elas são calculadas como:
@@ -553,8 +578,8 @@ As cargas fatoriais representam a correlação entre as variáveis originais e o
 Onde <img src="./tmp/latex/index_cf87f0f7e38c66643a2199afc548cb3363b5f9a9.svg" alt="$V$" class="org-svg" /> é a matriz de autovetores e <img src="./tmp/latex/index_ad50cd97560e74be910092b71ed793ff091b3fd1.svg" alt="$L$" class="org-svg" /> é a matriz diagonal de autovalores.
 </p>
 </div>
-<div id="outline-container-org128737f" class="outline-3">
-<h3 id="org128737f"><span class="section-number-3">5.1.</span> Matriz de Cargas Fatoriais (Sem Rotação):</h3>
+<div id="outline-container-org6ae5786" class="outline-3">
+<h3 id="org6ae5786"><span class="section-number-3">5.1.</span> Matriz de Cargas Fatoriais (Sem Rotação):</h3>
 <div class="outline-text-3" id="text-5-1">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -630,8 +655,8 @@ Onde <img src="./tmp/latex/index_cf87f0f7e38c66643a2199afc548cb3363b5f9a9.svg" a
 </div>
 </div>
 </div>
-<div id="outline-container-orgf9a64e8" class="outline-2">
-<h2 id="orgf9a64e8"><span class="section-number-2">6.</span> Passo 5: Interpretação dos Fatores</h2>
+<div id="outline-container-org949c49c" class="outline-2">
+<h2 id="org949c49c"><span class="section-number-2">6.</span> Passo 5: Interpretação dos Fatores</h2>
 <div class="outline-text-2" id="text-6">
 <ul class="org-ul">
 <li><b>Fator 1</b>: Fortemente relacionado a Mg, Ca (positivo) e Al3+, H+Al (negativo). Pode ser interpretado como um fator de <b>Fertilidade vs Acidez</b>.</li>
@@ -639,8 +664,8 @@ Onde <img src="./tmp/latex/index_cf87f0f7e38c66643a2199afc548cb3363b5f9a9.svg" a
 </ul>
 </div>
 </div>
-<div id="outline-container-org3db67a0" class="outline-2">
-<h2 id="org3db67a0"><span class="section-number-2">7.</span> Conclusão</h2>
+<div id="outline-container-org7d04e15" class="outline-2">
+<h2 id="org7d04e15"><span class="section-number-2">7.</span> Conclusão</h2>
 <div class="outline-text-2" id="text-7">
 <p>
 A análise fatorial permitiu reduzir as 7 variáveis originais em 2 fatores principais que explicam aproximadamente 64.6% da variância total dos dados de química do solo.
@@ -651,7 +676,7 @@ A análise fatorial permitiu reduzir as 7 variáveis originais em 2 fatores prin
 <div id="postamble" class="status">
 <p class="date">Date: 2026-06-07</p>
 <p class="author">Author: Gemini CLI</p>
-<p class="date">Created: 2026-06-07 dom 17:56</p>
+<p class="date">Created: 2026-06-07 dom 18:14</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
