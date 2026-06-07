@@ -1,0 +1,658 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt-br" xml:lang="pt-br">
+<head>
+<!-- 2026-06-07 dom 17:56 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Análise Fatorial Exploratória (AFE) - Química do Solo</title>
+<meta name="author" content="Gemini CLI" />
+<meta name="generator" content="Org Mode" />
+<style type="text/css">
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Análise Fatorial Exploratória (AFE) - Química do Solo</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org6860d1c">1. Introdução</a></li>
+<li><a href="#org2686505">2. Passo 1: Carregamento e Preparação dos Dados</a>
+<ul>
+<li><a href="#orgdd37de8">2.1. Padronização das variaveis</a></li>
+<li><a href="#org91e2945">2.2. Script para Padronização dos Dados</a></li>
+</ul>
+</li>
+<li><a href="#orgbd70440">3. Passo 2: Matriz de Correlação (R)</a></li>
+<li><a href="#org9718d5d">4. Passo 3: Decomposição em Autovalores e Autovetores</a>
+<ul>
+<li><a href="#orgea9a016">4.1. Autovalores Obtidos:</a></li>
+</ul>
+</li>
+<li><a href="#org27648d0">5. Passo 4: Matriz de Cargas Fatoriais (A)</a>
+<ul>
+<li><a href="#org128737f">5.1. Matriz de Cargas Fatoriais (Sem Rotação):</a></li>
+</ul>
+</li>
+<li><a href="#orgf9a64e8">6. Passo 5: Interpretação dos Fatores</a></li>
+<li><a href="#org3db67a0">7. Conclusão</a></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org6860d1c" class="outline-2">
+<h2 id="org6860d1c"><span class="section-number-2">1.</span> Introdução</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Este documento sao anotacoes de estudo sobre Análise Fatorial Exploratória (AFE)
+</p>
+
+<p>
+Detalhada dos dados de química do solo contidos no arquivo <code>quimica_do_solo.xlsx</code>.
+</p>
+
+<p>
+O objetivo é realizar a mesma análise que o nosso professor fez nas
+aulas, utilizando algebra matricial pra entender os passos e o
+mecanismo da técnica e encontrar os mesmos resultados que o professor
+encontrou usando o statistica.
+</p>
+
+<p>
+A análise segue os passos matemáticos clássicos utilizando álgebra matricial e a biblioteca SymPy para representação simbólica.
+</p>
+</div>
+</div>
+<div id="outline-container-org2686505" class="outline-2">
+<h2 id="org2686505"><span class="section-number-2">2.</span> Passo 1: Carregamento e Preparação dos Dados</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Os dados consistem em 90 amostras de solo com 7 variáveis quantitativas.
+</p>
+
+<p>
+As variáveis analisadas são:
+</p>
+<ul class="org-ul">
+<li><b>Ca</b>: Cálcio</li>
+<li><b>Mg</b>: Magnésio</li>
+<li><b>H + Al</b>: Acidez potencial</li>
+<li><b>Al3+</b>: Alumínio trocável</li>
+<li><b>S</b>: Soma de bases (ou enxofre, dependendo do contexto, aqui tratado como S)</li>
+<li><b>Fe</b>: Ferro</li>
+<li><b>Mn</b>: Manganês</li>
+</ul>
+</div>
+<div id="outline-container-orgdd37de8" class="outline-3">
+<h3 id="orgdd37de8"><span class="section-number-3">2.1.</span> Padronização das variaveis</h3>
+<div class="outline-text-3" id="text-2-1">
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #51afef;">from</span> sympy <span style="color: #51afef;">import</span> symbols, Matrix, latex
+
+<span style="color: #dcaeea;">x</span>, <span style="color: #dcaeea;">mu</span>, <span style="color: #dcaeea;">sigma</span> <span style="color: #51afef;">=</span> symbols(<span style="color: #98be65;">'x mu sigma'</span>)
+<span style="color: #dcaeea;">z</span> <span style="color: #51afef;">=</span> (x <span style="color: #51afef;">-</span> mu) <span style="color: #51afef;">/</span> sigma
+<span style="color: #c678dd;">print</span>(f<span style="color: #98be65;">"F&#243;rmula de Padroniza&#231;&#227;o: </span>{latex(z)}<span style="color: #98be65;">"</span>)
+</pre>
+</div>
+
+<p>
+A fórmula matemática é:
+<img src="./tmp/latex/index_31e2225f1de5f9bcdd6784cfad035bf58f92b624.svg" alt="\[ Z = \frac{X - \mu}{\sigma} \]" class="org-svg" />
+</p>
+</div>
+</div>
+<div id="outline-container-org91e2945" class="outline-3">
+<h3 id="org91e2945"><span class="section-number-3">2.2.</span> Script para Padronização dos Dados</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+O código abaixo realiza a leitura dos dados originais, aplica a padronização Z-score e exporta o resultado para um arquivo CSV.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #51afef;">import</span> pandas <span style="color: #51afef;">as</span> pd
+<span style="color: #51afef;">import</span> os
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">Caminhos dos arquivos
+</span><span style="color: #dcaeea;">input_file</span> <span style="color: #51afef;">=</span> <span style="color: #98be65;">'../../quimica_do_solo.xlsx'</span>
+<span style="color: #dcaeea;">output_file</span> <span style="color: #51afef;">=</span> <span style="color: #98be65;">'dados_padronizados.csv'</span>
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">Carregamento dos dados
+</span><span style="color: #dcaeea;">cols</span> <span style="color: #51afef;">=</span> [<span style="color: #98be65;">'Ca'</span>, <span style="color: #98be65;">'Mg'</span>, <span style="color: #98be65;">'H + Al'</span>, <span style="color: #98be65;">'Al3+'</span>, <span style="color: #98be65;">'S'</span>, <span style="color: #98be65;">'Fe'</span>, <span style="color: #98be65;">'Mn'</span>]
+<span style="color: #dcaeea;">df</span> <span style="color: #51afef;">=</span> pd.read_excel(input_file)
+<span style="color: #dcaeea;">X</span> <span style="color: #51afef;">=</span> df[cols]
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">C&#225;lculo da padroniza&#231;&#227;o (Z-score)
+</span><span style="color: #dcaeea;">df_std</span> <span style="color: #51afef;">=</span> (X <span style="color: #51afef;">-</span> X.mean()) <span style="color: #51afef;">/</span> X.std()
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">Salvar em CSV
+</span>df_std.to_csv(output_file, index<span style="color: #51afef;">=</span><span style="color: #a9a1e1;">False</span>)
+<span style="color: #c678dd;">print</span>(f<span style="color: #98be65;">"Dados padronizados salvos em: </span>{output_file}<span style="color: #98be65;">"</span>)
+<span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"</span><span style="color: #a9a1e1;">\n</span><span style="color: #98be65;">Primeiras linhas dos dados padronizados:"</span>)
+<span style="color: #c678dd;">print</span>(df_std.head())
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgbd70440" class="outline-2">
+<h2 id="orgbd70440"><span class="section-number-2">3.</span> Passo 2: Matriz de Correlação (R)</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+A AFE baseia-se na matriz de correlação entre as variáveis padronizadas.
+</p>
+
+<p>
+Seja <img src="./tmp/latex/index_1df32491ca6a22e979f1737e1b87c4a8e06f7a02.svg" alt="$Z$" class="org-svg" /> a matriz de dados padronizados (<img src="./tmp/latex/index_0523c9fd4f83de6657e527eb82cf1cf25337964c.svg" alt="$n \times p$" class="org-svg" />), a matriz de correlação <img src="./tmp/latex/index_e7cdf908761bd30daf868ae223dce1bb744d4445.svg" alt="$R$" class="org-svg" /> é dada por:
+<img src="./tmp/latex/index_d1281dfe0873d6376d2215467fd32023d767a723.svg" alt="\[ R = \frac{1}{n-1} Z^T Z \]" class="org-svg" />
+</p>
+
+<p>
+Numericamente, a matriz de correlação para nossos dados é:
+</p>
+
+<div class="table" id="org0cb7003">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">&#xa0;</th>
+<th scope="col" class="org-right">Ca</th>
+<th scope="col" class="org-right">Mg</th>
+<th scope="col" class="org-right">H+Al</th>
+<th scope="col" class="org-right">Al3+</th>
+<th scope="col" class="org-right">S</th>
+<th scope="col" class="org-right">Fe</th>
+<th scope="col" class="org-right">Mn</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left"><b>Ca</b></td>
+<td class="org-right">1.000</td>
+<td class="org-right">0.437</td>
+<td class="org-right">-0.302</td>
+<td class="org-right">-0.375</td>
+<td class="org-right">-0.337</td>
+<td class="org-right">0.028</td>
+<td class="org-right">0.126</td>
+</tr>
+
+<tr>
+<td class="org-left"><b>Mg</b></td>
+<td class="org-right">0.437</td>
+<td class="org-right">1.000</td>
+<td class="org-right">-0.490</td>
+<td class="org-right">-0.653</td>
+<td class="org-right">-0.403</td>
+<td class="org-right">-0.044</td>
+<td class="org-right">-0.077</td>
+</tr>
+
+<tr>
+<td class="org-left"><b>H+Al</b></td>
+<td class="org-right">-0.302</td>
+<td class="org-right">-0.490</td>
+<td class="org-right">1.000</td>
+<td class="org-right">0.734</td>
+<td class="org-right">0.211</td>
+<td class="org-right">0.297</td>
+<td class="org-right">-0.162</td>
+</tr>
+
+<tr>
+<td class="org-left"><b>Al3+</b></td>
+<td class="org-right">-0.375</td>
+<td class="org-right">-0.653</td>
+<td class="org-right">0.734</td>
+<td class="org-right">1.000</td>
+<td class="org-right">0.255</td>
+<td class="org-right">0.397</td>
+<td class="org-right">-0.252</td>
+</tr>
+
+<tr>
+<td class="org-left"><b>S</b></td>
+<td class="org-right">-0.337</td>
+<td class="org-right">-0.403</td>
+<td class="org-right">0.211</td>
+<td class="org-right">0.255</td>
+<td class="org-right">1.000</td>
+<td class="org-right">-0.184</td>
+<td class="org-right">0.413</td>
+</tr>
+
+<tr>
+<td class="org-left"><b>Fe</b></td>
+<td class="org-right">0.028</td>
+<td class="org-right">-0.044</td>
+<td class="org-right">0.297</td>
+<td class="org-right">0.397</td>
+<td class="org-right">-0.184</td>
+<td class="org-right">1.000</td>
+<td class="org-right">-0.281</td>
+</tr>
+
+<tr>
+<td class="org-left"><b>Mn</b></td>
+<td class="org-right">0.126</td>
+<td class="org-right">-0.077</td>
+<td class="org-right">-0.162</td>
+<td class="org-right">-0.252</td>
+<td class="org-right">0.413</td>
+<td class="org-right">-0.281</td>
+<td class="org-right">1.000</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="outline-container-org9718d5d" class="outline-2">
+<h2 id="org9718d5d"><span class="section-number-2">4.</span> Passo 3: Decomposição em Autovalores e Autovetores</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+Para extrair os fatores, resolvemos a equação característica:
+<img src="./tmp/latex/index_2b2bdba24c81fa1b4ffe9a0319b9bd26f5f81092.svg" alt="\[ \det(R - \lambda I) = 0 \]" class="org-svg" />
+</p>
+
+<p>
+Onde <img src="./tmp/latex/index_11dd773360a5998641e92685c84d17858047fc62.svg" alt="$\lambda$" class="org-svg" /> são os autovalores. Para cada <img src="./tmp/latex/index_e178c0659afecc93cc560301bbd1d2243a2598d1.svg" alt="$\lambda_i$" class="org-svg" />, encontramos o autovetor <img src="./tmp/latex/index_f358f268210663bafcbb07c3c73dd03a206077bb.svg" alt="$v_i$" class="org-svg" /> tal que:
+<img src="./tmp/latex/index_23939a303feec73eb4a1c9cede0bdbeeaca03692.svg" alt="\[ R v_i = \lambda_i v_i \]" class="org-svg" />
+</p>
+</div>
+<div id="outline-container-orgea9a016" class="outline-3">
+<h3 id="orgea9a016"><span class="section-number-3">4.1.</span> Autovalores Obtidos:</h3>
+<div class="outline-text-3" id="text-4-1">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right">Componente</th>
+<th scope="col" class="org-right">Autovalor (<img src="./tmp/latex/index_11dd773360a5998641e92685c84d17858047fc62.svg" alt="$\lambda$" class="org-svg" />)</th>
+<th scope="col" class="org-right">% Variância</th>
+<th scope="col" class="org-right">% Acumulada</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">1</td>
+<td class="org-right">2.797</td>
+<td class="org-right">39.96%</td>
+<td class="org-right">39.96%</td>
+</tr>
+
+<tr>
+<td class="org-right">2</td>
+<td class="org-right">1.726</td>
+<td class="org-right">24.66%</td>
+<td class="org-right">64.62%</td>
+</tr>
+
+<tr>
+<td class="org-right">3</td>
+<td class="org-right">0.892</td>
+<td class="org-right">12.74%</td>
+<td class="org-right">77.36%</td>
+</tr>
+
+<tr>
+<td class="org-right">4</td>
+<td class="org-right">0.580</td>
+<td class="org-right">8.28%</td>
+<td class="org-right">85.64%</td>
+</tr>
+
+<tr>
+<td class="org-right">5</td>
+<td class="org-right">0.452</td>
+<td class="org-right">6.46%</td>
+<td class="org-right">92.10%</td>
+</tr>
+
+<tr>
+<td class="org-right">6</td>
+<td class="org-right">0.381</td>
+<td class="org-right">5.44%</td>
+<td class="org-right">97.54%</td>
+</tr>
+
+<tr>
+<td class="org-right">7</td>
+<td class="org-right">0.172</td>
+<td class="org-right">2.46%</td>
+<td class="org-right">100.00%</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+Pelo critério de Kaiser (<img src="./tmp/latex/index_475885cbfd8cbaf3601caa864ba0e69c517fc485.svg" alt="$\lambda &amp;gt; 1$" class="org-svg" />), reteríamos 2 fatores.
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org27648d0" class="outline-2">
+<h2 id="org27648d0"><span class="section-number-2">5.</span> Passo 4: Matriz de Cargas Fatoriais (A)</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+As cargas fatoriais representam a correlação entre as variáveis originais e os fatores. Elas são calculadas como:
+<img src="./tmp/latex/index_eabccaccca6a510ba6df4fd43011d9853332fe13.svg" alt="\[ A = V \sqrt{L} \]" class="org-svg" />
+Onde <img src="./tmp/latex/index_cf87f0f7e38c66643a2199afc548cb3363b5f9a9.svg" alt="$V$" class="org-svg" /> é a matriz de autovetores e <img src="./tmp/latex/index_ad50cd97560e74be910092b71ed793ff091b3fd1.svg" alt="$L$" class="org-svg" /> é a matriz diagonal de autovalores.
+</p>
+</div>
+<div id="outline-container-org128737f" class="outline-3">
+<h3 id="org128737f"><span class="section-number-3">5.1.</span> Matriz de Cargas Fatoriais (Sem Rotação):</h3>
+<div class="outline-text-3" id="text-5-1">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Variável</th>
+<th scope="col" class="org-right">Fator 1</th>
+<th scope="col" class="org-right">Fator 2</th>
+<th scope="col" class="org-right">Comunalidade (<img src="./tmp/latex/index_a8f90bc7dcdc0b564da74b93240511f9a98b198a.svg" alt="$h^2$" class="org-svg" />)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">Ca</td>
+<td class="org-right">0.607</td>
+<td class="org-right">0.206</td>
+<td class="org-right">0.411</td>
+</tr>
+
+<tr>
+<td class="org-left">Mg</td>
+<td class="org-right">0.797</td>
+<td class="org-right">0.263</td>
+<td class="org-right">0.704</td>
+</tr>
+
+<tr>
+<td class="org-left">H + Al</td>
+<td class="org-right">-0.808</td>
+<td class="org-right">0.175</td>
+<td class="org-right">0.683</td>
+</tr>
+
+<tr>
+<td class="org-left">Al3+</td>
+<td class="org-right">-0.902</td>
+<td class="org-right">0.206</td>
+<td class="org-right">0.856</td>
+</tr>
+
+<tr>
+<td class="org-left">S</td>
+<td class="org-right">-0.447</td>
+<td class="org-right">-0.721</td>
+<td class="org-right">0.719</td>
+</tr>
+
+<tr>
+<td class="org-left">Fe</td>
+<td class="org-right">-0.321</td>
+<td class="org-right">0.657</td>
+<td class="org-right">0.535</td>
+</tr>
+
+<tr>
+<td class="org-left">Mn</td>
+<td class="org-right">0.155</td>
+<td class="org-right">-0.768</td>
+<td class="org-right">0.613</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="outline-container-orgf9a64e8" class="outline-2">
+<h2 id="orgf9a64e8"><span class="section-number-2">6.</span> Passo 5: Interpretação dos Fatores</h2>
+<div class="outline-text-2" id="text-6">
+<ul class="org-ul">
+<li><b>Fator 1</b>: Fortemente relacionado a Mg, Ca (positivo) e Al3+, H+Al (negativo). Pode ser interpretado como um fator de <b>Fertilidade vs Acidez</b>.</li>
+<li><b>Fator 2</b>: Fortemente relacionado a Mn e S (negativo) e Fe (positivo). Pode estar relacionado a processos de <b>Redox ou Micronutrientes específicos</b>.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org3db67a0" class="outline-2">
+<h2 id="org3db67a0"><span class="section-number-2">7.</span> Conclusão</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+A análise fatorial permitiu reduzir as 7 variáveis originais em 2 fatores principais que explicam aproximadamente 64.6% da variância total dos dados de química do solo.
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Date: 2026-06-07</p>
+<p class="author">Author: Gemini CLI</p>
+<p class="date">Created: 2026-06-07 dom 17:56</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

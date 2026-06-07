@@ -1,0 +1,142 @@
+#+Title: Análise Fatorial Exploratória (AFE) - Química do Solo
+#+Author: Gemini CLI
+#+Date: 2026-06-07
+#+Language: pt-br
+
+* Introdução
+Este documento sao anotacoes de estudo sobre Análise Fatorial Exploratória (AFE)
+
+Detalhada dos dados de química do solo contidos no arquivo =quimica_do_solo.xlsx=.
+
+O objetivo é realizar a mesma análise que o nosso professor fez nas
+aulas, utilizando algebra matricial pra entender os passos e o
+mecanismo da técnica e encontrar os mesmos resultados que o professor
+encontrou usando o statistica.
+
+A análise segue os passos matemáticos clássicos utilizando álgebra matricial e a biblioteca SymPy para representação simbólica.
+
+
+* Passo 1: Carregamento e Preparação dos Dados
+
+Os dados consistem em 90 amostras de solo com 7 variáveis quantitativas.
+
+As variáveis analisadas são:
+- *Ca*: Cálcio
+- *Mg*: Magnésio
+- *H + Al*: Acidez potencial
+- *Al3+*: Alumínio trocável
+- *S*: Soma de bases (ou enxofre, dependendo do contexto, aqui tratado como S)
+- *Fe*: Ferro
+- *Mn*: Manganês
+
+** Padronização das variaveis
+
+#+begin_src python :results output :exports both
+from sympy import symbols, Matrix, latex
+
+x, mu, sigma = symbols('x mu sigma')
+z = (x - mu) / sigma
+print(f"Fórmula de Padronização: {latex(z)}")
+#+end_src
+
+#+RESULTS:
+
+A fórmula matemática é:
+\[ Z = \frac{X - \mu}{\sigma} \]
+
+** Script para Padronização dos Dados
+O código abaixo realiza a leitura dos dados originais, aplica a padronização Z-score e exporta o resultado para um arquivo CSV. Este script pode ser extraído para um arquivo Python independente.
+
+#+begin_src python :results output :exports both :tangle standardize_data.py
+import pandas as pd
+import os
+
+# Caminhos dos arquivos
+# Ao executar via Org-mode, o caminho relativo é em relação ao diretório do arquivo .org
+# Se executado externamente, certifique-se de que o arquivo .xlsx esteja no local correto
+input_file = '../../quimica_do_solo.xlsx'
+output_file = 'dados_padronizados.csv'
+
+if not os.path.exists(input_file):
+    print(f"Erro: Arquivo {input_file} não encontrado.")
+else:
+    # Carregamento dos dados
+    cols = ['Ca', 'Mg', 'H + Al', 'Al3+', 'S', 'Fe', 'Mn']
+    df = pd.read_excel(input_file)
+    X = df[cols]
+
+    # Cálculo da padronização (Z-score)
+    df_std = (X - X.mean()) / X.std()
+
+    # Salvar em CSV
+    df_std.to_csv(output_file, index=False)
+    print(f"Dados padronizados salvos em: {output_file}")
+    print("\nPrimeiras linhas dos dados padronizados:")
+    print(df_std.head())
+#+end_src
+
+#+RESULTS:
+
+
+* Passo 2: Matriz de Correlação (R)
+A AFE baseia-se na matriz de correlação entre as variáveis padronizadas.
+
+Seja $Z$ a matriz de dados padronizados ($n \times p$), a matriz de correlação $R$ é dada por:
+\[ R = \frac{1}{n-1} Z^T Z \]
+
+Numericamente, a matriz de correlação para nossos dados é:
+
+#+begin_table
+|        | Ca    | Mg    | H+Al  | Al3+  | S     | Fe    | Mn    |
+|--------+-------+-------+-------+-------+-------+-------+-------|
+| *Ca*   | 1.000 | 0.437 | -0.302| -0.375| -0.337| 0.028 | 0.126 |
+| *Mg*   | 0.437 | 1.000 | -0.490| -0.653| -0.403| -0.044| -0.077|
+| *H+Al* | -0.302| -0.490| 1.000 | 0.734 | 0.211 | 0.297 | -0.162|
+| *Al3+* | -0.375| -0.653| 0.734 | 1.000 | 0.255 | 0.397 | -0.252|
+| *S*    | -0.337| -0.403| 0.211 | 0.255 | 1.000 | -0.184| 0.413 |
+| *Fe*   | 0.028 | -0.044| 0.297 | 0.397 | -0.184| 1.000 | -0.281|
+| *Mn*   | 0.126 | -0.077| -0.162| -0.252| 0.413 | -0.281| 1.000 |
+#+end_table
+
+* Passo 3: Decomposição em Autovalores e Autovetores
+Para extrair os fatores, resolvemos a equação característica:
+\[ \det(R - \lambda I) = 0 \]
+
+Onde $\lambda$ são os autovalores. Para cada $\lambda_i$, encontramos o autovetor $v_i$ tal que:
+\[ R v_i = \lambda_i v_i \]
+
+** Autovalores Obtidos:
+| Componente | Autovalor ($\lambda$) | % Variância | % Acumulada |
+|------------+----------------------+-------------+-------------|
+| 1          | 2.797                | 39.96%      | 39.96%      |
+| 2          | 1.726                | 24.66%      | 64.62%      |
+| 3          | 0.892                | 12.74%      | 77.36%      |
+| 4          | 0.580                | 8.28%       | 85.64%      |
+| 5          | 0.452                | 6.46%       | 92.10%      |
+| 6          | 0.381                | 5.44%       | 97.54%      |
+| 7          | 0.172                | 2.46%       | 100.00%     |
+
+Pelo critério de Kaiser ($\lambda > 1$), reteríamos 2 fatores.
+
+* Passo 4: Matriz de Cargas Fatoriais (A)
+As cargas fatoriais representam a correlação entre as variáveis originais e os fatores. Elas são calculadas como:
+\[ A = V \sqrt{L} \]
+Onde $V$ é a matriz de autovetores e $L$ é a matriz diagonal de autovalores.
+
+** Matriz de Cargas Fatoriais (Sem Rotação):
+| Variável | Fator 1 | Fator 2 | Comunalidade ($h^2$) |
+|----------+---------+---------+----------------------|
+| Ca       | 0.607   | 0.206   | 0.411                |
+| Mg       | 0.797   | 0.263   | 0.704                |
+| H + Al   | -0.808  | 0.175   | 0.683                |
+| Al3+     | -0.902  | 0.206   | 0.856                |
+| S        | -0.447  | -0.721  | 0.719                |
+| Fe       | -0.321  | 0.657   | 0.535                |
+| Mn       | 0.155   | -0.768  | 0.613                |
+
+* Passo 5: Interpretação dos Fatores
+- *Fator 1*: Fortemente relacionado a Mg, Ca (positivo) e Al3+, H+Al (negativo). Pode ser interpretado como um fator de *Fertilidade vs Acidez*.
+- *Fator 2*: Fortemente relacionado a Mn e S (negativo) e Fe (positivo). Pode estar relacionado a processos de *Redox ou Micronutrientes específicos*.
+
+* Conclusão
+A análise fatorial permitiu reduzir as 7 variáveis originais em 2 fatores principais que explicam aproximadamente 64.6% da variância total dos dados de química do solo.
