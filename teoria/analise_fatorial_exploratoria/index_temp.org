@@ -1,0 +1,120 @@
+#+Title: Analise Fatorial Exploratoria
+
+* Dados da tabela com totais marginais (pagina com Tabela 9)
+
+CSV criado em:
+
+- [[file:tabela9_preferencias_totais_marginais.csv][tabela9_preferencias_totais_marginais.csv]]
+
+| categoria_idade |  PA | PB |  PC |  PD | total_marginal |
+|-----------------+-----+----+-----+-----+----------------|
+| CRIANCAS        |  10 | 30 |  12 |  16 |             68 |
+| JOVENS          |  40 | 20 |  10 |  10 |             80 |
+| MEIA_IDADE      |  20 | 25 |  60 |  30 |            135 |
+| IDOSOS          |  30 | 12 |  40 |  60 |            142 |
+| TOTAL_MARGINAL  | 100 | 87 | 122 | 116 |            425 |
+
+
+Estrutura do arquivo:
+- Linhas: CRIANCAS, JOVENS, MEIA_IDADE, IDOSOS, TOTAL_MARGINAL
+- Colunas: PA, PB, PC, PD, total_marginal
+
+* Proximos passos matriciais com SymPy
+
+** Observacao importante
+
+A tabela com totais marginais (Tabela 9) e o fluxo com valores esperados pertencem a
+Analise de Correspondencia (capitulo de tabela de contingencia).
+
+Para Analise Fatorial Exploratoria (AFE), o fluxo matricial correto parte da matriz de
+correlacao/covariancia entre variaveis metricas.
+
+Por isso, abaixo estao os dois roteiros: (A) para a tabela com totais marginais e
+(B) para AFE propriamente dita.
+
+** (A) Roteiro da tabela com totais marginais (Analise de Correspondencia)
+
+1) Montar matriz de frequencias observadas N
+- N e uma matriz (linhas x colunas) com as contagens observadas.
+
+2) Calcular total geral n, perfis marginais de linha r e de coluna c
+- =n = sum(N)=
+- =r = (N * 1) / n=
+- =c = (N.T * 1) / n=
+
+3) Calcular matriz de proporcoes P e matriz esperada sob independencia
+- =P = N / n=
+- =E = n * r * c^T=
+- Cada celula esperada: =E_ij = (total_linha_i * total_coluna_j) / n=
+
+4) Calcular residuos padronizados para inercia
+- =S = D_r^(-1/2) * (P - r*c^T) * D_c^(-1/2)=
+- Aqui =D_r= e =D_c= sao diagonais de =r= e =c=.
+
+5) Decompor S (SVD)
+- =S = U * Sigma * V^T=
+- Autovalores (inercia por eixo): =lambda_k = sigma_k^2=
+
+6) Coordenadas fatoriais
+- Linhas principais: =F = D_r^(-1/2) * U * Sigma=
+- Colunas principais: =G = D_c^(-1/2) * V * Sigma=
+
+Trecho base em SymPy:
+#+begin_src python
+import sympy as sp
+
+N = sp.Matrix([
+	[10, 30, 12, 16],
+	[40, 20, 10, 10],
+	[20, 25, 60, 30],
+	[30, 12, 40, 60],
+])
+
+n = sp.Integer(sum(N))
+P = N / n
+
+r = sp.Matrix([sum(N.row(i)) for i in range(N.rows)]) / n
+c = sp.Matrix([sum(N.col(j)) for j in range(N.cols)]) / n
+
+Dr = sp.diag(*list(r))
+Dc = sp.diag(*list(c))
+
+E = n * (r * c.T)
+S = Dr**sp.Rational(-1, 2) * (P - r*c.T) * Dc**sp.Rational(-1, 2)
+#+end_src
+
+** (B) Roteiro da AFE (Exploratoria) com SymPy
+
+1) Matriz de dados X (padronizada)
+- Subtrair media de cada variavel e, se necessario, dividir pelo desvio padrao.
+
+2) Matriz de correlacao R
+- =R = corr(X)=
+- Verificar adequacao: estrutura de correlacao nao trivial.
+
+3) Extracao inicial (autovalores/autovetores de R)
+- Resolver =det(R - lambda I) = 0=
+- Ordenar autovalores decrescentes.
+
+4) Escolha do numero de fatores m
+- Critrios usuais: Kaiser (lambda > 1), scree plot, variancia acumulada.
+
+5) Cargas fatoriais iniciais
+- Se usar componentes principais como aproximacao inicial:
+- =L = V_m * sqrt(Lambda_m)=
+
+6) Comunalidades e especificidades
+- =h_i^2 = sum_j l_ij^2=
+- =psi_i = 1 - h_i^2= (quando em matriz de correlacao padronizada)
+
+7) Rotacao (ex.: Varimax)
+- Rotacionar =L= para facilitar interpretacao sem alterar ajuste global.
+
+8) Escores fatoriais
+- Obter fator por observacao via metodo de regressao ou Bartlett.
+
+Se voce quiser, no proximo passo eu monto tudo isso em blocos executaveis no Org
+(com codigo SymPy + saida simbolica) para reproduzir exatamente o fluxo do PDF.
+
+
+

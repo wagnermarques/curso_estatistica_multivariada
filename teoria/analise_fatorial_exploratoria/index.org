@@ -167,6 +167,10 @@ frente quando encontrar-mos os fatores.
 
 * Passo 3: Decomposição em Autovalores e Autovetores
 
+Pra um resumo bem interessante sobre autovalores e autovetores, achei interessante esse video:
+https://www.youtube.com/watch?v=MLck7c2Ma8E&t=1388s
+
+
 Para extrair os fatores, resolvemos a equação característica:
 
 \[ \det(R - \lambda I) = 0 \]
@@ -224,10 +228,6 @@ pra entender melhor como o numpy trabalhar com algebra linear, esta he
 a documentacao: https://numpy.org/doc/stable/reference/routines.linalg.html
 
 
-tem uma explicacao que achei muito interessante nesse video:
-https://www.youtube.com/watch?v=MLck7c2Ma8E&t=1388s
-
-
 ** Autovalores Obtidos:
 
 #+name: 
@@ -269,9 +269,186 @@ https://www.youtube.com/watch?v=MLck7c2Ma8E&t=1388s
 
 Pelo critério de Kaiser ($\lambda > 1$), reteríamos 2 fatores.
 
+No exercicio sobre componentes principais nao cheguei a fazer uma
+analise dos componentes encontrados, mas esse e uma boa oportunidade.
 
+Olhando abaixo, percebe-se claramente que os dois primeiro componentes
+principais não só sao os que explicam a mario parte da variancia
+(64,96%) mas tambem percebemos que o terceiro componente principal cai
+expressivamente. Algumas literaturas chamam isso de cotovelo (ewboll)
+posso estar escrevento errado o nome em ingles.
+
+| Componente | Autovalor ($\lambda$) | % Variância | % Acumulada |
+|------------+----------------------+-------------+-------------|
+| 1          | 2.797                | 39.96%      | 39.96%      |
+| 2          | 1.726                | 24.66%      | 64.62%      |
+
+
+
+* Passo 4: Interpretação da PCA e Visualização (antes de entrar no efa)
+
+antes de entrar no efa achei interessante aproveitar este estagio
+intermediario de pca pra dar uma olhada.
+
+64% acho pouco, entao já estou esperando uma analise visual nao tao
+obvia
+
+** 4.1 Scree Plot (Gráfico de Cotovelo)
+
+O Scree Plot ajuda a visualizar a queda na variância explicada e confirmar o número de componentes a reter.
+
+#+begin_src python :results output :exports both :tangle visualize_pca.py
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import os
+
+# Configurações de estilo
+sns.set_theme(style="whitegrid")
+
+# Localização dos arquivos
+script_dir = os.path.dirname(os.path.abspath(__file__)) if '__file__' in locals() else os.getcwd()
+input_file = os.path.join(script_dir, 'dados_padronizados.csv')
+img_dir = os.path.join(script_dir, 'imgs')
+
+if not os.path.exists(img_dir):
+    os.makedirs(img_dir)
+
+if os.path.exists(input_file):
+    df_std = pd.read_csv(input_file)
+    R = df_std.corr()
+    eigenvalues, eigenvectors = np.linalg.eig(R)
+    
+    # Ordenar
+    idx = eigenvalues.argsort()[::-1]
+    eigenvalues = eigenvalues[idx]
+    eigenvectors = eigenvectors[:, idx]
+    
+    # 1. Scree Plot
+    plt.figure(figsize=(8, 5))
+    plt.plot(range(1, len(eigenvalues)+1), eigenvalues, 'o-', linewidth=2)
+    plt.title('Scree Plot - Variância por Componente')
+    plt.xlabel('Componente Principal')
+    plt.ylabel('Autovalor (Variância)')
+    plt.axhline(y=1, color='r', linestyle='--', label='Critério de Kaiser (λ=1)')
+    plt.legend()
+    plt.savefig(os.path.join(img_dir, 'pca_scree_plot.png'))
+    plt.close()
+
+    # 2. Biplot (Cargas e Scores)
+    # Cálculo dos scores: Z * V
+    scores = df_std.values @ eigenvectors
+    
+    plt.figure(figsize=(10, 8))
+    # Plotar os scores das amostras
+    plt.scatter(scores[:, 0], scores[:, 1], alpha=0.5, color='gray', label='Amostras')
+    
+    # Plotar os vetores das variáveis (Cargas fatoriais: V * sqrt(L))
+    loadings = eigenvectors[:, :2] * np.sqrt(eigenvalues[:2])
+    
+    for i, var in enumerate(df_std.columns):
+        plt.arrow(0, 0, loadings[i, 0]*3, loadings[i, 1]*3, color='r', alpha=0.8, head_width=0.1)
+        plt.text(loadings[i, 0]*3.5, loadings[i, 1]*3.5, var, color='darkred', ha='center', va='center', fontweight='bold')
+
+    plt.title('PCA Biplot (PC1 vs PC2)')
+    plt.xlabel(f'PC1 ({ (eigenvalues[0]/sum(eigenvalues))*100:.1f}%)')
+    plt.ylabel(f'PC2 ({ (eigenvalues[1]/sum(eigenvalues))*100:.1f}%)')
+    plt.grid(True)
+    plt.savefig(os.path.join(img_dir, 'pca_biplot.png'))
+    plt.close()
+    
+    print("Gráficos gerados com sucesso em teoria/analise_fatorial_exploratoria/imgs/")
+#+end_src
+
+uma descricao inicial do grafico biplot abaixo seria: Os eixos X e Y
+sao os scores. Os pontos sao os casos plotados como grafico de
+dispersao considerando o score de cada componente principal.
+
+Os casos sao agrupados de acordo com as setas vermelhas que sao as
+variaveis originais (loadings)
+
+Dessa maneira podemos ver como as variaveis originais se relacionam
+com os componentes e também os casos relativos a ela.
+
+Por exemplo, apesar de, aparentemente, os casos estarem bem dispersos,
+não revelando facilmente grupos de casos, percebe-se que existem casos
+com solos para todas caracteristicas. Mas considerando que o terceiro
+e quarto quadrante é maior, observa-se que todos eles, apesar de
+dispersos, esto relacionados com Mg e Ca que, segundo o Gemini, sao
+solos nao ácidos e aparentemente férteis.
+
+Dependendo da pesquisa pode valer a pena identificar os casos.
+
+Na aula o professor incluir as elipses para visualizar melhor o
+agrupamento dos casos, nao consegui fazer por
+enquanto.. por enquanto rsrs
+
+#+RESULTS:
+
+[[./imgs/pca_biplot.png]]
+
+
+Conforme o professor demonstrou, no grafico do biplot a gente analisa
+a direcao e a forca, ou seja, comprimento dos vetores.
+
+Esse item abaixo, é inteiramente resposta do gemini, apesar de
+perceber que no pc1 temos uma relacao inversa entre Mg eCa contra
+H+Al3+ como não sei o que isso poderia significar perguntei ao gemini.
+
+   "Vemos **Ca** e **Mg** apontando para um lado, enquanto **Al3+** e **H+Al** apontam para o lado oposto."
+   "Isso confirma que o PC1 separa solos férteis (ricos em Ca/Mg) de solos ácidos (ricos em Alumínio)."
+
+
+   Ja no pc2 e claro facil perceber que Fe, Mn e S tem muita
+   relevancia sendo que Fe tem um relacionamento inversao a Mn e S.
+   Segue a interpretacao do gemini sobre o que isso pode significar:
+
+    "**Fe**, **Mn** e **S** têm fortes projeções neste eixo."
+    "Isso indica uma dinâmica química diferente da acidez,
+    possivelmente relacionada ao material de origem do solo ou
+    condições de oxirredução."
+    
+
+    Já o grafico abaixo justifica a escolha de dois componentes apenas
+    porque o terceiro ja esta expressivamente abaixo dos dois primeiros.
+
+
+[[./imgs/pca_scree_plot.png]]
+
+
+
+* Transição: Da PCA para a Análise Fatorial
+
+Essa era uma duvida minha desde o inicio do curso :)) Diferenciar PCA de EFA
+
+A diferenca he como tratamos a variância dos dados: PCA mostra a
+*toda* variancia das variaveis em relacao aos componentes. A questao
+he que parta da variacia pode ser causada por erros aleatorios e nao
+ser variancia causada pela outra variavel. EFA consegue detectar isso.
+
+
+** 1. Relação com o Modelo Linear Geral (MLG)
+No contexto da AFE, assumimos que cada variável observada ($Z_i$) é
+uma combinação linear de fatores comuns ($F_j$) e um fator
+único/específico ($U_i$):
+
+
+\[ Z_i = a_{i1}F_1 + a_{i2}F_2 + ... + a_{im}F_m + e_i \]
+
+Onde:
+- $F_j$ são os **Fatores Comuns** (variáveis latentes que influenciam múltiplas variáveis observadas).
+- $a_{ij}$ são as **Cargas Fatoriais** (coeficientes de regressão).
+- $e_i$ é o **Erro ou Variância Única** (o que o modelo não consegue explicar para aquela variável específica).
+
+** 2. Comunalidades ($h^2$) vs. Variância de Erro
+Diferente da PCA, que tenta explicar a *variância total*, a AFE foca na **Variância Comum** (Covariância).
+
+- **Comunalidade ($h^2$):** É a proporção da variância de uma variável que é compartilhada com os outros fatores. No exemplo do solo, se o Al3+ tem $h^2 = 0.85$, significa que 85% do seu comportamento é explicado pelos fatores comuns (como a acidez geral do solo).
+- **Variância Única / Erro ($\psi$):** Representa a parte da variância que é específica daquela variável ou fruto de erro de medição. É calculada como $1 - h^2$.
 
 * Passo 4: Matriz de Cargas Fatoriais (A)
+
 As cargas fatoriais representam a correlação entre as variáveis originais e os fatores. Elas são calculadas como:
 \[ A = V \sqrt{L} \]
 Onde $V$ é a matriz de autovetores e $L$ é a matriz diagonal de autovalores.
