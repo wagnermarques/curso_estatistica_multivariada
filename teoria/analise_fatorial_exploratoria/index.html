@@ -3,11 +3,11 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="pt-br" xml:lang="pt-br">
 <head>
-<!-- 2026-06-07 dom 18:14 -->
+<!-- 2026-06-07 dom 23:41 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Análise Fatorial Exploratória (AFE) - Química do Solo</title>
-<meta name="author" content="Gemini CLI" />
+<title>Análise Fatorial Exploratória (EFA - Exploratory Factorial Analysis)</title>
+<meta name="author" content="Eu e o Gemini" />
 <meta name="generator" content="Org Mode" />
 <style type="text/css">
   #content { max-width: 60em; margin: auto; }
@@ -196,36 +196,58 @@
 </head>
 <body>
 <div id="content" class="content">
-<h1 class="title">Análise Fatorial Exploratória (AFE) - Química do Solo</h1>
+<h1 class="title">Análise Fatorial Exploratória (EFA - Exploratory Factorial Analysis)</h1>
 <div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orge10167f">1. Introdução</a></li>
-<li><a href="#orgcc55e93">2. Passo 1: Carregamento e Preparação dos Dados</a>
+<li><a href="#org9cc0196">1. Introdução</a></li>
+<li><a href="#org0c58008">2. Passo 1: Carregamento e Preparação dos Dados</a>
 <ul>
-<li><a href="#org9df1c03">2.1. Padronização das variaveis</a></li>
-<li><a href="#orgeb5dd1b">2.2. Script para Padronização dos Dados</a></li>
+<li><a href="#org3be5da8">2.1. Padronização das variaveis</a></li>
+<li><a href="#org8cbadfa">2.2. Script para Padronização dos Dados</a></li>
 </ul>
 </li>
-<li><a href="#orge6c1d34">3. Passo 2: Matriz de Correlação (R)</a></li>
-<li><a href="#orgc67538a">4. Passo 3: Decomposição em Autovalores e Autovetores</a>
+<li><a href="#org210e42d">3. Passo 2: Matriz de Correlação (R)</a></li>
+<li><a href="#org3b99e4c">4. Passo 3: Decomposição em Autovalores e Autovetores</a>
 <ul>
-<li><a href="#orgd281fc6">4.1. Autovalores Obtidos:</a></li>
+<li><a href="#org9c8e795">4.1. Script para Extração de Autovalores e Autovetores</a></li>
+<li><a href="#orgd74bcae">4.2. Autovalores Obtidos:</a></li>
 </ul>
 </li>
-<li><a href="#orgefd6080">5. Passo 4: Matriz de Cargas Fatoriais (A)</a>
+<li><a href="#org2a3367e">5. Passo 4: Interpretação da PCA e Visualização (antes de entrar no efa)</a>
 <ul>
-<li><a href="#org6ae5786">5.1. Matriz de Cargas Fatoriais (Sem Rotação):</a></li>
+<li><a href="#orgf47102d">5.1. 4.1 Scree Plot (Gráfico de Cotovelo)</a></li>
 </ul>
 </li>
-<li><a href="#org949c49c">6. Passo 5: Interpretação dos Fatores</a></li>
-<li><a href="#org7d04e15">7. Conclusão</a></li>
+<li><a href="#orgdb03546">6. Transição: Da PCA para a Análise Fatorial</a>
+<ul>
+<li><a href="#org1da8733">6.1. 1. Relação com o Modelo Linear Geral (MLG)</a></li>
+<li><a href="#org1bb1689">6.2. 2. Comunalidades (<img src="./tmp/latex/index_a8f90bc7dcdc0b564da74b93240511f9a98b198a.svg" alt="$h^2$" class="org-svg" />) vs. Variância de Erro</a></li>
+</ul>
+</li>
+<li><a href="#org6637e59">7. Passo 4: Matriz de Cargas Fatoriais (A)</a>
+<ul>
+<li><a href="#org1f6951c">7.1. 4.1 O Cálculo Detalhado</a></li>
+<li><a href="#org73fbb44">7.2. 4.2 Por que multiplicamos pela raiz dos autovalores?</a></li>
+<li><a href="#orgcd4e955">7.3. Script de Cálculo com Python:</a></li>
+<li><a href="#orgc071ca5">7.4. Matriz de Cargas Fatoriais (Sem Rotação):</a></li>
+</ul>
+</li>
+<li><a href="#org05237ee">8. Passo 5: Interpretação Inicial (Sem Rotação)</a></li>
+<li><a href="#org2f82132">9. Passo 6: Rotação de Fatores (Varimax)</a>
+<ul>
+<li><a href="#orgc788cdb">9.1. 6.1 Por que Rotacionar? (O Conceito de Estrutura Simples)</a></li>
+<li><a href="#org933149b">9.2. 6.2 O que muda e o que não muda?</a></li>
+<li><a href="#org713e2e3">9.3. 6.3 O Método Varimax</a></li>
+</ul>
+</li>
+<li><a href="#org02869cc">10. Conclusão</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-orge10167f" class="outline-2">
-<h2 id="orge10167f"><span class="section-number-2">1.</span> Introdução</h2>
+<div id="outline-container-org9cc0196" class="outline-2">
+<h2 id="org9cc0196"><span class="section-number-2">1.</span> Introdução</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Este documento sao anotacoes de estudo sobre Análise Fatorial Exploratória (AFE)
@@ -245,10 +267,15 @@ encontrou usando o statistica.
 <p>
 A análise segue os passos matemáticos clássicos utilizando álgebra matricial e a biblioteca SymPy para representação simbólica.
 </p>
+
+<p>
+Seguindo a orientacao do professor, sempre que oportuno vou fazer
+analises para melhorar a compreensao do que esta sendo apresentado.
+</p>
 </div>
 </div>
-<div id="outline-container-orgcc55e93" class="outline-2">
-<h2 id="orgcc55e93"><span class="section-number-2">2.</span> Passo 1: Carregamento e Preparação dos Dados</h2>
+<div id="outline-container-org0c58008" class="outline-2">
+<h2 id="org0c58008"><span class="section-number-2">2.</span> Passo 1: Carregamento e Preparação dos Dados</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 Os dados consistem em 90 amostras de solo com 7 variáveis quantitativas.
@@ -267,8 +294,8 @@ As variáveis analisadas são:
 <li><b>Mn</b>: Manganês</li>
 </ul>
 </div>
-<div id="outline-container-org9df1c03" class="outline-3">
-<h3 id="org9df1c03"><span class="section-number-3">2.1.</span> Padronização das variaveis</h3>
+<div id="outline-container-org3be5da8" class="outline-3">
+<h3 id="org3be5da8"><span class="section-number-3">2.1.</span> Padronização das variaveis</h3>
 <div class="outline-text-3" id="text-2-1">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #51afef;">from</span> sympy <span style="color: #51afef;">import</span> symbols, Matrix, latex
@@ -285,8 +312,8 @@ A fórmula matemática é:
 </p>
 </div>
 </div>
-<div id="outline-container-orgeb5dd1b" class="outline-3">
-<h3 id="orgeb5dd1b"><span class="section-number-3">2.2.</span> Script para Padronização dos Dados</h3>
+<div id="outline-container-org8cbadfa" class="outline-3">
+<h3 id="org8cbadfa"><span class="section-number-3">2.2.</span> Script para Padronização dos Dados</h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
 O código abaixo realiza a leitura dos dados originais, aplica a padronização Z-score e exporta o resultado para um arquivo CSV. Este script pode ser extraído para um arquivo Python independente.
@@ -327,7 +354,7 @@ O código abaixo realiza a leitura dos dados originais, aplica a padronização 
 </div>
 
 <div class="org-src-container">
-<pre class="src src-shell" id="org5ec83eb">(venv) wgn@fedora:/run/media/wgn/ext4/Projects-Srcs/Projects-Srcs-FzlSoft/curso_estatistica_multivariada$ python3 teoria/analise_fatorial_exploratoria/standardize_data.py 
+<pre class="src src-shell" id="org22f46a7">(venv) wgn@fedora:/run/media/wgn/ext4/Projects-Srcs/Projects-Srcs-FzlSoft/curso_estatistica_multivariada$ python3 teoria/analise_fatorial_exploratoria/standardize_data.py 
 Dados padronizados salvos em: /run/media/wgn/ext4/Projects-Srcs/Projects-Srcs-FzlSoft/curso_estatistica_multivariada/teoria/analise_fatorial_exploratoria/dados_padronizados.csv
 
 Primeiras linhas dos dados padronizados:
@@ -343,9 +370,39 @@ Primeiras linhas dos dados padronizados:
 </div>
 </div>
 </div>
-<div id="outline-container-orge6c1d34" class="outline-2">
-<h2 id="orge6c1d34"><span class="section-number-2">3.</span> Passo 2: Matriz de Correlação (R)</h2>
+<div id="outline-container-org210e42d" class="outline-2">
+<h2 id="org210e42d"><span class="section-number-2">3.</span> Passo 2: Matriz de Correlação (R)</h2>
 <div class="outline-text-2" id="text-3">
+<p>
+A matriz de correção he mesmo que a matriz de covariancia aplicada aos
+dados padronizados.
+</p>
+
+<p>
+A padronizacao he importante porque a matriz de covariancia tem seus
+resultados fortemente impactado pelas escalas, mas a padronizacao
+resolve isso.
+</p>
+
+<p>
+o que temos abaixo he a matriz de covariancia aplicada aos dados
+padronizados mas pelo fato de ser identica a matriz de correlacao
+chamamos de matriz de correlacao mesmo.
+</p>
+
+<p>
+So pra ilustrar que apesar de resultados identicos no nosso caso desta
+analise, matriz de covariancia nao he a mesma coisa que matriz de
+correlacao, conforme essa imagem gerado pelo claude.
+</p>
+
+
+<div id="orgcfc8c79" class="figure">
+<p><img src="./imgs/passo_a_passo_mtz_cov_e_mtz_corr.png" alt="passo_a_passo_mtz_cov_e_mtz_corr.png" />
+</p>
+</div>
+
+
 <p>
 A AFE baseia-se na matriz de correlação entre as variáveis padronizadas.
 </p>
@@ -355,11 +412,19 @@ Seja <img src="./tmp/latex/index_1df32491ca6a22e979f1737e1b87c4a8e06f7a02.svg" a
 <img src="./tmp/latex/index_d1281dfe0873d6376d2215467fd32023d767a723.svg" alt="\[ R = \frac{1}{n-1} Z^T Z \]" class="org-svg" />
 </p>
 
+
 <p>
-Numericamente, a matriz de correlação para nossos dados é:
+No exercicio de componentes principais tem os passos detalhados sobre
+como obter  a matriz de correlacao.
 </p>
 
-<div class="table" id="orgf050660">
+
+<p>
+De posse da matriz de correlacao, ja temos algumas leituras interessantes diante da correlacao entre as variaveis.
+</p>
+
+
+<div class="table" id="orgc770023">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -420,7 +485,7 @@ Numericamente, a matriz de correlação para nossos dados é:
 <td class="org-right">-0.302</td>
 <td class="org-right">-0.490</td>
 <td class="org-right">1.000</td>
-<td class="org-right">0.734</td>
+<td class="org-right"><span class="underline">0.734</span></td>
 <td class="org-right">0.211</td>
 <td class="org-right">0.297</td>
 <td class="org-right">-0.162</td>
@@ -430,7 +495,7 @@ Numericamente, a matriz de correlação para nossos dados é:
 <td class="org-left"><b>Al3+</b></td>
 <td class="org-right">-0.375</td>
 <td class="org-right">-0.653</td>
-<td class="org-right">0.734</td>
+<td class="org-right"><b>0.734</b></td>
 <td class="org-right">1.000</td>
 <td class="org-right">0.255</td>
 <td class="org-right">0.397</td>
@@ -450,8 +515,8 @@ Numericamente, a matriz de correlação para nossos dados é:
 
 <tr>
 <td class="org-left"><b>Fe</b></td>
-<td class="org-right">0.028</td>
-<td class="org-right">-0.044</td>
+<td class="org-right"><b>0.028</b></td>
+<td class="org-right"><b>-0.044</b></td>
 <td class="org-right">0.297</td>
 <td class="org-right">0.397</td>
 <td class="org-right">-0.184</td>
@@ -462,7 +527,7 @@ Numericamente, a matriz de correlação para nossos dados é:
 <tr>
 <td class="org-left"><b>Mn</b></td>
 <td class="org-right">0.126</td>
-<td class="org-right">-0.077</td>
+<td class="org-right"><b>-0.077</b></td>
 <td class="org-right">-0.162</td>
 <td class="org-right">-0.252</td>
 <td class="org-right">0.413</td>
@@ -473,24 +538,147 @@ Numericamente, a matriz de correlação para nossos dados é:
 </table>
 
 </div>
+
+<p>
+A tabela mostra que Al3 tem correlacao forte com H+Al.Claro que aí
+precisa de literatura e conhecimento da área pra seber quais as
+implicacoes disso.
+</p>
+
+<p>
+O Fe tem correlação zero com Ca, Mg e muito baixa com H<sub>Al</sub> 0.297, com
+Al3+ 0.397 e mais baixa ainda com S -0.184.
+</p>
+
+<p>
+Isso quer dizer que a variancia do Fe nao esta relacionada a variancia
+da maioria dos outros elementos quimicos.
+</p>
+
+<p>
+O Mn já se relaciona fracamente com S 0.413.
+</p>
+
+
+<p>
+Esse primeiro olhar já nos da uma pista do que podemos ter lá na
+frente quando encontrar-mos os fatores.
+</p>
 </div>
 </div>
-<div id="outline-container-orgc67538a" class="outline-2">
-<h2 id="orgc67538a"><span class="section-number-2">4.</span> Passo 3: Decomposição em Autovalores e Autovetores</h2>
+<div id="outline-container-org3b99e4c" class="outline-2">
+<h2 id="org3b99e4c"><span class="section-number-2">4.</span> Passo 3: Decomposição em Autovalores e Autovetores</h2>
 <div class="outline-text-2" id="text-4">
 <p>
+Pra um resumo bem interessante sobre autovalores e autovetores, achei interessante esse video:
+<a href="https://www.youtube.com/watch?v=MLck7c2Ma8E&amp;t=1388s">https://www.youtube.com/watch?v=MLck7c2Ma8E&amp;t=1388s</a>
+</p>
+
+
+<p>
 Para extrair os fatores, resolvemos a equação característica:
+</p>
+
+<p>
 <img src="./tmp/latex/index_2b2bdba24c81fa1b4ffe9a0319b9bd26f5f81092.svg" alt="\[ \det(R - \lambda I) = 0 \]" class="org-svg" />
 </p>
 
 <p>
-Onde <img src="./tmp/latex/index_11dd773360a5998641e92685c84d17858047fc62.svg" alt="$\lambda$" class="org-svg" /> são os autovalores. Para cada <img src="./tmp/latex/index_e178c0659afecc93cc560301bbd1d2243a2598d1.svg" alt="$\lambda_i$" class="org-svg" />, encontramos o autovetor <img src="./tmp/latex/index_f358f268210663bafcbb07c3c73dd03a206077bb.svg" alt="$v_i$" class="org-svg" /> tal que:
+Onde <img src="./tmp/latex/index_11dd773360a5998641e92685c84d17858047fc62.svg" alt="$\lambda$" class="org-svg" /> são os autovalores. Para cada <img src="./tmp/latex/index_e178c0659afecc93cc560301bbd1d2243a2598d1.svg" alt="$\lambda_i$" class="org-svg" />, encontramos
+o autovetor <img src="./tmp/latex/index_f358f268210663bafcbb07c3c73dd03a206077bb.svg" alt="$v_i$" class="org-svg" /> tal que:
+</p>
+
+<p>
 <img src="./tmp/latex/index_23939a303feec73eb4a1c9cede0bdbeeaca03692.svg" alt="\[ R v_i = \lambda_i v_i \]" class="org-svg" />
 </p>
 </div>
-<div id="outline-container-orgd281fc6" class="outline-3">
-<h3 id="orgd281fc6"><span class="section-number-3">4.1.</span> Autovalores Obtidos:</h3>
+<div id="outline-container-org9c8e795" class="outline-3">
+<h3 id="org9c8e795"><span class="section-number-3">4.1.</span> Script para Extração de Autovalores e Autovetores</h3>
 <div class="outline-text-3" id="text-4-1">
+<p>
+Este script lê os dados padronizados, calcula a matriz de correlação e
+extrai os autovalores e autovetores.
+</p>
+
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #51afef;">import</span> pandas <span style="color: #51afef;">as</span> pd
+<span style="color: #51afef;">import</span> numpy <span style="color: #51afef;">as</span> np
+<span style="color: #51afef;">import</span> os
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">Localiza&#231;&#227;o do script e arquivos
+</span><span style="color: #dcaeea;">script_dir</span> <span style="color: #51afef;">=</span> os.path.dirname(os.path.abspath(__file__)) <span style="color: #51afef;">if</span> <span style="color: #98be65;">'__file__'</span> <span style="color: #51afef;">in</span> <span style="color: #c678dd;">locals</span>() <span style="color: #51afef;">else</span> os.getcwd()
+<span style="color: #dcaeea;">input_file</span> <span style="color: #51afef;">=</span> os.path.join(script_dir, <span style="color: #98be65;">'dados_padronizados.csv'</span>)
+
+<span style="color: #51afef;">if</span> <span style="color: #51afef;">not</span> os.path.exists(input_file):
+    <span style="color: #c678dd;">print</span>(f<span style="color: #98be65;">"Erro: Arquivo </span>{input_file}<span style="color: #98be65;"> n&#227;o encontrado. Execute o script de padroniza&#231;&#227;o primeiro."</span>)
+<span style="color: #51afef;">else</span>:
+    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">Carregar dados padronizados
+</span>    <span style="color: #dcaeea;">df_std</span> <span style="color: #51afef;">=</span> pd.read_csv(input_file)
+    
+    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">Calcular matriz de correla&#231;&#227;o (R)
+</span>    <span style="color: #dcaeea;">R</span> <span style="color: #51afef;">=</span> df_std.corr()
+    
+    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">Extrair autovalores e autovetores
+</span>    <span style="color: #dcaeea;">eigenvalues</span>, <span style="color: #dcaeea;">eigenvectors</span> <span style="color: #51afef;">=</span> np.linalg.eig(R)
+    
+    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">Ordenar de forma decrescente
+</span>    <span style="color: #dcaeea;">idx</span> <span style="color: #51afef;">=</span> eigenvalues.argsort()[::<span style="color: #51afef;">-</span>1]
+    <span style="color: #dcaeea;">eigenvalues</span> <span style="color: #51afef;">=</span> eigenvalues[idx]
+    <span style="color: #dcaeea;">eigenvectors</span> <span style="color: #51afef;">=</span> eigenvectors[:, idx]
+    
+    <span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"=== Resultados da Decomposi&#231;&#227;o Espectral ==="</span>)
+    <span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"</span><span style="color: #a9a1e1;">\n</span><span style="color: #98be65;">Autovalores (Vari&#226;ncia Explicada por cada componente):"</span>)
+    <span style="color: #51afef;">for</span> i, val <span style="color: #51afef;">in</span> <span style="color: #c678dd;">enumerate</span>(eigenvalues):
+        <span style="color: #dcaeea;">variancia_perc</span> <span style="color: #51afef;">=</span> (val <span style="color: #51afef;">/</span> <span style="color: #c678dd;">len</span>(eigenvalues)) <span style="color: #51afef;">*</span> 100
+        <span style="color: #c678dd;">print</span>(f<span style="color: #98be65;">"Componente </span>{i<span style="color: #51afef;">+</span>1}<span style="color: #98be65;">: </span>{val:.4f}<span style="color: #98be65;"> (</span>{variancia_perc:.2f}<span style="color: #98be65;">%)"</span>)
+        
+    <span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"</span><span style="color: #a9a1e1;">\n</span><span style="color: #98be65;">Matriz de Autovetores (V) - Primeiros 2 componentes:"</span>)
+    <span style="color: #dcaeea;">df_v</span> <span style="color: #51afef;">=</span> pd.DataFrame(eigenvectors[:, :2], index<span style="color: #51afef;">=</span>df_std.columns, columns<span style="color: #51afef;">=</span>[<span style="color: #98be65;">'V1'</span>, <span style="color: #98be65;">'V2'</span>])
+    <span style="color: #c678dd;">print</span>(df_v)
+</pre>
+</div>
+
+<p>
+a linha que extrai os autovalores e autovetores é np.linalg.eig(R)
+</p>
+
+<p>
+pra entender melhor como o numpy trabalhar com algebra linear, esta he
+a documentacao: <a href="https://numpy.org/doc/stable/reference/routines.linalg.html">https://numpy.org/doc/stable/reference/routines.linalg.html</a>
+</p>
+</div>
+</div>
+<div id="outline-container-orgd74bcae" class="outline-3">
+<h3 id="orgd74bcae"><span class="section-number-3">4.2.</span> Autovalores Obtidos:</h3>
+<div class="outline-text-3" id="text-4-2">
+<div class="org-src-container">
+<pre class="src src-shell" id="orgb527b29">(venv) wgn@fedora:/run/media/wgn/ext4/Projects-Srcs/Projects-Srcs-FzlSoft/curso_estatistica_multivariada$ python3 teoria/analise_fatorial_exploratoria/extract_eigen.py 
+=== Resultados da Decomposi&#231;&#227;o Espectral ===
+
+<span style="color: #c678dd;">Autovalores</span> (Vari&#226;ncia Explicada por cada componente):
+Componente 1: 2.7974 (39.96%)
+Componente 2: 1.7257 (24.65%)
+Componente 3: 0.8920 (12.74%)
+Componente 4: 0.5799 (8.28%)
+Componente 5: 0.4519 (6.46%)
+Componente 6: 0.3807 (5.44%)
+Componente 7: 0.1724 (2.46%)
+
+Matriz de Autovetores (V) - Primeiros 2 componentes:
+              V1        V2
+Ca     -0.363171 -0.156996
+Mg     -0.476468 -0.200491
+H + Al  0.482937 -0.133232
+Al3+    0.539410 -0.156802
+S       0.267106  0.549150
+Fe      0.192170 -0.499852
+Mn     -0.092840  0.584294
+(venv) wgn@fedora:/run/media/wgn/ext4/Projects-Srcs/Projects-Srcs-FzlSoft/curso_estatistica_multivariada$ 
+</pre>
+</div>
+
+
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -566,26 +754,25 @@ Onde <img src="./tmp/latex/index_11dd773360a5998641e92685c84d17858047fc62.svg" a
 <p>
 Pelo critério de Kaiser (<img src="./tmp/latex/index_475885cbfd8cbaf3601caa864ba0e69c517fc485.svg" alt="$\lambda &amp;gt; 1$" class="org-svg" />), reteríamos 2 fatores.
 </p>
-</div>
-</div>
-</div>
-<div id="outline-container-orgefd6080" class="outline-2">
-<h2 id="orgefd6080"><span class="section-number-2">5.</span> Passo 4: Matriz de Cargas Fatoriais (A)</h2>
-<div class="outline-text-2" id="text-5">
+
 <p>
-As cargas fatoriais representam a correlação entre as variáveis originais e os fatores. Elas são calculadas como:
-<img src="./tmp/latex/index_eabccaccca6a510ba6df4fd43011d9853332fe13.svg" alt="\[ A = V \sqrt{L} \]" class="org-svg" />
-Onde <img src="./tmp/latex/index_cf87f0f7e38c66643a2199afc548cb3363b5f9a9.svg" alt="$V$" class="org-svg" /> é a matriz de autovetores e <img src="./tmp/latex/index_ad50cd97560e74be910092b71ed793ff091b3fd1.svg" alt="$L$" class="org-svg" /> é a matriz diagonal de autovalores.
+No exercicio sobre componentes principais nao cheguei a fazer uma
+analise dos componentes encontrados, mas esse e uma boa oportunidade.
 </p>
-</div>
-<div id="outline-container-org6ae5786" class="outline-3">
-<h3 id="org6ae5786"><span class="section-number-3">5.1.</span> Matriz de Cargas Fatoriais (Sem Rotação):</h3>
-<div class="outline-text-3" id="text-5-1">
+
+<p>
+Olhando abaixo, percebe-se claramente que os dois primeiro componentes
+principais não só sao os que explicam a mario parte da variancia
+(64,96%) mas tambem percebemos que o terceiro componente principal cai
+expressivamente. Algumas literaturas chamam isso de cotovelo (ewboll)
+posso estar escrevento errado o nome em ingles.
+</p>
+
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
 <colgroup>
-<col  class="org-left" />
+<col  class="org-right" />
 
 <col  class="org-right" />
 
@@ -595,8 +782,392 @@ Onde <img src="./tmp/latex/index_cf87f0f7e38c66643a2199afc548cb3363b5f9a9.svg" a
 </colgroup>
 <thead>
 <tr>
+<th scope="col" class="org-right">Componente</th>
+<th scope="col" class="org-right">Autovalor (<img src="./tmp/latex/index_11dd773360a5998641e92685c84d17858047fc62.svg" alt="$\lambda$" class="org-svg" />)</th>
+<th scope="col" class="org-right">% Variância</th>
+<th scope="col" class="org-right">% Acumulada</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">1</td>
+<td class="org-right">2.797</td>
+<td class="org-right">39.96%</td>
+<td class="org-right">39.96%</td>
+</tr>
+
+<tr>
+<td class="org-right">2</td>
+<td class="org-right">1.726</td>
+<td class="org-right">24.66%</td>
+<td class="org-right">64.62%</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="outline-container-org2a3367e" class="outline-2">
+<h2 id="org2a3367e"><span class="section-number-2">5.</span> Passo 4: Interpretação da PCA e Visualização (antes de entrar no efa)</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+antes de entrar no efa achei interessante aproveitar este estagio
+intermediario de pca pra dar uma olhada.
+</p>
+
+<p>
+64% acho pouco, entao já estou esperando uma analise visual nao tao
+obvia
+</p>
+</div>
+<div id="outline-container-orgf47102d" class="outline-3">
+<h3 id="orgf47102d"><span class="section-number-3">5.1.</span> 4.1 Scree Plot (Gráfico de Cotovelo)</h3>
+<div class="outline-text-3" id="text-5-1">
+<p>
+O Scree Plot ajuda a visualizar a queda na variância explicada e confirmar o número de componentes a reter.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #51afef;">import</span> pandas <span style="color: #51afef;">as</span> pd
+<span style="color: #51afef;">import</span> numpy <span style="color: #51afef;">as</span> np
+<span style="color: #51afef;">import</span> matplotlib.pyplot <span style="color: #51afef;">as</span> plt
+<span style="color: #51afef;">import</span> seaborn <span style="color: #51afef;">as</span> sns
+<span style="color: #51afef;">import</span> os
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">Configura&#231;&#245;es de estilo
+</span>sns.set_theme(style<span style="color: #51afef;">=</span><span style="color: #98be65;">"whitegrid"</span>)
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">Localiza&#231;&#227;o dos arquivos
+</span><span style="color: #dcaeea;">script_dir</span> <span style="color: #51afef;">=</span> os.path.dirname(os.path.abspath(__file__)) <span style="color: #51afef;">if</span> <span style="color: #98be65;">'__file__'</span> <span style="color: #51afef;">in</span> <span style="color: #c678dd;">locals</span>() <span style="color: #51afef;">else</span> os.getcwd()
+<span style="color: #dcaeea;">input_file</span> <span style="color: #51afef;">=</span> os.path.join(script_dir, <span style="color: #98be65;">'dados_padronizados.csv'</span>)
+<span style="color: #dcaeea;">img_dir</span> <span style="color: #51afef;">=</span> os.path.join(script_dir, <span style="color: #98be65;">'imgs'</span>)
+
+<span style="color: #51afef;">if</span> <span style="color: #51afef;">not</span> os.path.exists(img_dir):
+    os.makedirs(img_dir)
+
+<span style="color: #51afef;">if</span> os.path.exists(input_file):
+    <span style="color: #dcaeea;">df_std</span> <span style="color: #51afef;">=</span> pd.read_csv(input_file)
+    <span style="color: #dcaeea;">R</span> <span style="color: #51afef;">=</span> df_std.corr()
+    <span style="color: #dcaeea;">eigenvalues</span>, <span style="color: #dcaeea;">eigenvectors</span> <span style="color: #51afef;">=</span> np.linalg.eig(R)
+    
+    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">Ordenar
+</span>    <span style="color: #dcaeea;">idx</span> <span style="color: #51afef;">=</span> eigenvalues.argsort()[::<span style="color: #51afef;">-</span>1]
+    <span style="color: #dcaeea;">eigenvalues</span> <span style="color: #51afef;">=</span> eigenvalues[idx]
+    <span style="color: #dcaeea;">eigenvectors</span> <span style="color: #51afef;">=</span> eigenvectors[:, idx]
+    
+    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">1. Scree Plot
+</span>    plt.figure(figsize<span style="color: #51afef;">=</span>(8, 5))
+    plt.plot(<span style="color: #c678dd;">range</span>(1, <span style="color: #c678dd;">len</span>(eigenvalues)<span style="color: #51afef;">+</span>1), eigenvalues, <span style="color: #98be65;">'o-'</span>, linewidth<span style="color: #51afef;">=</span>2)
+    plt.title(<span style="color: #98be65;">'Scree Plot - Vari&#226;ncia por Componente'</span>)
+    plt.xlabel(<span style="color: #98be65;">'Componente Principal'</span>)
+    plt.ylabel(<span style="color: #98be65;">'Autovalor (Vari&#226;ncia)'</span>)
+    plt.axhline(y<span style="color: #51afef;">=</span>1, color<span style="color: #51afef;">=</span><span style="color: #98be65;">'r'</span>, linestyle<span style="color: #51afef;">=</span><span style="color: #98be65;">'--'</span>, label<span style="color: #51afef;">=</span><span style="color: #98be65;">'Crit&#233;rio de Kaiser (&#955;=1)'</span>)
+    plt.legend()
+    plt.savefig(os.path.join(img_dir, <span style="color: #98be65;">'pca_scree_plot.png'</span>))
+    plt.close()
+
+    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">2. Biplot (Cargas e Scores)
+</span>    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">C&#225;lculo dos scores: Z * V
+</span>    <span style="color: #dcaeea;">scores</span> <span style="color: #51afef;">=</span> df_std.values @ eigenvectors
+    
+    plt.figure(figsize<span style="color: #51afef;">=</span>(10, 8))
+    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">Plotar os scores das amostras
+</span>    plt.scatter(scores[:, 0], scores[:, 1], alpha<span style="color: #51afef;">=</span>0.5, color<span style="color: #51afef;">=</span><span style="color: #98be65;">'gray'</span>, label<span style="color: #51afef;">=</span><span style="color: #98be65;">'Amostras'</span>)
+    
+    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">Plotar os vetores das vari&#225;veis (Cargas fatoriais: V * sqrt(L))
+</span>    <span style="color: #dcaeea;">loadings</span> <span style="color: #51afef;">=</span> eigenvectors[:, :2] <span style="color: #51afef;">*</span> np.sqrt(eigenvalues[:2])
+    
+    <span style="color: #51afef;">for</span> i, var <span style="color: #51afef;">in</span> <span style="color: #c678dd;">enumerate</span>(df_std.columns):
+        plt.arrow(0, 0, loadings[i, 0]<span style="color: #51afef;">*</span>3, loadings[i, 1]<span style="color: #51afef;">*</span>3, color<span style="color: #51afef;">=</span><span style="color: #98be65;">'r'</span>, alpha<span style="color: #51afef;">=</span>0.8, head_width<span style="color: #51afef;">=</span>0.1)
+        plt.text(loadings[i, 0]<span style="color: #51afef;">*</span>3.5, loadings[i, 1]<span style="color: #51afef;">*</span>3.5, var, color<span style="color: #51afef;">=</span><span style="color: #98be65;">'darkred'</span>, ha<span style="color: #51afef;">=</span><span style="color: #98be65;">'center'</span>, va<span style="color: #51afef;">=</span><span style="color: #98be65;">'center'</span>, fontweight<span style="color: #51afef;">=</span><span style="color: #98be65;">'bold'</span>)
+
+    plt.title(<span style="color: #98be65;">'PCA Biplot (PC1 vs PC2)'</span>)
+    plt.xlabel(f<span style="color: #98be65;">'PC1 (</span>{ (eigenvalues[0]<span style="color: #51afef;">/</span><span style="color: #c678dd;">sum</span>(eigenvalues))<span style="color: #51afef;">*</span>100:.1f}<span style="color: #98be65;">%)'</span>)
+    plt.ylabel(f<span style="color: #98be65;">'PC2 (</span>{ (eigenvalues[1]<span style="color: #51afef;">/</span><span style="color: #c678dd;">sum</span>(eigenvalues))<span style="color: #51afef;">*</span>100:.1f}<span style="color: #98be65;">%)'</span>)
+    plt.grid(<span style="color: #a9a1e1;">True</span>)
+    plt.savefig(os.path.join(img_dir, <span style="color: #98be65;">'pca_biplot.png'</span>))
+    plt.close()
+    
+    <span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"Gr&#225;ficos gerados com sucesso em teoria/analise_fatorial_exploratoria/imgs/"</span>)
+</pre>
+</div>
+
+<p>
+uma descricao inicial do grafico biplot abaixo seria: Os eixos X e Y
+sao os scores. Os pontos sao os casos plotados como grafico de
+dispersao considerando o score de cada componente principal.
+</p>
+
+<p>
+Os casos sao agrupados de acordo com as setas vermelhas que sao as
+variaveis originais (loadings)
+</p>
+
+<p>
+Dessa maneira podemos ver como as variaveis originais se relacionam
+com os componentes e também os casos relativos a ela.
+</p>
+
+<p>
+Por exemplo, apesar de, aparentemente, os casos estarem bem dispersos,
+não revelando facilmente grupos de casos, percebe-se que existem casos
+com solos para todas caracteristicas. Mas considerando que o terceiro
+e quarto quadrante é maior, observa-se que todos eles, apesar de
+dispersos, esto relacionados com Mg e Ca que, segundo o Gemini, sao
+solos nao ácidos e aparentemente férteis.
+</p>
+
+<p>
+Dependendo da pesquisa pode valer a pena identificar os casos.
+</p>
+
+<p>
+Na aula o professor incluir as elipses para visualizar melhor o
+agrupamento dos casos, nao consegui fazer por
+enquanto.. por enquanto rsrs
+</p>
+
+
+<div id="orgffc80da" class="figure">
+<p><img src="./imgs/pca_biplot.png" alt="pca_biplot.png" />
+</p>
+</div>
+
+
+<p>
+Conforme o professor demonstrou, no grafico do biplot a gente analisa
+a direcao e a forca, ou seja, comprimento dos vetores.
+</p>
+
+<p>
+Esse item abaixo, é inteiramente resposta do gemini, apesar de
+perceber que no pc1 temos uma relacao inversa entre Mg eCa contra
+H+Al3+ como não sei o que isso poderia significar perguntei ao gemini.
+</p>
+
+<p>
+"Vemos <b><b>Ca</b></b> e <b><b>Mg</b></b> apontando para um lado, enquanto <b><b>Al3+</b></b> e <b><b>H+Al</b></b> apontam para o lado oposto."
+"Isso confirma que o PC1 separa solos férteis (ricos em Ca/Mg) de solos ácidos (ricos em Alumínio)."
+</p>
+
+
+<p>
+Ja no pc2 e claro facil perceber que Fe, Mn e S tem muita
+relevancia sendo que Fe tem um relacionamento inversao a Mn e S.
+Segue a interpretacao do gemini sobre o que isso pode significar:
+</p>
+
+<p>
+"<b><b>Fe</b></b>, <b><b>Mn</b></b> e <b><b>S</b></b> têm fortes projeções neste eixo."
+"Isso indica uma dinâmica química diferente da acidez,
+possivelmente relacionada ao material de origem do solo ou
+condições de oxirredução."
+</p>
+
+
+<p>
+Já o grafico abaixo justifica a escolha de dois componentes apenas
+porque o terceiro ja esta expressivamente abaixo dos dois primeiros.
+</p>
+
+
+
+<div id="org1459f7e" class="figure">
+<p><img src="./imgs/pca_scree_plot.png" alt="pca_scree_plot.png" />
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgdb03546" class="outline-2">
+<h2 id="orgdb03546"><span class="section-number-2">6.</span> Transição: Da PCA para a Análise Fatorial</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+Essa era uma duvida minha desde o inicio do curso :)) Diferenciar PCA de EFA
+</p>
+
+<p>
+A diferenca he como tratamos a variância dos dados: PCA mostra a
+<b>toda</b> variancia das variaveis em relacao aos componentes. A questao
+he que parta da variacia pode ser causada por erros aleatorios e nao
+ser variancia causada pela outra variavel. EFA consegue detectar isso.
+</p>
+</div>
+<div id="outline-container-org1da8733" class="outline-3">
+<h3 id="org1da8733"><span class="section-number-3">6.1.</span> 1. Relação com o Modelo Linear Geral (MLG)</h3>
+<div class="outline-text-3" id="text-6-1">
+<p>
+No contexto da AFE, assumimos que cada variável observada (<img src="./tmp/latex/index_f48733eb86f8f8d424ec0dbdc19ca2b638cca53a.svg" alt="$Z_i$" class="org-svg" />) é
+uma combinação linear de fatores comuns (<img src="./tmp/latex/index_bc80ca95e01269840ffe5e9dc978f85330640c6d.svg" alt="$F_j$" class="org-svg" />) e um fator
+único/específico (<img src="./tmp/latex/index_c75a91ac346765d78985a27102bc0b672df3491c.svg" alt="$U_i$" class="org-svg" />):
+</p>
+
+
+<p>
+<img src="./tmp/latex/index_3377995f3268dedca79e29a1a2d16c35073b52de.svg" alt="\[ Z_i = a_{i1}F_1 + a_{i2}F_2 + ... + a_{im}F_m + e_i \]" class="org-svg" />
+</p>
+
+<p>
+Onde:
+</p>
+<ul class="org-ul">
+<li><img src="./tmp/latex/index_bc80ca95e01269840ffe5e9dc978f85330640c6d.svg" alt="$F_j$" class="org-svg" /> são os <b><b>Fatores Comuns</b></b> (variáveis latentes que influenciam múltiplas variáveis observadas).</li>
+<li><img src="./tmp/latex/index_4399f350ad391f3b9a21c874fc44b249bb2cb651.svg" alt="$a_{ij}$" class="org-svg" /> são as <b><b>Cargas Fatoriais</b></b> (coeficientes de regressão).</li>
+<li><img src="./tmp/latex/index_1cbdc2275135187d50160a8f7869277870038b9d.svg" alt="$e_i$" class="org-svg" /> é o <b><b>Erro ou Variância Única</b></b> (o que o modelo não consegue explicar para aquela variável específica).</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org1bb1689" class="outline-3">
+<h3 id="org1bb1689"><span class="section-number-3">6.2.</span> 2. Comunalidades (<img src="./tmp/latex/index_a8f90bc7dcdc0b564da74b93240511f9a98b198a.svg" alt="$h^2$" class="org-svg" />) vs. Variância de Erro</h3>
+<div class="outline-text-3" id="text-6-2">
+<p>
+Enquanto PCA, tenta explicar a <b>variância total</b>, a AFE foca na <b><b>Variância Comum</b></b> (Covariância).
+</p>
+
+<ul class="org-ul">
+<li><b><b>Comunalidade (<img src="./tmp/latex/index_a8f90bc7dcdc0b564da74b93240511f9a98b198a.svg" alt="$h^2$" class="org-svg" />):</b></b>
+É a proporção da variância de uma variável que é compartilhada com
+os outros fatores.
+No caso dos nossos dados desta analise, se o Al3+ tem <img src="./tmp/latex/index_388c350711a60dc4d03fd18ff51ec2da32d52f64.svg" alt="$h^2 = 0.85$" class="org-svg" />,
+significa que 85% do seu comportamento é explicado pelos fatores
+comuns (como a acidez geral do solo).</li>
+
+<li><b><b>Variância Única / Erro (<img src="./tmp/latex/index_9e08c75a8d749f15a7fac89dec383ec3f86394dc.svg" alt="$\psi$" class="org-svg" />):</b></b>
+Representa a parte da variância que é específica daquela variável ou
+fruto de erro de medição.
+É calculada como <img src="./tmp/latex/index_95e4ee8079572fd8c4a2ce8e3cb5b4cdde6afd94.svg" alt="$1 - h^2$" class="org-svg" />.</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-org6637e59" class="outline-2">
+<h2 id="org6637e59"><span class="section-number-2">7.</span> Passo 4: Matriz de Cargas Fatoriais (A)</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+As cargas fatoriais representam a correlação entre as variáveis
+originais e os fatores.
+</p>
+</div>
+<div id="outline-container-org1f6951c" class="outline-3">
+<h3 id="org1f6951c"><span class="section-number-3">7.1.</span> 4.1 O Cálculo Detalhado</h3>
+<div class="outline-text-3" id="text-7-1">
+<p>
+Para obter a matriz de cargas fatoriais (<img src="./tmp/latex/index_850ea8436980a6186eeccf66c7910086af4fbcd2.svg" alt="$A$" class="org-svg" />), não usamos apenas os
+autovetores puros.
+</p>
+
+<p>
+Os autovetores (<img src="./tmp/latex/index_cf87f0f7e38c66643a2199afc548cb3363b5f9a9.svg" alt="$V$" class="org-svg" />) extraídos pelo NumPy/SymPy são normalizados para
+ter comprimento unitário (norma = 1).
+</p>
+
+<p>
+No entanto, queremos que o comprimento do vetor represente a quantidade de variância que ele carrega.
+</p>
+
+
+<p>
+A fórmula matemática é:
+<img src="./tmp/latex/index_eabccaccca6a510ba6df4fd43011d9853332fe13.svg" alt="\[ A = V \sqrt{L} \]" class="org-svg" />
+</p>
+
+<p>
+Onde:
+</p>
+<ul class="org-ul">
+<li><img src="./tmp/latex/index_cf87f0f7e38c66643a2199afc548cb3363b5f9a9.svg" alt="$V$" class="org-svg" /> é a matriz cujas colunas são os <b><b>autovetores</b></b> da matriz de correlação <img src="./tmp/latex/index_e7cdf908761bd30daf868ae223dce1bb744d4445.svg" alt="$R$" class="org-svg" />.</li>
+<li><img src="./tmp/latex/index_ad50cd97560e74be910092b71ed793ff091b3fd1.svg" alt="$L$" class="org-svg" /> é uma <b><b>matriz diagonal</b></b> contendo os <b><b>autovalores</b></b> (<img src="./tmp/latex/index_11dd773360a5998641e92685c84d17858047fc62.svg" alt="$\lambda$" class="org-svg" />) correspondentes.</li>
+<li><img src="./tmp/latex/index_75117869ea817ffed748445a0d369328fec24c6e.svg" alt="$\sqrt{L}$" class="org-svg" /> é a raiz quadrada dos elementos da diagonal (os desvios-padrão dos componentes).</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org73fbb44" class="outline-3">
+<h3 id="org73fbb44"><span class="section-number-3">7.2.</span> 4.2 Por que multiplicamos pela raiz dos autovalores?</h3>
+<div class="outline-text-3" id="text-7-2">
+<ol class="org-ol">
+<li><b><b>Rescalonamento:</b></b> Isso transforma os autovetores (que medem apenas direção) em cargas (que medem intensidade).</li>
+<li><b><b>Correlação:</b></b> Nas variáveis padronizadas, o valor resultante na matriz <img src="./tmp/latex/index_850ea8436980a6186eeccf66c7910086af4fbcd2.svg" alt="$A$" class="org-svg" /> é exatamente a <b><b>correlação de Pearson</b></b> entre a variável original e o fator.</li>
+<li><b><b>Variância:</b></b> A soma dos quadrados das cargas de uma variável em todos os fatores é igual à sua <b><b>Comunalidade</b></b>.</li>
+</ol>
+</div>
+</div>
+<div id="outline-container-orgcd4e955" class="outline-3">
+<h3 id="orgcd4e955"><span class="section-number-3">7.3.</span> Script de Cálculo com Python:</h3>
+<div class="outline-text-3" id="text-7-3">
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #51afef;">import</span> pandas <span style="color: #51afef;">as</span> pd
+<span style="color: #51afef;">import</span> numpy <span style="color: #51afef;">as</span> np
+<span style="color: #51afef;">import</span> os
+
+<span style="color: #dcaeea;">script_dir</span> <span style="color: #51afef;">=</span> os.path.dirname(os.path.abspath(__file__)) <span style="color: #51afef;">if</span> <span style="color: #98be65;">'__file__'</span> <span style="color: #51afef;">in</span> <span style="color: #c678dd;">locals</span>() <span style="color: #51afef;">else</span> os.getcwd()
+<span style="color: #dcaeea;">input_file</span> <span style="color: #51afef;">=</span> os.path.join(script_dir, <span style="color: #98be65;">'dados_padronizados.csv'</span>)
+
+<span style="color: #51afef;">if</span> os.path.exists(input_file):
+    <span style="color: #dcaeea;">df_std</span> <span style="color: #51afef;">=</span> pd.read_csv(input_file)
+    <span style="color: #dcaeea;">R</span> <span style="color: #51afef;">=</span> df_std.corr()
+    <span style="color: #dcaeea;">eigenvalues</span>, <span style="color: #dcaeea;">eigenvectors</span> <span style="color: #51afef;">=</span> np.linalg.eig(R)
+    
+    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">Ordenar
+</span>    <span style="color: #dcaeea;">idx</span> <span style="color: #51afef;">=</span> eigenvalues.argsort()[::<span style="color: #51afef;">-</span>1]
+    <span style="color: #dcaeea;">L</span> <span style="color: #51afef;">=</span> eigenvalues[idx]
+    <span style="color: #dcaeea;">V</span> <span style="color: #51afef;">=</span> eigenvectors[:, idx]
+    
+    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">Pegar apenas os 2 primeiros (Kaiser &gt; 1)
+</span>    <span style="color: #dcaeea;">L_2</span> <span style="color: #51afef;">=</span> L[:2]
+    <span style="color: #dcaeea;">V_2</span> <span style="color: #51afef;">=</span> V[:, :2]
+    
+    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">Calcular A = V * sqrt(L)
+</span>    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">np.diag(np.sqrt(L_2)) cria a matriz diagonal com as ra&#237;zes
+</span>    <span style="color: #dcaeea;">A</span> <span style="color: #51afef;">=</span> V_2 @ np.diag(np.sqrt(L_2))
+    
+    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">Criar DataFrame para visualiza&#231;&#227;o
+</span>    <span style="color: #dcaeea;">df_a</span> <span style="color: #51afef;">=</span> pd.DataFrame(A, index<span style="color: #51afef;">=</span>df_std.columns, columns<span style="color: #51afef;">=</span>[<span style="color: #98be65;">'Fator 1'</span>, <span style="color: #98be65;">'Fator 2'</span>])
+    
+    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">Calcular Comunalidade (Soma dos quadrados das cargas na linha)
+</span>    <span style="color: #dcaeea;">df_a</span>[<span style="color: #98be65;">'Comunalidade (h2)'</span>] <span style="color: #51afef;">=</span> (df_a<span style="color: #51afef;">**</span>2).<span style="color: #c678dd;">sum</span>(axis<span style="color: #51afef;">=</span>1)
+    
+    <span style="color: #c678dd;">print</span>(<span style="color: #98be65;">"=== Matriz de Cargas Fatoriais (Calculada) ==="</span>)
+    <span style="color: #c678dd;">print</span>(df_a.<span style="color: #c678dd;">round</span>(3))
+</pre>
+</div>
+
+
+<div class="org-src-container">
+<pre class="src src-shell" id="org36bdd65">(venv) wgn@fedora:/run/media/wgn/ext4/Projects-Srcs/Projects-Srcs-FzlSoft/curso_estatistica_multivariada$ python3 teoria/analise_fatorial_exploratoria/matriz_carga_fatoriais.py 
+=== Matriz de Cargas Fatoriais (Calculada) ===
+        Fator 1  Fator 2  Comunalidade (h2)
+Ca       -0.607   -0.206              0.411
+Mg       -0.797   -0.263              0.704
+H + Al    0.808   -0.175              0.683
+Al3+      0.902   -0.206              0.856
+S         0.447    0.721              0.720
+Fe        0.321   -0.657              0.534
+Mn       -0.155    0.768              0.613
+(venv) wgn@fedora:/run/media/wgn/ext4/Projects-Srcs/Projects-Srcs-FzlSoft/curso_estatistica_multivariada$ 
+
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgc071ca5" class="outline-3">
+<h3 id="orgc071ca5"><span class="section-number-3">7.4.</span> Matriz de Cargas Fatoriais (Sem Rotação):</h3>
+<div class="outline-text-3" id="text-7-4">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+</colgroup>
+<thead>
+<tr>
 <th scope="col" class="org-left">Variável</th>
-<th scope="col" class="org-right">Fator 1</th>
+<th scope="col" class="org-left">Fator 1</th>
 <th scope="col" class="org-right">Fator 2</th>
 <th scope="col" class="org-right">Comunalidade (<img src="./tmp/latex/index_a8f90bc7dcdc0b564da74b93240511f9a98b198a.svg" alt="$h^2$" class="org-svg" />)</th>
 </tr>
@@ -604,49 +1175,49 @@ Onde <img src="./tmp/latex/index_cf87f0f7e38c66643a2199afc548cb3363b5f9a9.svg" a
 <tbody>
 <tr>
 <td class="org-left">Ca</td>
-<td class="org-right">0.607</td>
+<td class="org-left"><b>0.607</b></td>
 <td class="org-right">0.206</td>
 <td class="org-right">0.411</td>
 </tr>
 
 <tr>
 <td class="org-left">Mg</td>
-<td class="org-right">0.797</td>
+<td class="org-left"><b>0.797</b></td>
 <td class="org-right">0.263</td>
 <td class="org-right">0.704</td>
 </tr>
 
 <tr>
 <td class="org-left">H + Al</td>
-<td class="org-right">-0.808</td>
+<td class="org-left"><b>-0.808</b></td>
 <td class="org-right">0.175</td>
 <td class="org-right">0.683</td>
 </tr>
 
 <tr>
 <td class="org-left">Al3+</td>
-<td class="org-right">-0.902</td>
+<td class="org-left"><b>-0.902</b></td>
 <td class="org-right">0.206</td>
 <td class="org-right">0.856</td>
 </tr>
 
 <tr>
 <td class="org-left">S</td>
-<td class="org-right">-0.447</td>
+<td class="org-left">-0.447</td>
 <td class="org-right">-0.721</td>
 <td class="org-right">0.719</td>
 </tr>
 
 <tr>
 <td class="org-left">Fe</td>
-<td class="org-right">-0.321</td>
+<td class="org-left">-0.321</td>
 <td class="org-right">0.657</td>
 <td class="org-right">0.535</td>
 </tr>
 
 <tr>
 <td class="org-left">Mn</td>
-<td class="org-right">0.155</td>
+<td class="org-left">0.155</td>
 <td class="org-right">-0.768</td>
 <td class="org-right">0.613</td>
 </tr>
@@ -655,19 +1226,109 @@ Onde <img src="./tmp/latex/index_cf87f0f7e38c66643a2199afc548cb3363b5f9a9.svg" a
 </div>
 </div>
 </div>
-<div id="outline-container-org949c49c" class="outline-2">
-<h2 id="org949c49c"><span class="section-number-2">6.</span> Passo 5: Interpretação dos Fatores</h2>
-<div class="outline-text-2" id="text-6">
+<div id="outline-container-org05237ee" class="outline-2">
+<h2 id="org05237ee"><span class="section-number-2">8.</span> Passo 5: Interpretação Inicial (Sem Rotação)</h2>
+<div class="outline-text-2" id="text-8">
 <ul class="org-ul">
-<li><b>Fator 1</b>: Fortemente relacionado a Mg, Ca (positivo) e Al3+, H+Al (negativo). Pode ser interpretado como um fator de <b>Fertilidade vs Acidez</b>.</li>
-<li><b>Fator 2</b>: Fortemente relacionado a Mn e S (negativo) e Fe (positivo). Pode estar relacionado a processos de <b>Redox ou Micronutrientes específicos</b>.</li>
+<li><b>Fator 1</b>: Fortemente relacionado a Mg, Ca (negativo no script, positivo na tabela) e Al3+, H+Al (oposto). Representa a dimensão de <b>Fertilidade vs Acidez</b>. Note que as variáveis estão "misturadas" com o Fator 2 (cargas médias em S e Fe).</li>
+<li><b>Fator 2</b>: Relacionado a Mn, S e Fe. Representa <b>Micronutrientes/Redox</b>.</li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org7d04e15" class="outline-2">
-<h2 id="org7d04e15"><span class="section-number-2">7.</span> Conclusão</h2>
-<div class="outline-text-2" id="text-7">
+<div id="outline-container-org2f82132" class="outline-2">
+<h2 id="org2f82132"><span class="section-number-2">9.</span> Passo 6: Rotação de Fatores (Varimax)</h2>
+<div class="outline-text-2" id="text-9">
 <p>
+Após extrair as cargas iniciais, muitas vezes percebemos que as variáveis "carregam" em vários fatores ao mesmo tempo, o que dificulta dizer exatamente o que cada fator significa. É aqui que entra a <b><b>Rotação</b></b>.
+</p>
+</div>
+<div id="outline-container-orgc788cdb" class="outline-3">
+<h3 id="orgc788cdb"><span class="section-number-3">9.1.</span> 6.1 Por que Rotacionar? (O Conceito de Estrutura Simples)</h3>
+<div class="outline-text-3" id="text-9-1">
+<p>
+A matriz sem rotação segue um princípio matemático: o primeiro fator deve explicar o <b>máximo</b> de variância possível. Isso geralmente cria um "Fator Geral" onde quase tudo tem carga alta.
+</p>
+
+<p>
+A rotação busca a <b><b>Estrutura Simples (Simple Structure)</b></b> de Thurstone:
+</p>
+<ol class="org-ol">
+<li>Cada variável deve ter carga alta em <b><b>apenas um</b></b> fator.</li>
+<li>Cada fator deve ter cargas altas em apenas algumas variáveis e próximas de zero nas outras.</li>
+</ol>
+</div>
+</div>
+<div id="outline-container-org933149b" class="outline-3">
+<h3 id="org933149b"><span class="section-number-3">9.2.</span> 6.2 O que muda e o que não muda?</h3>
+<div class="outline-text-3" id="text-9-2">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">Característica</td>
+<td class="org-left">Sem Rotação</td>
+<td class="org-left">Com Rotação (Varimax)</td>
+</tr>
+
+<tr>
+<td class="org-left">:---</td>
+<td class="org-left">:---</td>
+<td class="org-left">:---</td>
+</tr>
+
+<tr>
+<td class="org-left"><b><b>Variância Total Explicada</b></b></td>
+<td class="org-left">Igual</td>
+<td class="org-left">Igual</td>
+</tr>
+
+<tr>
+<td class="org-left"><b><b>Comunalidade (<img src="./tmp/latex/index_a8f90bc7dcdc0b564da74b93240511f9a98b198a.svg" alt="$h^2$" class="org-svg" />)</b></b></td>
+<td class="org-left">Igual</td>
+<td class="org-left">Igual</td>
+</tr>
+
+<tr>
+<td class="org-left"><b><b>Interpretabilidade</b></b></td>
+<td class="org-left">Difícil (muitas misturas)</td>
+<td class="org-left"><b><b>Fácil (grupos nítidos)</b></b></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="outline-container-org713e2e3" class="outline-3">
+<h3 id="org713e2e3"><span class="section-number-3">9.3.</span> 6.3 O Método Varimax</h3>
+<div class="outline-text-3" id="text-9-3">
+<p>
+O Varimax é o método de rotação <b><b>ortogonal</b></b> mais comum. Ele "gira" os eixos para que as cargas fiquem próximas de 1, -1 ou 0, eliminando as cargas intermediárias que causam confusão.
+</p>
+
+<p>
+No próximo estágio, aplicaremos o cálculo da rotação para ver como a separação entre "Acidez" e "Micronutrientes" fica muito mais nítida.
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org02869cc" class="outline-2">
+<h2 id="org02869cc"><span class="section-number-2">10.</span> Conclusão</h2>
+<div class="outline-text-2" id="text-10">
+<p>
+A análise fatorial permitiu reduzir as 7 variáveis originais em 2 fatores principais que explicam aproximadamente 64.6% da variância total. A PCA nos deu o "resumo", e a AFE (com a futura rotação) nos dará a "causa" biológica/química dos dados.
+</p>
+
+<p>
+Considerando que é um exercicio, acredito que os objetivos de
+descoberta e aprendizado foi efetivo.
+Consegui 
 A análise fatorial permitiu reduzir as 7 variáveis originais em 2 fatores principais que explicam aproximadamente 64.6% da variância total dos dados de química do solo.
 </p>
 </div>
@@ -675,8 +1336,8 @@ A análise fatorial permitiu reduzir as 7 variáveis originais em 2 fatores prin
 </div>
 <div id="postamble" class="status">
 <p class="date">Date: 2026-06-07</p>
-<p class="author">Author: Gemini CLI</p>
-<p class="date">Created: 2026-06-07 dom 18:14</p>
+<p class="author">Author: Eu e o Gemini</p>
+<p class="date">Created: 2026-06-07 dom 23:41</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
