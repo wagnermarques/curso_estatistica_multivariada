@@ -555,17 +555,38 @@ Mn       -0.155    0.768              0.613
 | Fe       | -0.321   |   0.657 |                0.535 |
 | Mn       | 0.155    |  -0.768 |                0.613 |
 
-* Passo 5: Interpretação dos Fatores
-- *Fator 1*: Fortemente relacionado a Mg, Ca (positivo) e Al3+, H+Al
-  (negativo).
-  Segundo o Gemini, pode ser interpretado como um fator de *Fertilidade vs Acidez*.
+* Passo 5: Interpretação Inicial (Sem Rotação)
+- *Fator 1*: Fortemente relacionado a Mg, Ca (negativo no script, positivo na tabela) e Al3+, H+Al (oposto). Representa a dimensão de *Fertilidade vs Acidez*. Note que as variáveis estão "misturadas" com o Fator 2 (cargas médias em S e Fe).
+- *Fator 2*: Relacionado a Mn, S e Fe. Representa *Micronutrientes/Redox*.
 
-- *Fator 2*:
-  Fortemente relacionado a Mn e S (negativo) e Fe (positivo).
-  Segundo o Gemini, pode estar relacionado a processos de *Redox ou Micronutrientes específicos*.
+* Passo 6: Rotação de Fatores (Varimax)
 
-  
-* Conclusão da análise
+Após extrair as cargas iniciais, muitas vezes percebemos que as variáveis "carregam" em vários fatores ao mesmo tempo, o que dificulta dizer exatamente o que cada fator significa. É aqui que entra a **Rotação**.
+
+** 6.1 Por que Rotacionar? (O Conceito de Estrutura Simples)
+
+A matriz sem rotação segue um princípio matemático: o primeiro fator deve explicar o *máximo* de variância possível. Isso geralmente cria um "Fator Geral" onde quase tudo tem carga alta.
+
+A rotação busca a **Estrutura Simples (Simple Structure)** de Thurstone:
+1.  Cada variável deve ter carga alta em **apenas um** fator.
+2.  Cada fator deve ter cargas altas em apenas algumas variáveis e próximas de zero nas outras.
+
+** 6.2 O que muda e o que não muda?
+
+| Característica                | Sem Rotação               | Com Rotação (Varimax)      |
+| :---                          | :---                      | :---                       |
+| **Variância Total Explicada** | Igual                     | Igual                      |
+| **Comunalidade ($h^2$)**      | Igual                     | Igual                      |
+| **Interpretabilidade**        | Difícil (muitas misturas) | **Fácil (grupos nítidos)** |
+
+** 6.3 O Método Varimax
+O Varimax é o método de rotação **ortogonal** mais comum. Ele "gira" os eixos para que as cargas fiquem próximas de 1, -1 ou 0, eliminando as cargas intermediárias que causam confusão.
+
+No próximo estágio, aplicaremos o cálculo da rotação para ver como a separação entre "Acidez" e "Micronutrientes" fica muito mais nítida.
+
+* Conclusão
+A análise fatorial permitiu reduzir as 7 variáveis originais em 2 fatores principais que explicam aproximadamente 64.6% da variância total. A PCA nos deu o "resumo", e a AFE (com a futura rotação) nos dará a "causa" biológica/química dos dados.
+
 Considerando que é um exercicio, acredito que os objetivos de
 descoberta e aprendizado foi efetivo.
 Consegui 
