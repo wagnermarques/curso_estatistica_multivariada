@@ -2,6 +2,8 @@
 #+Author: Eu e o Gemini
 #+Date: 2026-06-07
 #+Language: pt-br
+#+OPTIONS: tex:t
+#+HTML_MATHJAX: align: left indent: 5em tagside: left font: Neo-Euler
 
 * Introdução
 
@@ -125,7 +127,7 @@ correlacao, conforme essa imagem gerado pelo claude.
 
 A AFE baseia-se na matriz de correlação entre as variáveis padronizadas.
 
-Seja $Z$ a matriz de dados padronizados ($n \times p$), a matriz de correlação $R$ é dada por:
+Seja \(Z\) a matriz de dados padronizados (\(n \times p\)), a matriz de correlação \(R\) é dada por:
 \[ R = \frac{1}{n-1} Z^T Z \]
 
 
@@ -175,8 +177,8 @@ Para extrair os fatores, resolvemos a equação característica:
 
 \[ \det(R - \lambda I) = 0 \]
 
-Onde $\lambda$ são os autovalores. Para cada $\lambda_i$, encontramos
-o autovetor $v_i$ tal que:
+Onde \(\lambda\) são os autovalores. Para cada \(\lambda_i\), encontramos
+o autovetor \(v_i\) tal que:
 
 \[ R v_i = \lambda_i v_i \]
 
@@ -257,17 +259,17 @@ a documentacao: https://numpy.org/doc/stable/reference/routines.linalg.html
 #+end_src
 
 
-| Componente | Autovalor ($\lambda$) | % Variância | % Acumulada |
-|------------+----------------------+-------------+-------------|
-| 1          | 2.797                | 39.96%      | 39.96%      |
-| 2          | 1.726                | 24.66%      | 64.62%      |
-| 3          | 0.892                | 12.74%      | 77.36%      |
-| 4          | 0.580                | 8.28%       | 85.64%      |
-| 5          | 0.452                | 6.46%       | 92.10%      |
-| 6          | 0.381                | 5.44%       | 97.54%      |
-| 7          | 0.172                | 2.46%       | 100.00%     |
+| Componente | Autovalor (\(\lambda\)) | % Variância | % Acumulada |
+|------------+-------------------------+-------------+-------------|
+| 1          | 3.109                   | 44.42%      | 44.42%      |
+| 2          | 1.636                   | 23.37%      | 67.79%      |
+| 3          | 0.739                   | 10.55%      | 78.34%      |
+| 4          | 0.584                   | 8.35%       | 86.69%      |
+| 5          | 0.457                   | 6.53%       | 93.22%      |
+| 6          | 0.285                   | 4.07%       | 97.29%      |
+| 7          | 0.190                   | 2.71%       | 100.00%     |
 
-Pelo critério de Kaiser ($\lambda > 1$), reteríamos 2 fatores.
+Pelo critério de Kaiser (\(\lambda > 1\)), reteríamos 2 fatores.
 
 No exercicio sobre componentes principais nao cheguei a fazer uma
 analise dos componentes encontrados, mas esse e uma boa oportunidade.
@@ -430,33 +432,47 @@ ser variancia causada pela outra variavel. EFA consegue detectar isso.
 
 ** 1. Relação com o Modelo Linear Geral (MLG)
 
-No contexto da AFE, assumimos que cada variável observada ($Z_i$) é
-uma combinação linear de fatores comuns ($F_j$) e um fator
-único/específico ($U_i$):
+Perguntei ao Gemini sobre análise fatorial e sua relacao com os
+modelos lineares generalizados.
+
+Foi uma boa conversa. Ele me explicou a análise fatorial guarda
+algumas relacoes com técnicas de regressão inclusive. A análise
+fatorial confirmatória é uma das técnicas da análise com equacoes
+estruturais.
+
+Percebi que as técnicas se assemelham muitas vezes com relação ao
+instrumental matemático matricial, acredito que pela sua linearidade.
+
+Considerando que estamos estudando analise fatorial exploratoria (AFE)
+podemos considerar cada variável observada (\(Z_i\)) é
+uma combinação linear de fatores comuns (\(F_j\)) e um fator
+único/específico (\(e_i\))
 
 
 \[ Z_i = a_{i1}F_1 + a_{i2}F_2 + ... + a_{im}F_m + e_i \]
 
 Onde:
-- $F_j$ são os **Fatores Comuns** (variáveis latentes que influenciam múltiplas variáveis observadas).
-- $a_{ij}$ são as **Cargas Fatoriais** (coeficientes de regressão).
-- $e_i$ é o **Erro ou Variância Única** (o que o modelo não consegue explicar para aquela variável específica).
+- \(F_j\) são os **Fatores Comuns** (variáveis latentes que influenciam múltiplas variáveis observadas).
+- \(a_{ij}\) são as **Cargas Fatoriais** (coeficientes de regressão).
+- \(e_i\) é o **Erro ou Variância Única** (o que o modelo não consegue explicar para aquela variável específica).
 
-** 2. Comunalidades ($h^2$) vs. Variância de Erro
+
+** 2. Comunalidades (\(h^2\)) vs. Variância de Erro
 
 Enquanto PCA, tenta explicar a *variância total*, a AFE foca na **Variância Comum** (Covariância).
 
-- **Comunalidade ($h^2$):**
+- **Comunalidade (\(h^2\)):**
   É a proporção da variância de uma variável que é compartilhada com
   os outros fatores.
-  No caso dos nossos dados desta analise, se o Al3+ tem $h^2 = 0.85$,
+  No caso dos nossos dados desta analise, se o Al3+ tem \(h^2 = 0.85\),
   significa que 85% do seu comportamento é explicado pelos fatores
   comuns (como a acidez geral do solo).
-  
-- **Variância Única / Erro ($\psi$):**
+
+- **Variância Única / Erro (\(\psi\)):**
   Representa a parte da variância que é específica daquela variável ou
   fruto de erro de medição.
-  É calculada como $1 - h^2$.
+  É calculada como \(1 - h^2\).
+
 
 * Passo 4: Matriz de Cargas Fatoriais (A)
 
@@ -465,10 +481,10 @@ originais e os fatores.
 
 ** 4.1 O Cálculo Detalhado
 
-Para obter a matriz de cargas fatoriais ($A$), não usamos apenas os
+Para obter a matriz de cargas fatoriais (\(A\)), não usamos apenas os
 autovetores puros.
 
-Os autovetores ($V$) extraídos pelo NumPy/SymPy são normalizados para
+Os autovetores (\(V\)) extraídos pelo NumPy/SymPy são normalizados para
 ter comprimento unitário (norma = 1).
 
 No entanto, queremos que o comprimento do vetor represente a quantidade de variância que ele carrega.
@@ -478,14 +494,16 @@ A fórmula matemática é:
 \[ A = V \sqrt{L} \]
 
 Onde:
-- $V$ é a matriz cujas colunas são os **autovetores** da matriz de correlação $R$.
-- $L$ é uma **matriz diagonal** contendo os **autovalores** ($\lambda$) correspondentes.
-- $\sqrt{L}$ é a raiz quadrada dos elementos da diagonal (os desvios-padrão dos componentes).
+- \(V\) é a matriz cujas colunas são os **autovetores** da matriz de correlação \(R\).
+- \(L\) é uma **matriz diagonal** contendo os **autovalores** (\(\lambda\)) correspondentes.
+- \(\sqrt{L}\) é a raiz quadrada dos elementos da diagonal (os desvios-padrão dos componentes).
+
 
 ** 4.2 Por que multiplicamos pela raiz dos autovalores?
 1. **Rescalonamento:** Isso transforma os autovetores (que medem apenas direção) em cargas (que medem intensidade).
-2. **Correlação:** Nas variáveis padronizadas, o valor resultante na matriz $A$ é exatamente a **correlação de Pearson** entre a variável original e o fator.
+2. **Correlação:** Nas variáveis padronizadas, o valor resultante na matriz \(A\) é exatamente a **correlação de Pearson** entre a variável original e o fator.
 3. **Variância:** A soma dos quadrados das cargas de uma variável em todos os fatores é igual à sua **Comunalidade**.
+
 
 ** Script de Cálculo com Python:
 
@@ -545,44 +563,73 @@ Mn       -0.155    0.768              0.613
 
 ** Matriz de Cargas Fatoriais (Sem Rotação):
 
-| Variável | Fator 1  | Fator 2 | Comunalidade ($h^2$) |
-|----------+----------+---------+----------------------|
-| Ca       | *0.607*  |   0.206 |                0.411 |
-| Mg       | *0.797*  |   0.263 |                0.704 |
-| H + Al   | *-0.808* |   0.175 |                0.683 |
-| Al3+     | *-0.902* |   0.206 |                0.856 |
-| S        | -0.447   |  -0.721 |                0.719 |
-| Fe       | -0.321   |   0.657 |                0.535 |
-| Mn       | 0.155    |  -0.768 |                0.613 |
+| Variável | Fator 1  |  Fator 2 | Comunalidade (\(h^2\)) |
+|----------+----------+----------+------------------------|
+| Ca       | *0.607*  |    0.206 |                  0.411 |
+| Mg       | *0.797*  |    0.263 |                  0.704 |
+| H + Al   | *-0.808* |    0.175 |                  0.683 |
+| Al3+     | *-0.902* |    0.206 |                  0.856 |
+| S        | _-0.447_ | _-0.721_ |                  0.719 |
+| Fe       | -0.321   |    0.657 |                  0.535 |
+| Mn       | 0.155    |   -0.768 |                  0.613 |
+
 
 * Passo 5: Interpretação Inicial (Sem Rotação)
 - *Fator 1*: Fortemente relacionado a Mg, Ca (negativo no script, positivo na tabela) e Al3+, H+Al (oposto). Representa a dimensão de *Fertilidade vs Acidez*. Note que as variáveis estão "misturadas" com o Fator 2 (cargas médias em S e Fe).
 - *Fator 2*: Relacionado a Mn, S e Fe. Representa *Micronutrientes/Redox*.
 
+
 * Passo 6: Rotação de Fatores (Varimax)
 
-Após extrair as cargas iniciais, muitas vezes percebemos que as variáveis "carregam" em vários fatores ao mesmo tempo, o que dificulta dizer exatamente o que cada fator significa. É aqui que entra a **Rotação**.
+Após extrair as cargas iniciais, muitas vezes percebemos que as
+variáveis "carregam" em vários fatores ao mesmo tempo, o que dificulta
+dizer exatamente o que cada fator significa.
+
+Isso aconteceu com o elemento S na matriz de cargas dos fatores nao
+rotacionados apresentada ha pouco, conforme demostrado abaixo.
+
+| Variável | Fator 1  |  Fator 2 | Comunalidade (\(h^2\)) |
+|----------+----------+----------+------------------------|
+| S        | _-0.447_ | _-0.721_ |                  0.719 |
+
+Na vedade nos nossos dados e a unica variavel que isso acontece, mas a
+titulo de complementacao do exercicio vamos fazer a rotacao usando
+varimax conforme o prof fez em aula.
+
+É aqui que entra a **Rotação**.
 
 ** 6.1 Por que Rotacionar? (O Conceito de Estrutura Simples)
 
-A matriz sem rotação segue um princípio matemático: o primeiro fator deve explicar o *máximo* de variância possível. Isso geralmente cria um "Fator Geral" onde quase tudo tem carga alta.
+A matriz sem rotação segue um princípio matemático:
 
-A rotação busca a **Estrutura Simples (Simple Structure)** de Thurstone:
-1.  Cada variável deve ter carga alta em **apenas um** fator.
-2.  Cada fator deve ter cargas altas em apenas algumas variáveis e próximas de zero nas outras.
+o primeiro fator deve explicar o *máximo* de variância possível.
+
+Isso geralmente cria um "Fator Geral" onde quase tudo tem carga alta.
+
 
 ** 6.2 O que muda e o que não muda?
 
 | Característica                | Sem Rotação               | Com Rotação (Varimax)      |
 | :---                          | :---                      | :---                       |
 | **Variância Total Explicada** | Igual                     | Igual                      |
-| **Comunalidade ($h^2$)**      | Igual                     | Igual                      |
+| **Comunalidade (\(h^2\))**      | Igual                     | Igual                      |
 | **Interpretabilidade**        | Difícil (muitas misturas) | **Fácil (grupos nítidos)** |
 
 ** 6.3 O Método Varimax
-O Varimax é o método de rotação **ortogonal** mais comum. Ele "gira" os eixos para que as cargas fiquem próximas de 1, -1 ou 0, eliminando as cargas intermediárias que causam confusão.
 
-No próximo estágio, aplicaremos o cálculo da rotação para ver como a separação entre "Acidez" e "Micronutrientes" fica muito mais nítida.
+O Varimax é o método de rotação **ortogonal** mais comum.
+
+Ele "gira" os eixos para que as cargas fiquem próximas de 1, -1 ou 0,
+eliminando as cargas intermediárias que causam confusão.
+
+Ainda preciso entender e trazer e explicar o que signfica na práica
+"eliminando as cargas intermediárias".
+
+Na verdade o livro do hair entre as páginas 250-260 explica muita
+coisa sobre a rotação varimax e a obliqua. Tem coisas importantes
+envolvendo essa questao que implica na qualidade da interpretacao que
+precisam ser esclarecidas aqui. Assim que possivel o farei.
+
 
 * Conclusão
 A análise fatorial permitiu reduzir as 7 variáveis originais em 2 fatores principais que explicam aproximadamente 64.6% da variância total. A PCA nos deu o "resumo", e a AFE (com a futura rotação) nos dará a "causa" biológica/química dos dados.
