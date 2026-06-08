@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="pt-br" xml:lang="pt-br">
 <head>
-<!-- 2026-06-08 seg 14:02 -->
+<!-- 2026-06-08 seg 14:10 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Análise Fatorial Exploratória (EFA - Exploratory Factorial Analysis)</title>
@@ -233,53 +233,53 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orgf86c5a0">1. Introdução</a></li>
-<li><a href="#orgf407f42">2. Passo 1: Carregamento e Preparação dos Dados</a>
+<li><a href="#org04caebb">1. Introdução</a></li>
+<li><a href="#org6993a57">2. Passo 1: Carregamento e Preparação dos Dados</a>
 <ul>
-<li><a href="#org1b3aec7">2.1. Padronização das variaveis</a></li>
-<li><a href="#org6b3d6d7">2.2. Script para Padronização dos Dados</a></li>
+<li><a href="#orgd44d11e">2.1. Padronização das variaveis</a></li>
+<li><a href="#org055f813">2.2. Script para Padronização dos Dados</a></li>
 </ul>
 </li>
-<li><a href="#orgb819afd">3. Passo 2: Matriz de Correlação (R)</a></li>
-<li><a href="#orgf7cd19e">4. Passo 3: Decomposição em Autovalores e Autovetores</a>
+<li><a href="#org2040551">3. Passo 2: Matriz de Correlação (R)</a></li>
+<li><a href="#orgbd149b0">4. Passo 3: Decomposição em Autovalores e Autovetores</a>
 <ul>
-<li><a href="#org0302de6">4.1. Script para Extração de Autovalores e Autovetores</a></li>
-<li><a href="#org6ab75dc">4.2. Autovalores Obtidos:</a></li>
+<li><a href="#orgdffb2ff">4.1. Script para Extração de Autovalores e Autovetores</a></li>
+<li><a href="#org8621ba4">4.2. Autovalores Obtidos:</a></li>
 </ul>
 </li>
-<li><a href="#org84fdae9">5. Passo 4: Interpretação da PCA e Visualização (antes de entrar no efa)</a>
+<li><a href="#orga4ac169">5. Passo 4: Interpretação da PCA e Visualização (antes de entrar no efa)</a>
 <ul>
-<li><a href="#org3c0c4ff">5.1. 4.1 Scree Plot (Gráfico de Cotovelo)</a></li>
+<li><a href="#org8ec3548">5.1. 4.1 Scree Plot (Gráfico de Cotovelo)</a></li>
 </ul>
 </li>
-<li><a href="#org4e348df">6. Transição: Da PCA para a Análise Fatorial</a>
+<li><a href="#org1a683b7">6. Transição: Da PCA para a Análise Fatorial</a>
 <ul>
-<li><a href="#orgf48d860">6.1. 1. Relação com o Modelo Linear Geral (MLG)</a></li>
-<li><a href="#orga587d97">6.2. 2. Comunalidades (\(h^2\)) vs. Variância de Erro</a></li>
+<li><a href="#org21fe2a2">6.1. 1. Relação com o Modelo Linear Geral (MLG)</a></li>
+<li><a href="#org154a114">6.2. 2. Comunalidades (\(h^2\)) vs. Variância de Erro</a></li>
 </ul>
 </li>
-<li><a href="#orge51135c">7. Passo 4: Matriz de Cargas Fatoriais (A)</a>
+<li><a href="#orgaa5c9ae">7. Passo 4: Matriz de Cargas Fatoriais (A)</a>
 <ul>
-<li><a href="#org7106cf0">7.1. 4.1 O Cálculo Detalhado</a></li>
-<li><a href="#org7323bc1">7.2. 4.2 Por que multiplicamos pela raiz dos autovalores?</a></li>
-<li><a href="#orge3572b6">7.3. Script de Cálculo com Python:</a></li>
-<li><a href="#orge8719f1">7.4. Matriz de Cargas Fatoriais (Sem Rotação):</a></li>
+<li><a href="#org537f911">7.1. 4.1 O Cálculo Detalhado</a></li>
+<li><a href="#org58e3bd7">7.2. 4.2 Por que multiplicamos pela raiz dos autovalores?</a></li>
+<li><a href="#org11f3633">7.3. Script de Cálculo com Python:</a></li>
+<li><a href="#org3b534b8">7.4. Matriz de Cargas Fatoriais (Sem Rotação):</a></li>
 </ul>
 </li>
-<li><a href="#orgf253326">8. Passo 5: Interpretação Inicial (Sem Rotação)</a></li>
-<li><a href="#orgfbe3dfd">9. Passo 6: Rotação de Fatores (Varimax)</a>
+<li><a href="#orge64e902">8. Passo 5: Interpretação Inicial (Sem Rotação)</a></li>
+<li><a href="#org533f0c8">9. Passo 6: Rotação de Fatores (Varimax)</a>
 <ul>
-<li><a href="#orgaa08404">9.1. 6.1 Por que Rotacionar? (O Conceito de Estrutura Simples)</a></li>
-<li><a href="#org093e3e2">9.2. 6.2 O que muda e o que não muda?</a></li>
-<li><a href="#org43443b4">9.3. 6.3 O Método Varimax</a></li>
+<li><a href="#orgd5b5699">9.1. 6.1 Por que Rotacionar? (O Conceito de Estrutura Simples)</a></li>
+<li><a href="#orgef1f993">9.2. 6.2 O que muda e o que não muda?</a></li>
+<li><a href="#org4aecda0">9.3. 6.3 O Método Varimax</a></li>
 </ul>
 </li>
-<li><a href="#orgeeb2180">10. Conclusão</a></li>
+<li><a href="#org17ae36d">10. Conclusão</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-orgf86c5a0" class="outline-2">
-<h2 id="orgf86c5a0"><span class="section-number-2">1.</span> Introdução</h2>
+<div id="outline-container-org04caebb" class="outline-2">
+<h2 id="org04caebb"><span class="section-number-2">1.</span> Introdução</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Este documento sao anotacoes de estudo sobre Análise Fatorial Exploratória (AFE)
@@ -306,8 +306,8 @@ analises para melhorar a compreensao do que esta sendo apresentado.
 </p>
 </div>
 </div>
-<div id="outline-container-orgf407f42" class="outline-2">
-<h2 id="orgf407f42"><span class="section-number-2">2.</span> Passo 1: Carregamento e Preparação dos Dados</h2>
+<div id="outline-container-org6993a57" class="outline-2">
+<h2 id="org6993a57"><span class="section-number-2">2.</span> Passo 1: Carregamento e Preparação dos Dados</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 Os dados consistem em 90 amostras de solo com 7 variáveis quantitativas.
@@ -326,8 +326,8 @@ As variáveis analisadas são:
 <li><b>Mn</b>: Manganês</li>
 </ul>
 </div>
-<div id="outline-container-org1b3aec7" class="outline-3">
-<h3 id="org1b3aec7"><span class="section-number-3">2.1.</span> Padronização das variaveis</h3>
+<div id="outline-container-orgd44d11e" class="outline-3">
+<h3 id="orgd44d11e"><span class="section-number-3">2.1.</span> Padronização das variaveis</h3>
 <div class="outline-text-3" id="text-2-1">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #51afef;">from</span> sympy <span style="color: #51afef;">import</span> symbols, Matrix, latex
@@ -344,8 +344,8 @@ A fórmula matemática é:
 </p>
 </div>
 </div>
-<div id="outline-container-org6b3d6d7" class="outline-3">
-<h3 id="org6b3d6d7"><span class="section-number-3">2.2.</span> Script para Padronização dos Dados</h3>
+<div id="outline-container-org055f813" class="outline-3">
+<h3 id="org055f813"><span class="section-number-3">2.2.</span> Script para Padronização dos Dados</h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
 O código abaixo realiza a leitura dos dados originais, aplica a padronização Z-score e exporta o resultado para um arquivo CSV. Este script pode ser extraído para um arquivo Python independente.
@@ -386,7 +386,7 @@ O código abaixo realiza a leitura dos dados originais, aplica a padronização 
 </div>
 
 <div class="org-src-container">
-<pre class="src src-shell" id="orga0aa34b">(venv) wgn@fedora:/run/media/wgn/ext4/Projects-Srcs/Projects-Srcs-FzlSoft/curso_estatistica_multivariada$ python3 teoria/analise_fatorial_exploratoria/standardize_data.py 
+<pre class="src src-shell" id="orgc245bef">(venv) wgn@fedora:/run/media/wgn/ext4/Projects-Srcs/Projects-Srcs-FzlSoft/curso_estatistica_multivariada$ python3 teoria/analise_fatorial_exploratoria/standardize_data.py 
 Dados padronizados salvos em: /run/media/wgn/ext4/Projects-Srcs/Projects-Srcs-FzlSoft/curso_estatistica_multivariada/teoria/analise_fatorial_exploratoria/dados_padronizados.csv
 
 Primeiras linhas dos dados padronizados:
@@ -402,8 +402,8 @@ Primeiras linhas dos dados padronizados:
 </div>
 </div>
 </div>
-<div id="outline-container-orgb819afd" class="outline-2">
-<h2 id="orgb819afd"><span class="section-number-2">3.</span> Passo 2: Matriz de Correlação (R)</h2>
+<div id="outline-container-org2040551" class="outline-2">
+<h2 id="org2040551"><span class="section-number-2">3.</span> Passo 2: Matriz de Correlação (R)</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 A matriz de correção he mesmo que a matriz de covariancia aplicada aos
@@ -429,7 +429,7 @@ correlacao, conforme essa imagem gerado pelo claude.
 </p>
 
 
-<div id="org7982fbf" class="figure">
+<div id="orgb507b7c" class="figure">
 <p><img src="./imgs/passo_a_passo_mtz_cov_e_mtz_corr.png" alt="passo_a_passo_mtz_cov_e_mtz_corr.png" />
 </p>
 </div>
@@ -456,7 +456,7 @@ De posse da matriz de correlacao, ja temos algumas leituras interessantes diante
 </p>
 
 
-<div class="table" id="orgfd86917">
+<div class="table" id="org48b5b71">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -598,8 +598,8 @@ frente quando encontrar-mos os fatores.
 </p>
 </div>
 </div>
-<div id="outline-container-orgf7cd19e" class="outline-2">
-<h2 id="orgf7cd19e"><span class="section-number-2">4.</span> Passo 3: Decomposição em Autovalores e Autovetores</h2>
+<div id="outline-container-orgbd149b0" class="outline-2">
+<h2 id="orgbd149b0"><span class="section-number-2">4.</span> Passo 3: Decomposição em Autovalores e Autovetores</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 Pra um resumo bem interessante sobre autovalores e autovetores, achei interessante esse video:
@@ -624,8 +624,8 @@ o autovetor \(v_i\) tal que:
 \[ R v_i = \lambda_i v_i \]
 </p>
 </div>
-<div id="outline-container-org0302de6" class="outline-3">
-<h3 id="org0302de6"><span class="section-number-3">4.1.</span> Script para Extração de Autovalores e Autovetores</h3>
+<div id="outline-container-orgdffb2ff" class="outline-3">
+<h3 id="orgdffb2ff"><span class="section-number-3">4.1.</span> Script para Extração de Autovalores e Autovetores</h3>
 <div class="outline-text-3" id="text-4-1">
 <p>
 Este script lê os dados padronizados, calcula a matriz de correlação e
@@ -681,11 +681,11 @@ a documentacao: <a href="https://numpy.org/doc/stable/reference/routines.linalg.
 </p>
 </div>
 </div>
-<div id="outline-container-org6ab75dc" class="outline-3">
-<h3 id="org6ab75dc"><span class="section-number-3">4.2.</span> Autovalores Obtidos:</h3>
+<div id="outline-container-org8621ba4" class="outline-3">
+<h3 id="org8621ba4"><span class="section-number-3">4.2.</span> Autovalores Obtidos:</h3>
 <div class="outline-text-3" id="text-4-2">
 <div class="org-src-container">
-<pre class="src src-shell" id="orgabb0c06">(venv) wgn@fedora:/run/media/wgn/ext4/Projects-Srcs/Projects-Srcs-FzlSoft/curso_estatistica_multivariada$ python3 teoria/analise_fatorial_exploratoria/extract_eigen.py 
+<pre class="src src-shell" id="orge9f046a">(venv) wgn@fedora:/run/media/wgn/ext4/Projects-Srcs/Projects-Srcs-FzlSoft/curso_estatistica_multivariada$ python3 teoria/analise_fatorial_exploratoria/extract_eigen.py 
 === Resultados da Decomposi&#231;&#227;o Espectral ===
 
 <span style="color: #c678dd;">Autovalores</span> (Vari&#226;ncia Explicada por cada componente):
@@ -839,8 +839,8 @@ posso estar escrevento errado o nome em ingles.
 </div>
 </div>
 </div>
-<div id="outline-container-org84fdae9" class="outline-2">
-<h2 id="org84fdae9"><span class="section-number-2">5.</span> Passo 4: Interpretação da PCA e Visualização (antes de entrar no efa)</h2>
+<div id="outline-container-orga4ac169" class="outline-2">
+<h2 id="orga4ac169"><span class="section-number-2">5.</span> Passo 4: Interpretação da PCA e Visualização (antes de entrar no efa)</h2>
 <div class="outline-text-2" id="text-5">
 <p>
 antes de entrar no efa achei interessante aproveitar este estagio
@@ -852,8 +852,8 @@ intermediario de pca pra dar uma olhada.
 obvia
 </p>
 </div>
-<div id="outline-container-org3c0c4ff" class="outline-3">
-<h3 id="org3c0c4ff"><span class="section-number-3">5.1.</span> 4.1 Scree Plot (Gráfico de Cotovelo)</h3>
+<div id="outline-container-org8ec3548" class="outline-3">
+<h3 id="org8ec3548"><span class="section-number-3">5.1.</span> 4.1 Scree Plot (Gráfico de Cotovelo)</h3>
 <div class="outline-text-3" id="text-5-1">
 <p>
 O Scree Plot ajuda a visualizar a queda na variância explicada e confirmar o número de componentes a reter.
@@ -960,7 +960,7 @@ enquanto.. por enquanto rsrs
 </p>
 
 
-<div id="orgfb067c2" class="figure">
+<div id="org087dc93" class="figure">
 <p><img src="./imgs/pca_biplot.png" alt="pca_biplot.png" />
 </p>
 </div>
@@ -1004,15 +1004,15 @@ porque o terceiro ja esta expressivamente abaixo dos dois primeiros.
 
 
 
-<div id="org31650c5" class="figure">
+<div id="org40adaa4" class="figure">
 <p><img src="./imgs/pca_scree_plot.png" alt="pca_scree_plot.png" />
 </p>
 </div>
 </div>
 </div>
 </div>
-<div id="outline-container-org4e348df" class="outline-2">
-<h2 id="org4e348df"><span class="section-number-2">6.</span> Transição: Da PCA para a Análise Fatorial</h2>
+<div id="outline-container-org1a683b7" class="outline-2">
+<h2 id="org1a683b7"><span class="section-number-2">6.</span> Transição: Da PCA para a Análise Fatorial</h2>
 <div class="outline-text-2" id="text-6">
 <p>
 Essa era uma duvida minha desde o inicio do curso :)) Diferenciar PCA de EFA
@@ -1025,8 +1025,8 @@ he que parta da variacia pode ser causada por erros aleatorios e nao
 ser variancia causada pela outra variavel. EFA consegue detectar isso.
 </p>
 </div>
-<div id="outline-container-orgf48d860" class="outline-3">
-<h3 id="orgf48d860"><span class="section-number-3">6.1.</span> 1. Relação com o Modelo Linear Geral (MLG)</h3>
+<div id="outline-container-org21fe2a2" class="outline-3">
+<h3 id="org21fe2a2"><span class="section-number-3">6.1.</span> 1. Relação com o Modelo Linear Geral (MLG)</h3>
 <div class="outline-text-3" id="text-6-1">
 <p>
 Perguntei ao Gemini sobre análise fatorial e sua relacao com os
@@ -1067,8 +1067,8 @@ Onde:
 </ul>
 </div>
 </div>
-<div id="outline-container-orga587d97" class="outline-3">
-<h3 id="orga587d97"><span class="section-number-3">6.2.</span> 2. Comunalidades (\(h^2\)) vs. Variância de Erro</h3>
+<div id="outline-container-org154a114" class="outline-3">
+<h3 id="org154a114"><span class="section-number-3">6.2.</span> 2. Comunalidades (\(h^2\)) vs. Variância de Erro</h3>
 <div class="outline-text-3" id="text-6-2">
 <p>
 Enquanto PCA, tenta explicar a <b>variância total</b>, a AFE foca na <b><b>Variância Comum</b></b> (Covariância).
@@ -1090,16 +1090,16 @@ fruto de erro de medição.
 </div>
 </div>
 </div>
-<div id="outline-container-orge51135c" class="outline-2">
-<h2 id="orge51135c"><span class="section-number-2">7.</span> Passo 4: Matriz de Cargas Fatoriais (A)</h2>
+<div id="outline-container-orgaa5c9ae" class="outline-2">
+<h2 id="orgaa5c9ae"><span class="section-number-2">7.</span> Passo 4: Matriz de Cargas Fatoriais (A)</h2>
 <div class="outline-text-2" id="text-7">
 <p>
 As cargas fatoriais representam a correlação entre as variáveis
 originais e os fatores.
 </p>
 </div>
-<div id="outline-container-org7106cf0" class="outline-3">
-<h3 id="org7106cf0"><span class="section-number-3">7.1.</span> 4.1 O Cálculo Detalhado</h3>
+<div id="outline-container-org537f911" class="outline-3">
+<h3 id="org537f911"><span class="section-number-3">7.1.</span> 4.1 O Cálculo Detalhado</h3>
 <div class="outline-text-3" id="text-7-1">
 <p>
 Para obter a matriz de cargas fatoriais (\(A\)), não usamos apenas os
@@ -1131,8 +1131,8 @@ Onde:
 </ul>
 </div>
 </div>
-<div id="outline-container-org7323bc1" class="outline-3">
-<h3 id="org7323bc1"><span class="section-number-3">7.2.</span> 4.2 Por que multiplicamos pela raiz dos autovalores?</h3>
+<div id="outline-container-org58e3bd7" class="outline-3">
+<h3 id="org58e3bd7"><span class="section-number-3">7.2.</span> 4.2 Por que multiplicamos pela raiz dos autovalores?</h3>
 <div class="outline-text-3" id="text-7-2">
 <ol class="org-ol">
 <li><b><b>Rescalonamento:</b></b> Isso transforma os autovetores (que medem apenas direção) em cargas (que medem intensidade).</li>
@@ -1141,8 +1141,8 @@ Onde:
 </ol>
 </div>
 </div>
-<div id="outline-container-orge3572b6" class="outline-3">
-<h3 id="orge3572b6"><span class="section-number-3">7.3.</span> Script de Cálculo com Python:</h3>
+<div id="outline-container-org11f3633" class="outline-3">
+<h3 id="org11f3633"><span class="section-number-3">7.3.</span> Script de Cálculo com Python:</h3>
 <div class="outline-text-3" id="text-7-3">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #51afef;">import</span> pandas <span style="color: #51afef;">as</span> pd
@@ -1183,7 +1183,7 @@ Onde:
 
 
 <div class="org-src-container">
-<pre class="src src-shell" id="org22ff588">(venv) wgn@fedora:/run/media/wgn/ext4/Projects-Srcs/Projects-Srcs-FzlSoft/curso_estatistica_multivariada$ python3 teoria/analise_fatorial_exploratoria/matriz_carga_fatoriais.py 
+<pre class="src src-shell" id="org9f522ac">(venv) wgn@fedora:/run/media/wgn/ext4/Projects-Srcs/Projects-Srcs-FzlSoft/curso_estatistica_multivariada$ python3 teoria/analise_fatorial_exploratoria/matriz_carga_fatoriais.py 
 === Matriz de Cargas Fatoriais (Calculada) ===
         Fator 1  Fator 2  Comunalidade (h2)
 Ca       -0.607   -0.206              0.411
@@ -1199,8 +1199,8 @@ Mn       -0.155    0.768              0.613
 </div>
 </div>
 </div>
-<div id="outline-container-orge8719f1" class="outline-3">
-<h3 id="orge8719f1"><span class="section-number-3">7.4.</span> Matriz de Cargas Fatoriais (Sem Rotação):</h3>
+<div id="outline-container-org3b534b8" class="outline-3">
+<h3 id="org3b534b8"><span class="section-number-3">7.4.</span> Matriz de Cargas Fatoriais (Sem Rotação):</h3>
 <div class="outline-text-3" id="text-7-4">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -1276,8 +1276,8 @@ Mn       -0.155    0.768              0.613
 </div>
 </div>
 </div>
-<div id="outline-container-orgf253326" class="outline-2">
-<h2 id="orgf253326"><span class="section-number-2">8.</span> Passo 5: Interpretação Inicial (Sem Rotação)</h2>
+<div id="outline-container-orge64e902" class="outline-2">
+<h2 id="orge64e902"><span class="section-number-2">8.</span> Passo 5: Interpretação Inicial (Sem Rotação)</h2>
 <div class="outline-text-2" id="text-8">
 <ul class="org-ul">
 <li><b>Fator 1</b>: Fortemente relacionado a Mg, Ca (negativo no script, positivo na tabela) e Al3+, H+Al (oposto). Representa a dimensão de <b>Fertilidade vs Acidez</b>. Note que as variáveis estão "misturadas" com o Fator 2 (cargas médias em S e Fe).</li>
@@ -1285,8 +1285,8 @@ Mn       -0.155    0.768              0.613
 </ul>
 </div>
 </div>
-<div id="outline-container-orgfbe3dfd" class="outline-2">
-<h2 id="orgfbe3dfd"><span class="section-number-2">9.</span> Passo 6: Rotação de Fatores (Varimax)</h2>
+<div id="outline-container-org533f0c8" class="outline-2">
+<h2 id="org533f0c8"><span class="section-number-2">9.</span> Passo 6: Rotação de Fatores (Varimax)</h2>
 <div class="outline-text-2" id="text-9">
 <p>
 Após extrair as cargas iniciais, muitas vezes percebemos que as
@@ -1336,11 +1336,24 @@ varimax conforme o prof fez em aula.
 </p>
 
 <p>
-É aqui que entra a <b><b>Rotação</b></b>.
+Para efeitos de estudo vai ser muito importante esse passo porque é
+onde o assundo da analise fatorial exploratorio se cruza com ANOVA por
+analise de fatores.
+</p>
+
+<p>
+Segundo o livro do Hair a ANOVA em questao referese ao calculo dos
+escore dos fatores como variaveis dependente em um modelo de analise
+de variancia.
+</p>
+
+<p>
+Vou precisar compreender ainda pra colocar aqui exatamente e
+matematicamente esses conceitos
 </p>
 </div>
-<div id="outline-container-orgaa08404" class="outline-3">
-<h3 id="orgaa08404"><span class="section-number-3">9.1.</span> 6.1 Por que Rotacionar? (O Conceito de Estrutura Simples)</h3>
+<div id="outline-container-orgd5b5699" class="outline-3">
+<h3 id="orgd5b5699"><span class="section-number-3">9.1.</span> 6.1 Por que Rotacionar? (O Conceito de Estrutura Simples)</h3>
 <div class="outline-text-3" id="text-9-1">
 <p>
 A matriz sem rotação segue um princípio matemático:
@@ -1355,8 +1368,8 @@ Isso geralmente cria um "Fator Geral" onde quase tudo tem carga alta.
 </p>
 </div>
 </div>
-<div id="outline-container-org093e3e2" class="outline-3">
-<h3 id="org093e3e2"><span class="section-number-3">9.2.</span> 6.2 O que muda e o que não muda?</h3>
+<div id="outline-container-orgef1f993" class="outline-3">
+<h3 id="orgef1f993"><span class="section-number-3">9.2.</span> 6.2 O que muda e o que não muda?</h3>
 <div class="outline-text-3" id="text-9-2">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -1402,8 +1415,8 @@ Isso geralmente cria um "Fator Geral" onde quase tudo tem carga alta.
 </table>
 </div>
 </div>
-<div id="outline-container-org43443b4" class="outline-3">
-<h3 id="org43443b4"><span class="section-number-3">9.3.</span> 6.3 O Método Varimax</h3>
+<div id="outline-container-org4aecda0" class="outline-3">
+<h3 id="org4aecda0"><span class="section-number-3">9.3.</span> 6.3 O Método Varimax</h3>
 <div class="outline-text-3" id="text-9-3">
 <p>
 O Varimax é o método de rotação <b><b>ortogonal</b></b> mais comum.
@@ -1428,8 +1441,8 @@ precisam ser esclarecidas aqui. Assim que possivel o farei.
 </div>
 </div>
 </div>
-<div id="outline-container-orgeeb2180" class="outline-2">
-<h2 id="orgeeb2180"><span class="section-number-2">10.</span> Conclusão</h2>
+<div id="outline-container-org17ae36d" class="outline-2">
+<h2 id="org17ae36d"><span class="section-number-2">10.</span> Conclusão</h2>
 <div class="outline-text-2" id="text-10">
 <p>
 A análise fatorial permitiu reduzir as 7 variáveis originais em 2 fatores principais que explicam aproximadamente 64.6% da variância total. A PCA nos deu o "resumo", e a AFE (com a futura rotação) nos dará a "causa" biológica/química dos dados.
@@ -1447,7 +1460,7 @@ A análise fatorial permitiu reduzir as 7 variáveis originais em 2 fatores prin
 <div id="postamble" class="status">
 <p class="date">Date: 2026-06-07</p>
 <p class="author">Author: Eu e o Gemini</p>
-<p class="date">Created: 2026-06-08 seg 14:02</p>
+<p class="date">Created: 2026-06-08 seg 14:10</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

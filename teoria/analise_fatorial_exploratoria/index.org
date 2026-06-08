@@ -596,7 +596,16 @@ Na vedade nos nossos dados e a unica variavel que isso acontece, mas a
 titulo de complementacao do exercicio vamos fazer a rotacao usando
 varimax conforme o prof fez em aula.
 
-É aqui que entra a **Rotação**.
+Para efeitos de estudo vai ser muito importante esse passo porque é
+onde o assundo da analise fatorial exploratorio se cruza com ANOVA por
+analise de fatores.
+
+Segundo o livro do Hair a ANOVA em questao referese ao calculo dos
+escore dos fatores como variaveis dependente em um modelo de analise
+de variancia.
+
+Vou precisar compreender ainda pra colocar aqui exatamente e
+matematicamente esses conceitos
 
 ** 6.1 Por que Rotacionar? (O Conceito de Estrutura Simples)
 
