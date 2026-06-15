@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt-br" xml:lang="pt-br">
+<head>
+<!-- 2026-06-14 dom 17:08 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Analise de Correspondencia</title>
+<meta name="author" content="wgn" />
+<meta name="generator" content="Org Mode" />
+<style type="text/css">
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'left',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'left',
+      displayIndent: '5em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'left',
+      displayIndent: '5em'
+    },
+    output: {
+      font: 'mathjax-euler',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Analise de Correspondencia</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org5a4261c">1. vendo nossos dados e introduzindo qui quadrado</a></li>
+<li><a href="#org2515488">2. Entendendo o calculo do qui quadrado</a>
+<ul>
+<li><a href="#orgf6b5b79">2.1. Valor Esperado (Freq Esperada) da Celula</a></li>
+<li><a href="#org1520931">2.2. Estatistica Qui-Quadrado (\(\chi^2\))</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org5a4261c" class="outline-2">
+<h2 id="org5a4261c"><span class="section-number-2">1.</span> vendo nossos dados e introduzindo qui quadrado</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+O qui quadrado tem um tipo de padronizaÃ§Ã£o dos valores pra poder fazer
+a comparacao
+</p>
+
+<p>
+Olhando os dados abaixo, podemos perceber que o total marginal da coluna refrigerante he 140 e do
+cha 88. Ou seja tem muito mais pessoas que tomam refrigetente que cha.
+</p>
+
+<p>
+Por esse motivo fica muito dificil so olhando pra tabela de
+contigencia comparar 55 com 3 pra dizer que crianÃ§as tomam mais
+regrigerante que cha. Nao parece errado por intuicao mas o 55 ta
+inflado pelo total marginal muito maior.
+</p>
+
+<p>
+O valore esperado de cada celular vai prover um valor pra cada celula
+e aÃ­ sem da pra comparar 55 com o valor esperado da celula e o 3 com o
+valor esperado da respectiva celular.
+</p>
+
+<p>
+Com base nessa base de comparacao a estatistica qui quadrado he construida
+</p>
+
+
+<div class="org-src-container">
+<pre class="src src-shell" id="orgc2bb6e1">../../venv/bin/python3 ../../scripts/data.py head ../../data/exerc_ana_corresp_regrigerante_tabela_contingencia.csv
+</pre>
+</div>
+
+
+<p>
+Abaixo temos a mesma saida so que mostrando os valores esperados
+</p>
+
+
+<div class="org-src-container">
+<pre class="src src-shell" id="org5198be9">../../venv/bin/python3 ../../scripts/stat_qui2.py --show-expected-values ../../data/exerc_ana_corresp_regrigerante_tabela_contingencia.csv
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org2515488" class="outline-2">
+<h2 id="org2515488"><span class="section-number-2">2.</span> Entendendo o calculo do qui quadrado</h2>
+<div class="outline-text-2" id="text-2">
+</div>
+<div id="outline-container-orgf6b5b79" class="outline-3">
+<h3 id="orgf6b5b79"><span class="section-number-3">2.1.</span> Valor Esperado (Freq Esperada) da Celula</h3>
+<div class="outline-text-3" id="text-2-1">
+
+<div id="org5b19dda" class="figure">
+<p><img src="./imgs/formula_valor_esperado_da_celula.png" alt="formula_valor_esperado_da_celula.png" />
+</p>
+<p><span class="figure-number">Figure 1: </span>fonte: slides do prof</p>
+</div>
+
+
+<p>
+Na literatura o valor esperado he indicado geralmente por (\(E_{ij}\))
+</p>
+
+<p>
+O Livro Hair nao traz formulas porque Ã© mais conceitual, mas explica
+bem sobre a analise de correspondencia.
+</p>
+
+<p>
+Conforme conversamos aqui neste texto um pouco antes o motivo pelo
+qual se calcula o valor esperado pra cada celular. O livro do Hair
+explica bem que Ã© o valor esperado que "padroniza" e dÃ¡ base pra
+comparacao.
+</p>
+
+<p>
+o valor esperado (\(E_{ij}\)) de cada celular, tambem chamado na
+  literatura como frequencia esperada Ã© calculada com a formula
+  abaixo onde as linhas sao indentificadas pelo indice  \(i\) e as
+  colunas  \(j\) is:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell" id="org5122a3b"><span style="color: #dcaeea;">VENV_PATH</span>=$(<span style="color: #51afef; font-weight: bold;">readlink -f ../../venv/bin/python3</span>)
+<span style="color: #dcaeea;">FORMULA</span>=$(<span style="color: #51afef; font-weight: bold;">$VENV_PATH ../../scripts/math_latex.py qui2-expected-values --raw</span>)
+<span style="color: #c678dd;">echo</span> <span style="color: #98be65;">"\[ $FORMULA \]"</span>
+</pre>
+</div>
+
+<p>
+\[ E_{ij} = \frac{C_{j} R_{i}}{n} \]
+</p>
+
+<p>
+Onde:
+</p>
+<ul class="org-ul">
+<li>\(R_i\): total da linha que contem a celula Soma das linhas \(i\) (Total Marginal da linha).</li>
+<li>\(C_j\): total da coluna que contem a celula \(j\) (Total Marginal da coluna).</li>
+<li>\(n\): Total Geral</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org1520931" class="outline-3">
+<h3 id="org1520931"><span class="section-number-3">2.2.</span> Estatistica Qui-Quadrado (\(\chi^2\))</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+A estatistica qui-quadrado total he a soma das contribuiÃ§Ãµes de cada cÃ©lula:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell" id="org8b2d5dd"><span style="color: #dcaeea;">VENV_PATH</span>=$(<span style="color: #51afef; font-weight: bold;">readlink -f ../../venv/bin/python3</span>)
+<span style="color: #dcaeea;">FORMULA</span>=$(<span style="color: #51afef; font-weight: bold;">$VENV_PATH ../../scripts/math_latex.py qui2-stat --raw</span>)
+<span style="color: #c678dd;">echo</span> <span style="color: #98be65;">"\[ $FORMULA \]"</span>
+</pre>
+</div>
+
+<p>
+\[ \chi^{2} = \sum_{\substack{1 \leq i \leq r\\1 \leq j \leq c}} \frac{\left(- E_{ij} + O_{ij}\right)^{2}}{E_{ij}} \]
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: wgn</p>
+<p class="date">Created: 2026-06-14 dom 17:08</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
